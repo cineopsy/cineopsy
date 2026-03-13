@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style>
+/* ============================================
+   COMPREHENSIVE LIGHT MODE — ALL ELEMENTS
+   ============================================ */
+
+/* Base */
+:root.light body { background:#f5f5f0 !important; color:#111111 !important; }
+
+/* ── Navigation ── */
+:root.light nav { background:rgba(245,245,240,0.97) !important; border-bottom:1px solid rgba(0,0,0,0.1) !important; }
+:root.light .nav-logo .cine { color:#111111 !important; }
+:root.light .nav-logo .opsy { color:#cc0000 !important; }
+:root.light .nav-links a { color:rgba(20,20,20,0.6) !important; }
+:root.light .nav-links a:hover { color:#111111 !important; }
+:root.light .hamburger span { background:#111111 !important; }
+:root.light .theme-btn { border-color:rgba(0,0,0,0.2) !important; color:#111111 !important; }
+
+/* ── Footer ── */
+:root.light footer { background:#e8e8e4 !important; border-top:1px solid rgba(0,0,0,0.08) !important; }
+:root.light footer * { color:#111111 !important; }
+:root.light .footer-logo .cine { color:#111111 !important; }
+:root.light .footer-logo .opsy { color:#cc0000 !important; }
+:root.light .footer-tagline { color:rgba(20,20,20,0.55) !important; }
+:root.light .footer-copy { color:rgba(20,20,20,0.4) !important; }
+
+/* ── Hero ── */
+:root.light #hero { background:#f0f0eb !important; }
+:root.light .hero-title .cine { color:#111111 !important; }
+:root.light .hero-title .opsy { color:#cc0000 !important; }
+:root.light .hero-tagline { color:rgba(20,20,20,0.45) !important; }
+:root.light .hero-bg { opacity:0.5 !important; }
+:root.light .filmline { background:rgba(220,220,215,0.99) !important; }
+:root.light .fhole { background:#f0f0eb !important; border-color:rgba(0,0,0,0.1) !important; }
+
+/* ── Buttons ── */
+:root.light .btn-outline { border-color:rgba(0,0,0,0.25) !important; color:#111111 !important; background:transparent !important; }
+:root.light .btn-outline:hover { background:rgba(204,0,0,0.08) !important; color:#cc0000 !important; }
+:root.light .btn-primary { background:#cc0000 !important; color:#ffffff !important; }
+
+/* ── Section labels & titles ── */
+:root.light .section-label { color:#cc0000 !important; }
+:root.light .section-title { color:#111111 !important; }
+:root.light .section-title span { color:#cc0000 !important; }
+:root.light .section-sub { color:rgba(20,20,20,0.55) !important; }
+
+/* ── Cards ── */
+:root.light .playlist-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .playlist-card:hover { border-color:rgba(204,0,0,0.3) !important; }
+:root.light .pl-name { color:#111111 !important; }
+:root.light .pl-desc { color:rgba(20,20,20,0.6) !important; }
+:root.light .pl-day { color:#cc0000 !important; }
+:root.light .pl-freq { color:rgba(204,0,0,0.7) !important; border-top-color:rgba(0,0,0,0.08) !important; }
+
+/* ── Stat boxes ── */
+:root.light .stat-box { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .stat-num { color:#cc0000 !important; }
+:root.light .stat-lbl { color:rgba(20,20,20,0.55) !important; }
+
+/* ── About section ── */
+:root.light .about-text p { color:rgba(20,20,20,0.75) !important; }
+:root.light .about-text strong { color:#111111 !important; }
+
+/* ── Playlist hero ── */
+:root.light .pl-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.06),transparent) !important; border-bottom-color:rgba(204,0,0,0.15) !important; }
+:root.light .pl-hero-day { color:#cc0000 !important; }
+:root.light .pl-hero * { color:#111111 !important; }
+:root.light .pl-hero p { color:rgba(20,20,20,0.6) !important; }
+
+/* ── Episode cards ── */
+:root.light .ep-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .ep-card:hover { border-color:rgba(204,0,0,0.3) !important; }
+:root.light .ep-num { color:#cc0000 !important; }
+:root.light .ep-title { color:#111111 !important; }
+:root.light .ep-date { color:rgba(20,20,20,0.5) !important; }
+:root.light .ep-excerpt { color:rgba(20,20,20,0.6) !important; }
+:root.light .ep-arrow { color:#cc0000 !important; }
+
+/* ── Episode detail page ── */
+:root.light .ep-back { color:rgba(20,20,20,0.55) !important; }
+:root.light .ep-back:hover { color:#cc0000 !important; }
+:root.light .ep-badge { color:#cc0000 !important; }
+:root.light .ep-main-title { color:#111111 !important; }
+:root.light .ep-meta { color:rgba(20,20,20,0.5) !important; }
+:root.light .video-wrap { background:#e0e0db !important; border-color:rgba(0,0,0,0.08) !important; }
+:root.light .info-box { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .info-label { color:#cc0000 !important; }
+:root.light .info-val { color:#111111 !important; }
+:root.light .content-body { color:rgba(20,20,20,0.8) !important; }
+:root.light .content-body h3 { color:#111111 !important; }
+:root.light .content-body strong { color:#111111 !important; }
+:root.light .content-body em { color:rgba(20,20,20,0.6) !important; }
+:root.light .content-body blockquote { background:rgba(204,0,0,0.04) !important; color:rgba(20,20,20,0.7) !important; }
+
+/* ── Related cards ── */
+:root.light .rel-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .rel-cat { color:#cc0000 !important; }
+:root.light .rel-title { color:#111111 !important; }
+:root.light .rel-num { color:#cc0000 !important; }
+
+/* ── News page ── */
+:root.light .news-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.06),transparent) !important; border-bottom-color:rgba(204,0,0,0.2) !important; }
+:root.light .news-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .news-card:hover { border-color:rgba(204,0,0,0.3) !important; }
+:root.light .news-card-title { color:#111111 !important; }
+:root.light .news-card-date { color:rgba(20,20,20,0.5) !important; }
+:root.light .news-card-excerpt { color:rgba(20,20,20,0.6) !important; }
+:root.light .news-cat { color:#cc0000 !important; border-color:rgba(204,0,0,0.3) !important; }
+:root.light .cat-btn { color:rgba(20,20,20,0.6) !important; border-color:rgba(0,0,0,0.15) !important; }
+:root.light .cat-btn.active, :root.light .cat-btn:hover { color:#111111 !important; border-color:#cc0000 !important; background:rgba(204,0,0,0.06) !important; }
+:root.light .featured-badge { background:#cc0000 !important; color:#ffffff !important; }
+
+/* ── News article page ── */
+:root.light .article-cat { color:#cc0000 !important; border-color:rgba(204,0,0,0.3) !important; }
+:root.light .article-title { color:#111111 !important; }
+:root.light .article-meta { color:rgba(20,20,20,0.5) !important; }
+:root.light .article-body { color:rgba(20,20,20,0.8) !important; }
+:root.light .article-body h2 { color:#111111 !important; }
+:root.light .article-body h3 { color:#111111 !important; }
+:root.light .article-body strong { color:#111111 !important; }
+:root.light .article-body blockquote { background:rgba(204,0,0,0.04) !important; color:rgba(20,20,20,0.7) !important; }
+:root.light .article-tags .tag { color:rgba(20,20,20,0.6) !important; border-color:rgba(0,0,0,0.12) !important; }
+:root.light .article-back { color:rgba(20,20,20,0.55) !important; }
+:root.light .article-back:hover { color:#cc0000 !important; }
+:root.light .article-cover { border-color:rgba(0,0,0,0.08) !important; }
+
+/* ── Contact page ── */
+:root.light .contact-heading { color:#111111 !important; }
+:root.light .social-link { background:#e4e4e0 !important; color:#111111 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .social-link:hover { border-color:#cc0000 !important; color:#cc0000 !important; }
+:root.light input, :root.light textarea, :root.light select { background:#e8e8e4 !important; border-color:rgba(0,0,0,0.15) !important; color:#111111 !important; }
+:root.light input::placeholder, :root.light textarea::placeholder { color:rgba(20,20,20,0.35) !important; }
+:root.light input:focus, :root.light textarea:focus { border-color:#cc0000 !important; }
+
+/* ── Red divider ── */
+:root.light .red-divider { background:linear-gradient(90deg,transparent,rgba(204,0,0,0.35),transparent) !important; }
+
+/* ── Loading / Empty states ── */
+:root.light .loading-state { color:rgba(20,20,20,0.5) !important; }
+:root.light .empty-state { background:rgba(204,0,0,0.02) !important; border-color:rgba(204,0,0,0.15) !important; }
+:root.light .empty-title { color:rgba(20,20,20,0.6) !important; }
+:root.light .empty-sub { color:rgba(20,20,20,0.45) !important; }
+
+/* ── Generic white text fix ── */
+:root.light h1,:root.light h2,:root.light h3,:root.light h4 { color:#111111 !important; }
+:root.light p { color:rgba(20,20,20,0.75) !important; }
+
+/* ── Google Translate ── */
+:root.light .goog-te-gadget select { border-color:rgba(0,0,0,0.2) !important; color:#111111 !important; background:#f0f0eb !important; }
+
+/* ── News hero strip on homepage ── */
+:root.light #heroNewsStrip a { background:rgba(0,0,0,0.04) !important; border-color:rgba(0,0,0,0.08) !important; border-left-color:#cc0000 !important; }
+:root.light #heroNewsStrip a span:last-child { color:#111111 !important; }
+</style>
+
+<!-- Light Theme -->
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CinéOpsy — Where Cinema Meets Biopsy</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap');
+:root{--red:#cc0000;--red-bright:#ff2222;--black:#080808;--black2:#0f0f0f;--black3:#161616;--white:#f0ece4;--gray:#888;--gray-light:#555;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Crimson Pro',Georgia,serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 40px;background:rgba(8,8,8,0.97);border-bottom:1px solid rgba(204,0,0,0.15);}
+.nav-logo img{height:52px;object-fit:contain;}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--red);transition:width 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{width:24px;height:2px;background:var(--white);transition:0.3s;}
+.red-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.page-wrap{max-width:1100px;margin:0 auto;padding:100px 30px 60px;}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.section-label::before{content:'';width:30px;height:1px;background:var(--red);}
+.section-title{font-family:'Cinzel',serif;font-size:clamp(24px,4vw,40px);font-weight:700;color:var(--white);margin-bottom:6px;line-height:1.1;}
+.section-title span{color:var(--red);}
+.section-sub{font-family:'Crimson Pro',serif;font-style:italic;font-size:16px;color:var(--gray);margin-bottom:40px;}
+.btn-primary{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;background:var(--red);color:var(--white);padding:12px 28px;text-decoration:none;border:1px solid var(--red);transition:all 0.2s;display:inline-block;cursor:pointer;}
+.btn-primary:hover{background:var(--red-bright);box-shadow:0 0 20px rgba(204,0,0,0.4);}
+.btn-outline{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;background:transparent;color:var(--white);padding:12px 28px;text-decoration:none;border:1px solid rgba(240,236,228,0.3);transition:all 0.2s;display:inline-block;cursor:pointer;}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
+footer{border-top:1px solid rgba(255,255,255,0.05);padding:30px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+footer img{height:36px;object-fit:contain;}
+.footer-copy{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+.footer-tagline{font-family:'Crimson Pro',serif;font-style:italic;font-size:13px;color:rgba(204,0,0,0.5);}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s,transform 0.6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav{padding:10px 20px;}.nav-links{display:none;flex-direction:column;position:fixed;top:72px;left:0;right:0;background:rgba(8,8,8,0.98);padding:20px;gap:16px;border-bottom:1px solid rgba(204,0,0,0.2);}.nav-links.open{display:flex;}.hamburger{display:flex;}.page-wrap{padding:90px 16px 40px;}footer{flex-direction:column;text-align:center;padding:20px;}}
+</style>
+
+<style>
+
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:3px;text-decoration:none;}
+.nav-logo .cine{color:#f0ece4;}.nav-logo .opsy{color:#cc0000;}
+.footer-logo{font-family:'Cinzel',serif;font-size:20px;font-weight:700;letter-spacing:3px;}
+.footer-logo .cine{color:#f0ece4;}.footer-logo .opsy{color:#cc0000;}
+
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden;background:#080808;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(150,0,0,0.15) 0%,transparent 55%),radial-gradient(ellipse at 70% 70%,rgba(80,0,0,0.1) 0%,transparent 50%);pointer-events:none;}
+.filmline{position:absolute;left:0;right:0;height:40px;background:rgba(10,10,10,0.98);display:flex;align-items:center;gap:7px;padding:0 10px;overflow:hidden;z-index:2;}
+.filmline.top{top:0;}.filmline.bot{bottom:0;}
+.fhole{width:20px;height:13px;flex-shrink:0;background:#080808;border-radius:3px;border:1px solid #1e1e1e;}
+.hero-content{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(64px,13vw,140px);font-weight:900;line-height:0.92;letter-spacing:6px;margin-bottom:10px;animation:fadeUp 1s ease both;}
+.hero-title .cine{color:#f0ece4;display:block;}.hero-title .opsy{color:#cc0000;display:block;text-shadow:0 0 60px rgba(204,0,0,0.5);}
+.hero-slash{width:200px;height:2px;margin:16px auto;background:linear-gradient(90deg,transparent,#cc0000,#ff4444,#cc0000,transparent);animation:fadeUp 1s 0.3s ease both;}
+.hero-tagline{font-family:'Crimson Pro',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(240,236,228,0.5);letter-spacing:2px;margin-bottom:36px;animation:fadeUp 1s 0.5s ease both;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s 0.7s ease both;}
+.playlists-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2px;}
+.playlist-card{background:var(--black3);padding:28px 22px;border:1px solid rgba(255,255,255,0.04);text-decoration:none;color:inherit;display:block;transition:transform 0.3s,border-color 0.3s;position:relative;overflow:hidden;}
+.playlist-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
+.playlist-card:hover{transform:translateY(-4px);border-color:rgba(204,0,0,0.3);}.playlist-card:hover::after{transform:scaleX(1);}
+.pl-day{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.pl-icon{font-size:26px;margin-bottom:12px;}
+.pl-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.pl-desc{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px;}
+.pl-freq{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(204,0,0,0.7);border-top:1px solid rgba(255,255,255,0.06);padding-top:12px;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
+.about-text p{font-size:17px;line-height:1.8;color:rgba(240,236,228,0.75);margin-bottom:16px;}
+.about-text strong{color:var(--white);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.stat-box{background:var(--black3);padding:26px 20px;border:1px solid rgba(255,255,255,0.04);}
+.stat-num{font-family:'Cinzel',serif;font-size:34px;font-weight:700;color:var(--red);}
+.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:4px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;}}
+</style>
+
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="news.html" style="color:#cc0000;font-weight:700">📰 News</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="weekly.html">Weekly</a></li>
+    <li><a href="verdict.html">Verdict</a></li>
+    <li><a href="whatif.html">What If</a></li>
+    <li><a href="casefiles.html">Case Files</a></li>
+    <li><a href="beyondborders.html">Beyond Borders</a></li>
+    <li><a href="specials.html">Specials</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-controls">
+    <div id="google_translate_element"></div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+  </div>
+</nav>
+
+<div id="hero">
+  <div class="hero-bg"></div>
+  <div class="filmline top" id="ft"></div>
+  <div class="hero-content">
+    <h1 class="hero-title"><span class="cine">CINE</span><span class="opsy">OPSY</span></h1>
+    <div class="hero-slash"></div>
+    <p class="hero-tagline" id="heroTagline">Where Cinema Meets Biopsy</p>
+    <div class="hero-btns" style="flex-direction:column;align-items:center;gap:0;width:100%;max-width:560px;">
+      <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary" id="ytBtn" style="width:100%;max-width:340px;text-align:center;margin-bottom:28px;">Watch on YouTube</a>
+      
+      <!-- Latest News Strip -->
+      <div id="heroNewsStrip" style="width:100%;margin-bottom:28px;display:none;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:12px;text-align:center;">📰 Latest News</div>
+        <div id="heroNewsItems" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,236,228,0.4);margin-top:12px;display:block;text-align:center;transition:color 0.2s;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='rgba(240,236,228,0.4)'">View All News →</a>
+      </div>
+
+      <a href="#playlists" class="btn-outline" style="width:100%;max-width:340px;text-align:center;">Explore Series</a>
+    </div>
+  </div>
+  <div class="filmline bot" id="fb"></div>
+</div>
+<div class="red-divider"></div>
+<section class="page-wrap" id="playlists">
+  <div class="section-label">Our Series</div>
+  <h2 class="section-title reveal">Six Ways to <span>Dissect Cinema</span></h2>
+  <p class="section-sub reveal">Click any series to explore all episodes.</p>
+  <div class="playlists-grid">
+    <a href="weekly.html" class="playlist-card reveal">
+      <div class="pl-day">Every Thursday</div><div class="pl-icon">📰</div>
+      <div class="pl-name">CinéOpsy Weekly</div><div class="pl-desc">Box office, industry news, upcoming releases & weekly cinema recap.</div>
+      <div class="pl-freq">Weekly →</div>
+    </a>
+    <a href="verdict.html" class="playlist-card reveal">
+      <div class="pl-day">Every Friday</div><div class="pl-icon">🔬</div>
+      <div class="pl-name">Verdict</div><div class="pl-desc">Deep honest reviews of new releases. Watch it or Skip it.</div>
+      <div class="pl-freq">Weekly →</div>
+    </a>
+    <a href="whatif.html" class="playlist-card reveal">
+      <div class="pl-day">Alternate Sundays</div><div class="pl-icon">🤔</div>
+      <div class="pl-name">What If</div><div class="pl-desc">Alternate timeline analysis — exploring untold movie possibilities.</div>
+      <div class="pl-freq">Bi-weekly →</div>
+    </a>
+    <a href="casefiles.html" class="playlist-card reveal">
+      <div class="pl-day">Alternate Sundays</div><div class="pl-icon">🩺</div>
+      <div class="pl-name">Case Files</div><div class="pl-desc">Medical diagnosis of movies. Cinema on the operating table.</div>
+      <div class="pl-freq">Bi-weekly →</div>
+    </a>
+    <a href="beyondborders.html" class="playlist-card reveal">
+      <div class="pl-day">Every 2 Tuesdays</div><div class="pl-icon">🌍</div>
+      <div class="pl-name">Beyond Borders</div><div class="pl-desc">World cinema that never reached India — explained in Hindi.</div>
+      <div class="pl-freq">Every 2 Weeks →</div>
+    </a>
+    <a href="specials.html" class="playlist-card reveal">
+      <div class="pl-day">Special Releases</div><div class="pl-icon">🎞️</div>
+      <div class="pl-name">CinéOpsy Specials</div><div class="pl-desc">Special videos, unique content & exclusive CinéOpsy productions.</div>
+      <div class="pl-freq">Special →</div>
+    </a></div>
+</section>
+<div class="red-divider"></div>
+<section class="page-wrap">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-label">About CinéOpsy</div>
+      <h2 class="section-title">We Don't Just<br><span>Watch Films.</span></h2><br>
+      <p id="aboutP1">From <strong>Bollywood to Hollywood</strong>, South Cinema to World Cinema — we bring you films that never made it to your screen, honest reviews of hidden gems, and cinema that goes beyond the surface.</p>
+      <p id="aboutP2"><strong>No fluff. No hype. Just cinema — seen clearly.</strong></p><br>
+      <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary" id="ytBtn2">Subscribe on YouTube</a>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-box"><div class="stat-num" id="st1n">6</div><div class="stat-lbl" id="st1l">Unique Series</div></div>
+      <div class="stat-box"><div class="stat-num" id="st2n">3–4</div><div class="stat-lbl" id="st2l">Videos / Week</div></div>
+      <div class="stat-box"><div class="stat-num" id="st3n">100%</div><div class="stat-lbl" id="st3l">Honest Reviews</div></div>
+      <div class="stat-box"><div class="stat-num" id="st4n">∞</div><div class="stat-lbl" id="st4l">Cinema Love</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="red-divider"></div>
+<footer>
+  <div class="footer-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></div>
+  <div class="footer-tagline">Where Cinema Meets Biopsy</div>
+  <div class="footer-copy" id="footerCopy">© 2026 CinéOpsy. All rights reserved.</div>
+</footer>
+
+
+<script>
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
+// Set active nav link
+(function(){
+  const links = document.querySelectorAll('.nav-links a');
+  const page = location.pathname.split('/').pop() || 'index.html';
+  links.forEach(l => { if(l.getAttribute('href') === page) l.classList.add('active'); });
+})();
+// Reveal on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*80); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+
+<script>
+
+let db = null, firebaseReady = false;
+try {
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+  firebaseReady = true;
+} catch(e) { console.warn('Firebase:', e.message); }
+
+async function loadSiteSettings() {
+  if (!firebaseReady) return;
+  try {
+    const st = await db.collection('settings').doc('sitetext').get();
+    if (st.exists && st.data().footer) {
+      const el = document.getElementById('footerCopy');
+      if (el) el.textContent = st.data().footer;
+    }
+    const th = await db.collection('settings').doc('theme').get();
+    if (th.exists) {
+      const d = th.data(), r = document.documentElement;
+      if (d.red)  r.style.setProperty('--red', d.red);
+      if (d.bg)   r.style.setProperty('--black', d.bg);
+      if (d.text) r.style.setProperty('--white', d.text);
+      if (d.card) r.style.setProperty('--black3', d.card);
+    }
+  } catch(e) {}
+}
+loadSiteSettings();
+
+
+// Load dynamic content from Firebase
+async function loadHomeContent() {
+  if (!firebaseReady) return;
+  try {
+    const st = await db.collection('settings').doc('sitetext').get();
+    if (!st.exists) return;
+    const d = st.data();
+    if (d.tagline)       document.getElementById('heroTagline').textContent = d.tagline;
+    if (d.aboutP1)       document.getElementById('aboutP1').innerHTML = d.aboutP1;
+    if (d.aboutP2)       document.getElementById('aboutP2').innerHTML = d.aboutP2;
+    if (d.s1n) document.getElementById('st1n').textContent = d.s1n;
+    if (d.s1l) document.getElementById('st1l').textContent = d.s1l;
+    if (d.s2n) document.getElementById('st2n').textContent = d.s2n;
+    if (d.s2l) document.getElementById('st2l').textContent = d.s2l;
+    if (d.s3n) document.getElementById('st3n').textContent = d.s3n;
+    if (d.s3l) document.getElementById('st3l').textContent = d.s3l;
+    if (d.s4n) document.getElementById('st4n').textContent = d.s4n;
+    if (d.s4l) document.getElementById('st4l').textContent = d.s4l;
+
+    // Social links
+    const sl = await db.collection('settings').doc('social').get();
+    if (sl.exists && sl.data().youtube) {
+      const ytUrl = sl.data().youtube;
+      const ytBtn = document.getElementById('ytBtn');
+      const ytBtn2 = document.getElementById('ytBtn2');
+      if (ytBtn) ytBtn.href = ytUrl;
+      if (ytBtn2) ytBtn2.href = ytUrl;
+    }
+  } catch(e) {}
+}
+loadHomeContent();
+
+// Load latest 3 news in hero
+async function loadHeroNews() {
+  if (!firebaseReady) return;
+  try {
+    const snap = await db.collection('news').orderBy('createdAt','desc').limit(3).get();
+    if (snap.empty) return;
+    const strip = document.getElementById('heroNewsStrip');
+    const container = document.getElementById('heroNewsItems');
+    const news = snap.docs.map(d => ({...d.data(), id: d.id}));
+    container.innerHTML = news.map(n => `
+      <a href="news_article.html?id=${n.id}" style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-left:2px solid #cc0000;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='rgba(204,0,0,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#cc0000;white-space:nowrap;margin-top:3px;">${n.category||'News'}</span>
+        <span style="font-family:'Cinzel',serif;font-size:13px;color:#f0ece4;line-height:1.4;text-align:left;">${n.title}</span>
+      </a>`).join('');
+    strip.style.display = 'block';
+  } catch(e) {}
+}
+loadHeroNews();
+
+['ft','fb'].forEach(id=>{
+  const el=document.getElementById(id);if(!el)return;
+  for(let i=0;i<35;i++){const h=document.createElement('div');h.className='fhole';el.appendChild(h);}
+});
+</script>
+
+<script type="text/javascript">
+// Google Translate
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'hi,ta,te,ml,bn,mr,gu,pa,kn,ur,fr,es,de,ja,zh-CN,ar',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+// Theme toggle
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.classList.add('light');
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.innerHTML = '☀️ Light';
+  } else {
+    document.documentElement.classList.remove('light');
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.innerHTML = '🌙 Dark';
+  }
+}
+function toggleTheme() {
+  const isLight = document.documentElement.classList.contains('light');
+  const newTheme = isLight ? 'dark' : 'light';
+  localStorage.setItem('cineopsy_theme', newTheme);
+  applyTheme(newTheme);
+}
+// Apply saved theme on load
+(function() {
+  const saved = localStorage.getItem('cineopsy_theme') || 'dark';
+  applyTheme(saved);
+})();
+</script>
+</body></html>

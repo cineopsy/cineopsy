@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Panel — CinéOpsy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+<style>
+:root{
+  --red:#cc0000;--red-bright:#ff2222;
+  --black:#080808;--black2:#0f0f0f;--black3:#161616;--black4:#1e1e1e;
+  --white:#f0ece4;--gray:#888;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 50%,rgba(150,0,0,0.1) 0%,transparent 60%);}
+.login-box{background:var(--black3);border:1px solid rgba(204,0,0,0.25);padding:52px 44px;width:min(400px,92vw);text-align:center;}
+.login-title{font-family:'Cinzel',serif;font-size:30px;font-weight:900;letter-spacing:4px;margin-bottom:4px;}
+.login-title .o{color:var(--red);}
+.login-sub{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:36px;}
+.login-box input{width:100%;background:var(--black);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:14px 16px;font-family:'Crimson Pro',serif;font-size:16px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
+.login-box input:focus{border-color:var(--red);}
+.login-err{color:#ff4444;font-size:13px;margin-bottom:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;display:none;}
+
+/* ADMIN */
+#adminPanel{display:none;}
+.admin-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,0.97);border-bottom:1px solid rgba(204,0,0,0.15);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+.admin-brand{font-family:'Cinzel',serif;font-size:18px;font-weight:700;letter-spacing:3px;}
+.admin-brand .o{color:var(--red);}
+.admin-nav-right{display:flex;gap:10px;}
+.admin-wrap{max-width:1000px;margin:0 auto;padding:90px 24px 60px;}
+
+/* TABS */
+.tabs-wrap{display:flex;gap:0;flex-wrap:wrap;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.tab{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 18px;background:transparent;border:none;color:var(--gray);cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab:hover{color:var(--white);}
+.tab.active{color:var(--white);border-bottom-color:var(--red);}
+.tab-pane{display:none;}.tab-pane.active{display:block;}
+
+/* CARDS */
+.card{background:var(--black3);border:1px solid rgba(255,255,255,0.06);padding:28px;margin-bottom:20px;}
+.card-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(204,0,0,0.2);}
+
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.fg label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);}
+.fg input,.fg textarea,.fg select{width:100%;background:var(--black);border:1px solid rgba(255,255,255,0.08);color:var(--white);padding:12px 14px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;resize:vertical;transition:border-color 0.2s;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);}
+.fg textarea{min-height:100px;}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* BUTTONS */
+.btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-red{background:var(--red);color:#fff;}.btn-red:hover{background:var(--red-bright);}
+.btn-dark{background:var(--black4);color:var(--white);border:1px solid rgba(255,255,255,0.1);}.btn-dark:hover{border-color:var(--red);color:var(--red);}
+.btn-del{background:transparent;color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:7px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.btn-del:hover{background:#ff4444;color:#fff;}
+.btn-edit{background:transparent;color:var(--gray);border:1px solid rgba(255,255,255,0.1);padding:7px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.btn-edit:hover{border-color:var(--red);color:var(--red);}
+
+/* ALERTS */
+.alert{padding:12px 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:none;}
+.alert-success{background:rgba(0,120,0,0.15);border:1px solid rgba(0,200,0,0.25);color:#4eff4e;}
+.alert-error{background:rgba(200,0,0,0.15);border:1px solid rgba(255,68,68,0.3);color:#ff4444;}
+
+/* EPISODE LIST */
+.ep-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+.ep-item{background:var(--black);border:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.ep-item-title{font-family:'Cinzel',serif;font-size:14px;color:var(--white);margin-bottom:4px;}
+.ep-item-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;color:var(--gray);}
+.ep-item-btns{display:flex;gap:8px;flex-shrink:0;}
+
+/* STATS */
+.stats-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:2px;margin-bottom:28px;}
+.stat-card{background:var(--black3);border:1px solid rgba(255,255,255,0.05);padding:20px;text-align:center;}
+.stat-card .num{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:var(--red);}
+.stat-card .lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:4px;}
+
+/* COLOR */
+.color-row{display:flex;align-items:center;gap:12px;}
+.color-preview{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;}
+.fg input[type="color"]{width:50px;height:38px;border:1px solid rgba(255,255,255,0.1);background:var(--black);cursor:pointer;padding:2px;}
+
+/* SOCIAL GRID */
+.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--black3);border:1px solid rgba(204,0,0,0.2);width:min(700px,95vw);max-height:90vh;overflow-y:auto;padding:32px;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.modal-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;}
+.modal-close{background:none;border:none;color:var(--gray);font-size:24px;cursor:pointer;line-height:1;}
+.modal-close:hover{color:var(--red);}
+
+/* FIREBASE SETUP BOX */
+.setup-box{background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.2);padding:24px;margin-bottom:20px;}
+.setup-box h3{font-family:'Cinzel',serif;font-size:15px;color:var(--white);margin-bottom:14px;}
+.setup-box ol{padding-left:20px;display:flex;flex-direction:column;gap:10px;font-size:15px;color:rgba(240,236,228,0.7);line-height:1.7;}
+.setup-box a{color:var(--red);text-decoration:none;}
+.setup-box strong{color:var(--white);}
+
+@media(max-width:600px){
+  .fg-row,.social-grid{grid-template-columns:1fr;}
+  .ep-item{flex-direction:column;align-items:flex-start;}
+  .admin-nav{padding:12px 16px;}
+  .admin-wrap{padding:80px 14px 40px;}
+}
+
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:3px;text-decoration:none;}
+.nav-logo .cine{color:#f0ece4;}.nav-logo .opsy{color:#cc0000;}
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-title">CINE<span class="o">OPSY</span></div>
+    <div class="login-sub">Admin Panel</div>
+    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <div class="login-err" id="loginErr">❌ Wrong password. Try again.</div>
+    <button class="btn btn-red" onclick="login()" style="width:100%">Login →</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+
+  <div class="admin-nav">
+    <div class="admin-brand">CINE<span class="o">OPSY</span> <span style="font-size:11px;color:var(--gray);letter-spacing:2px;font-family:'Barlow Condensed',sans-serif;">ADMIN</span></div>
+    <div class="admin-nav-right">
+      <a href="index.html" target="_blank" class="btn btn-dark">View Site ↗</a>
+      <button class="btn btn-dark" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-wrap">
+
+    <!-- Firebase status banner -->
+    <div id="firebaseBanner" style="display:none;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.3);padding:14px 18px;margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffaa00;">
+      ⚠️ Firebase not connected — using local storage. Go to Settings tab to configure Firebase.
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-overview">
+      <div class="stat-card"><div class="num" id="s0">0</div><div class="lbl">Weekly</div></div>
+      <div class="stat-card"><div class="num" id="s1">0</div><div class="lbl">Verdict</div></div>
+      <div class="stat-card"><div class="num" id="s2">0</div><div class="lbl">What If</div></div>
+      <div class="stat-card"><div class="num" id="s3">0</div><div class="lbl">Case Files</div></div>
+      <div class="stat-card"><div class="num" id="s4">0</div><div class="lbl">Beyond Borders</div></div>
+      <div class="stat-card"><div class="num" id="s5">0</div><div class="lbl">Specials</div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-wrap">
+      <button class="tab active" onclick="switchTab(event,'episodes')">🎬 Episodes</button>
+      <button class="tab" onclick="switchTab(event,'sitetext')">✏️ Site Text</button>
+      <button class="tab" onclick="switchTab(event,'social')">📱 Social</button>
+      <button class="tab" onclick="switchTab(event,'theme')">🎨 Theme</button>
+      <button class="tab" onclick="switchTab(event,'settings')">⚙️ Settings</button>
+      <button class="tab" onclick="switchTab(event,'news')">📰 News</button>
+    </div>
+
+    <!-- ═══════════════════════ -->
+    <!-- EPISODES TAB           -->
+    <!-- ═══════════════════════ -->
+    <div class="tab-pane active" id="tab-episodes">
+
+      <div class="card">
+        <div class="card-title">➕ Add New Episode</div>
+        <div class="alert alert-success" id="epSuccess">✓ Episode added successfully!</div>
+        <div class="alert alert-error" id="epError">❌ Error. Please try again.</div>
+
+        <div class="fg">
+          <label>Playlist *</label>
+          <select id="addPlaylist" onchange="updateInfoFields()">
+            <option value="weekly">📰 CinéOpsy Weekly</option>
+            <option value="verdict">🔬 Verdict</option>
+            <option value="whatif">🤔 What If</option>
+            <option value="casefiles">🩺 Case Files</option>
+            <option value="beyondborders">🌍 Beyond Borders</option>
+            <option value="specials">🎞️ CinéOpsy Specials</option>
+          </select>
+        </div>
+
+        <div class="fg-row">
+          <div class="fg"><label>Title *</label><input type="text" id="addTitle" placeholder="Episode title"></div>
+          <div class="fg"><label>Date</label><input type="date" id="addDate"></div>
+        </div>
+
+        <div class="fg">
+          <label>YouTube Link (optional — add later)</label>
+          <input type="text" id="addYoutube" placeholder="https://youtube.com/watch?v=...">
+        </div>
+
+        <div class="fg">
+          <label>Short Description</label>
+          <textarea id="addExcerpt" placeholder="Brief description shown in news list..." style="min-height:70px"></textarea>
+        </div>
+
+        <div id="infoFieldsWrap" style="margin-bottom:14px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px">Playlist-Specific Fields</div>
+          <div class="fg-row" id="infoFields"></div>
+        </div>
+
+        <div class="fg">
+          <label>Full Content / Analysis</label>
+          <textarea id="addContent" placeholder="Full description, news, analysis...&#10;&#10;New line = new paragraph." style="min-height:180px"></textarea>
+        </div>
+
+        <button class="btn btn-red" onclick="addEpisode()">Add Episode →</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Manage Episodes</div>
+        <div class="fg">
+          <label>Select Playlist</label>
+          <select id="managePlaylist" onchange="loadEpisodeList()">
+            <option value="weekly">📰 CinéOpsy Weekly</option>
+            <option value="verdict">🔬 Verdict</option>
+            <option value="whatif">🤔 What If</option>
+            <option value="casefiles">🩺 Case Files</option>
+            <option value="beyondborders">🌍 Beyond Borders</option>
+            <option value="specials">🎞️ CinéOpsy Specials</option>
+          </select>
+        </div>
+        <div class="ep-list" id="episodeList">
+          <p style="color:var(--gray);font-style:italic;font-size:15px">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════ -->
+    <!-- SITE TEXT TAB          -->
+    <!-- ═══════════════════════ -->
+    <div class="tab-pane" id="tab-sitetext">
+      <div class="card">
+        <div class="card-title">🏠 Homepage Text</div>
+        <div class="alert alert-success" id="siteTextSuccess">✓ Saved!</div>
+        <div class="fg"><label>Hero Tagline</label><input type="text" id="st_tagline" placeholder="Where Cinema Meets Biopsy"></div>
+        <div class="fg"><label>About Heading</label><input type="text" id="st_aboutHeading" placeholder="We Don't Just Watch Films."></div>
+        <div class="fg"><label>About Paragraph 1</label><textarea id="st_aboutP1"></textarea></div>
+        <div class="fg"><label>About Paragraph 2</label><textarea id="st_aboutP2"></textarea></div>
+
+        <div style="margin:20px 0 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);">Homepage Stats</div>
+        <div class="fg-row">
+          <div class="fg"><label>Stat 1 Number</label><input type="text" id="st_s1n" placeholder="5"></div>
+          <div class="fg"><label>Stat 1 Label</label><input type="text" id="st_s1l" placeholder="Unique Series"></div>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Stat 2 Number</label><input type="text" id="st_s2n" placeholder="3–4"></div>
+          <div class="fg"><label>Stat 2 Label</label><input type="text" id="st_s2l" placeholder="Videos / Week"></div>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Stat 3 Number</label><input type="text" id="st_s3n" placeholder="100%"></div>
+          <div class="fg"><label>Stat 3 Label</label><input type="text" id="st_s3l" placeholder="Honest Reviews"></div>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Stat 4 Number</label><input type="text" id="st_s4n" placeholder="∞"></div>
+          <div class="fg"><label>Stat 4 Label</label><input type="text" id="st_s4l" placeholder="Cinema Love"></div>
+        </div>
+
+        <div style="margin:20px 0 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);">Footer & Other</div>
+        <div class="fg"><label>Footer Copyright</label><input type="text" id="st_footer" placeholder="© 2026 CinéOpsy. All rights reserved."></div>
+        <button class="btn btn-red" onclick="saveSiteText()">Save All Text →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════ -->
+    <!-- SOCIAL TAB             -->
+    <!-- ═══════════════════════ -->
+    <div class="tab-pane" id="tab-social">
+      <div class="card">
+        <div class="card-title">📱 Social Media Links</div>
+        <div class="alert alert-success" id="socialSuccess">✓ Links saved!</div>
+        <div class="social-grid">
+          <div class="fg"><label>▶️ YouTube</label><input type="text" id="sl_youtube" placeholder="https://youtube.com/@Cineopsy"></div>
+          <div class="fg"><label>📸 Instagram</label><input type="text" id="sl_instagram" placeholder="https://instagram.com/cineopsy"></div>
+          <div class="fg"><label>🐦 X / Twitter</label><input type="text" id="sl_twitter" placeholder="https://x.com/cineopsy"></div>
+          <div class="fg"><label>🧵 Threads</label><input type="text" id="sl_threads" placeholder="https://threads.net/@cineopsy"></div>
+          <div class="fg"><label>👾 Reddit</label><input type="text" id="sl_reddit" placeholder="https://reddit.com/u/cineopsy"></div>
+          <div class="fg"><label>✈️ Telegram</label><input type="text" id="sl_telegram" placeholder="https://t.me/cineopsy"></div>
+          <div class="fg"><label>💬 WhatsApp Channel</label><input type="text" id="sl_whatsapp" placeholder="https://whatsapp.com/channel/..."></div>
+        </div>
+        <button class="btn btn-red" onclick="saveSocialLinks()">Save Links →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════ -->
+    <!-- THEME TAB              -->
+    <!-- ═══════════════════════ -->
+    <div class="tab-pane" id="tab-theme">
+      <div class="card">
+        <div class="card-title">🎨 Color Theme</div>
+        <div class="alert alert-success" id="themeSuccess">✓ Theme saved!</div>
+        <div class="fg-row">
+          <div class="fg">
+            <label>Primary Red</label>
+            <div class="color-row">
+              <input type="color" id="th_red" value="#cc0000" oninput="syncColor('th_red')">
+              <div class="color-preview" id="prev_red" style="background:#cc0000"></div>
+              <input type="text" id="th_red_hex" value="#cc0000" style="flex:1" oninput="syncHex('th_red')">
+            </div>
+          </div>
+          <div class="fg">
+            <label>Background</label>
+            <div class="color-row">
+              <input type="color" id="th_bg" value="#080808" oninput="syncColor('th_bg')">
+              <div class="color-preview" id="prev_bg" style="background:#080808"></div>
+              <input type="text" id="th_bg_hex" value="#080808" style="flex:1" oninput="syncHex('th_bg')">
+            </div>
+          </div>
+        </div>
+        <div class="fg-row">
+          <div class="fg">
+            <label>Text Color</label>
+            <div class="color-row">
+              <input type="color" id="th_text" value="#f0ece4" oninput="syncColor('th_text')">
+              <div class="color-preview" id="prev_text" style="background:#f0ece4"></div>
+              <input type="text" id="th_text_hex" value="#f0ece4" style="flex:1" oninput="syncHex('th_text')">
+            </div>
+          </div>
+          <div class="fg">
+            <label>Card Background</label>
+            <div class="color-row">
+              <input type="color" id="th_card" value="#161616" oninput="syncColor('th_card')">
+              <div class="color-preview" id="prev_card" style="background:#161616"></div>
+              <input type="text" id="th_card_hex" value="#161616" style="flex:1" oninput="syncHex('th_card')">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <button class="btn btn-red" onclick="saveTheme()">Save Theme →</button>
+          <button class="btn btn-dark" onclick="resetTheme()">Reset Default</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════ -->
+    <!-- NEWS TAB               -->
+    <!-- ═══════════════════════ -->
+    <div class="tab-pane" id="tab-news">
+      <div class="card">
+        <h3 class="card-title">📰 Publish News Article</h3>
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">HEADLINE *</label>
+            <input type="text" id="newsTitle" placeholder="News headline..." class="field-input">
+          </div>
+          <div class="form-col">
+            <label class="field-label">CATEGORY *</label>
+            <select id="newsCat" class="field-input">
+              <option value="Bollywood">Bollywood</option>
+              <option value="Hollywood">Hollywood</option>
+              <option value="OTT">OTT</option>
+              <option value="South Cinema">South Cinema</option>
+              <option value="World Cinema">World Cinema</option>
+              <option value="Box Office">Box Office</option>
+              <option value="Cinema">Cinema (General)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label class="field-label">DATE</label>
+            <input type="date" id="newsDate" class="field-input">
+          </div>
+          <div class="form-col">
+            <label class="field-label">AUTHOR</label>
+            <input type="text" id="newsAuthor" placeholder="By CinéOpsy" class="field-input">
+          </div>
+        </div>
+        <label class="field-label">COVER IMAGE URL</label>
+        <input type="text" id="newsCover" placeholder="https://i.ibb.co/xxxx/photo.jpg" class="field-input">
+        <small style="color:#555;font-size:11px;display:block;margin-top:4px;margin-bottom:12px">Free image upload: imgbb.com ya postimages.org</small>
+
+        <label class="field-label">SHORT DESCRIPTION (list mein dikhegi)</label>
+        <textarea id="newsExcerpt" placeholder="1-2 line summary..." rows="2" class="field-input" style="resize:vertical"></textarea>
+
+        <label class="field-label" style="margin-top:12px">FULL NEWS CONTENT *</label>
+        <small style="color:#555;font-size:11px;display:block;margin-bottom:6px">To add photos in between content, type [IMG0] [IMG1] etc. where you want the image</small>
+        <textarea id="newsContent" placeholder="Write full news content here...&#10;&#10;[IMG0]&#10;&#10;Continue writing..." rows="10" class="field-input" style="font-family:monospace;resize:vertical"></textarea>
+
+        <label class="field-label" style="margin-top:12px">INLINE IMAGES</label>
+        <small style="color:#555;font-size:11px;display:block;margin-bottom:8px">Add image URLs below for [IMG0], [IMG1], [IMG2] placeholders in content</small>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="img0url" placeholder="[IMG0] Image URL" class="field-input" style="flex:2">
+          <input type="text" id="img0cap" placeholder="Caption" class="field-input" style="flex:1">
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input type="text" id="img1url" placeholder="[IMG1] Image URL" class="field-input" style="flex:2">
+          <input type="text" id="img1cap" placeholder="Caption" class="field-input" style="flex:1">
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input type="text" id="img2url" placeholder="[IMG2] Image URL" class="field-input" style="flex:2">
+          <input type="text" id="img2cap" placeholder="Caption" class="field-input" style="flex:1">
+        </div>
+
+        <label class="field-label">TAGS (comma separated)</label>
+        <input type="text" id="newsTags" placeholder="Bollywood, SRK, Netflix, OTT" class="field-input">
+
+        <button onclick="addNews()" class="btn-save" style="margin-top:16px;width:100%">📰 PUBLISH NEWS →</button>
+        <div id="newsMsg" style="margin-top:10px;font-size:14px;text-align:center"></div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <h3 class="card-title">📋 Published News</h3>
+        <div id="newsList"><p style="color:#555;font-style:italic">Loading...</p></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════ -->
+    <!-- SETTINGS TAB           -->
+    <!-- ═══════════════════════ -->
+    <div class="tab-pane" id="tab-settings">
+
+      <div class="card">
+        <div class="card-title">🔥 Firebase Setup</div>
+        <div class="setup-box">
+          <h3>One-time setup — done forever! 🎯</h3>
+          <ol>
+            <li>Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a></li>
+            <li>Create a new project — name: <strong>cineopsy</strong></li>
+            <li>In your project: click <strong>Add app → Web (&lt;/&gt;)</strong></li>
+            <li>Register the app — copy your <strong>firebaseConfig</strong></li>
+            <li>In left menu: <strong>Firestore Database → Create database → Test mode → Enable</strong></li>
+            <li>Paste your config values in the form below</li>
+            <li>Save — then re-upload the site to Netlify</li>
+            <li style="color:#4eff4e"><strong>Done! ✅ Changes will now reflect everywhere!</strong></li>
+          </ol>
+        </div>
+
+        <div class="alert alert-success" id="fbSuccess">✓ Firebase config saved! Reupload site to Netlify.</div>
+        <div class="alert alert-error" id="fbError">❌ Error saving config.</div>
+
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:14px">Paste Your Firebase Config</div>
+        <div class="fg"><label>API Key</label><input type="text" id="fb_apiKey" placeholder="AIzaSy..."></div>
+        <div class="fg-row">
+          <div class="fg"><label>Auth Domain</label><input type="text" id="fb_authDomain" placeholder="cineopsy.firebaseapp.com"></div>
+          <div class="fg"><label>Project ID</label><input type="text" id="fb_projectId" placeholder="cineopsy-xxxxx"></div>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Storage Bucket</label><input type="text" id="fb_storageBucket" placeholder="cineopsy.appspot.com"></div>
+          <div class="fg"><label>Messaging Sender ID</label><input type="text" id="fb_messagingSenderId" placeholder="123456789"></div>
+        </div>
+        <div class="fg"><label>App ID</label><input type="text" id="fb_appId" placeholder="1:123:web:abc..."></div>
+        <button class="btn btn-red" onclick="saveFirebaseConfig()">Save Config & Download firebase-config.js →</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔐 Change Password</div>
+        <div class="alert alert-success" id="pwSuccess">✓ Password changed!</div>
+        <div class="alert alert-error" id="pwError">❌ Check fields and try again.</div>
+        <div class="fg"><label>Current Password</label><input type="password" id="pwCurrent" placeholder="Current password"></div>
+        <div class="fg"><label>New Password</label><input type="password" id="pwNew" placeholder="New password (min 6 chars)"></div>
+        <div class="fg"><label>Confirm New Password</label><input type="password" id="pwConfirm" placeholder="Confirm new password"></div>
+        <button class="btn btn-red" onclick="changePassword()">Change Password →</button>
+      </div>
+
+    </div><!-- end settings -->
+
+  </div><!-- end admin-wrap -->
+</div><!-- end adminPanel -->
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Episode</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="alert alert-success" id="editSuccess">✓ Updated!</div>
+    <div class="fg"><label>Title</label><input type="text" id="editTitle"></div>
+    <div class="fg-row">
+      <div class="fg"><label>Date</label><input type="date" id="editDate"></div>
+      <div class="fg"><label>YouTube Link</label><input type="text" id="editYoutube"></div>
+    </div>
+    <div class="fg"><label>Short Description</label><textarea id="editExcerpt" style="min-height:70px"></textarea></div>
+    <div class="fg"><label>Full Content</label><textarea id="editContent" style="min-height:180px"></textarea></div>
+    <input type="hidden" id="editId">
+    <input type="hidden" id="editPlaylist">
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-red" onclick="saveEdit()">Save Changes →</button>
+      <button class="btn btn-dark" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════
+// FIREBASE
+// ════════════════════════════════
+let db = null;
+let firebaseReady = false;
+
+function initFirebase() {
+  try {
+    const cfg = JSON.parse(localStorage.getItem('co_firebase_config') || 'null');
+    if (!cfg || !cfg.apiKey || cfg.apiKey === 'YOUR_API_KEY') throw new Error('No config');
+    if (!firebase.apps.length) firebase.initializeApp(cfg);
+    db = firebase.firestore();
+    firebaseReady = true;
+    console.log('✅ Firebase connected!');
+  } catch(e) {
+    firebaseReady = false;
+    document.getElementById('firebaseBanner').style.display = 'block';
+    console.warn('Firebase not ready:', e.message);
+  }
+}
+
+// ════════════════════════════════
+// LOGIN / LOGOUT
+// ════════════════════════════════
+const DEFAULT_PW = 'Cineopsy420@';
+function getPw() { return localStorage.getItem('co_pw') || DEFAULT_PW; }
+
+function login() {
+  const pw = document.getElementById('pwInput').value;
+  if (pw === getPw()) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('addDate').valueAsDate = new Date();
+    initFirebase();
+    updateInfoFields();
+    loadStats();
+    loadSiteText();
+    loadSocialLinks();
+    loadTheme();
+    loadFirebaseConfig();
+    loadEpisodeList();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+  }
+}
+
+function logout() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('pwInput').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+}
+
+function changePassword() {
+  const cur = document.getElementById('pwCurrent').value;
+  const nw  = document.getElementById('pwNew').value;
+  const cf  = document.getElementById('pwConfirm').value;
+  if (cur !== getPw())  { showAlert('pwError', '❌ Current password is wrong.'); return; }
+  if (nw.length < 6)    { showAlert('pwError', '❌ Min 6 characters required.'); return; }
+  if (nw !== cf)        { showAlert('pwError', '❌ Passwords do not match.'); return; }
+  localStorage.setItem('co_pw', nw);
+  ['pwCurrent','pwNew','pwConfirm'].forEach(id => document.getElementById(id).value = '');
+  showAlert('pwSuccess', '✓ Password changed!');
+}
+
+// ════════════════════════════════
+// TABS
+// ════════════════════════════════
+function switchTab(e, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+  if (id === 'episodes') loadEpisodeList();
+}
+
+// ════════════════════════════════
+// EPISODES
+// ════════════════════════════════
+const PL_FIELDS = {
+  weekly:        ['Box Office Report', 'New Releases', 'Upcoming Movies', 'Industry News'],
+  verdict:       ['Movie Name', 'Rating (out of 10)', 'Genre', 'Verdict: Watch / Skip'],
+  whatif:        ['Movie / Universe', 'The What If Question', 'Alternate Scenario', 'Key Point'],
+  casefiles:     ['Patient (Movie)', 'Symptoms', 'Diagnosis', 'Treatment / Verdict'],
+  beyondborders: ['Country / Industry', 'Film Name', 'Release Year', 'Why It Matters'],
+  specials:     ['Video Type', 'Main Topic', 'Special Feature', 'Notes'],
+};
+
+function updateInfoFields() {
+  const pl = document.getElementById('addPlaylist').value;
+  const fields = PL_FIELDS[pl] || [];
+  document.getElementById('infoFields').innerHTML = fields.map((f, i) =>
+    `<div class="fg"><label>${f}</label><input type="text" id="info_${i}" placeholder="${f}..."></div>`
+  ).join('');
+}
+
+async function addEpisode() {
+  const pl      = document.getElementById('addPlaylist').value;
+  const title   = document.getElementById('addTitle').value.trim();
+  const date    = document.getElementById('addDate').value;
+  const youtube = document.getElementById('addYoutube').value.trim();
+  const excerpt = document.getElementById('addExcerpt').value.trim();
+  const content = document.getElementById('addContent').value.trim();
+  if (!title) { showAlert('epError', '❌ Title is required!'); return; }
+
+  const info = (PL_FIELDS[pl] || []).map((f, i) => ({
+    label: f, val: document.getElementById('info_' + i)?.value.trim() || ''
+  }));
+
+  const ep = { title, date, youtube, excerpt, content, info, playlist: pl, createdAt: Date.now() };
+
+  try {
+    if (firebaseReady) {
+      await db.collection('episodes').doc(pl).collection('items').add(ep);
+    } else {
+      ep.id = Date.now();
+      const eps = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]');
+      eps.push(ep);
+      localStorage.setItem('co_ep_' + pl, JSON.stringify(eps));
+    }
+    showAlert('epSuccess', '✓ Episode added!');
+    // Reset form
+    ['addTitle','addYoutube','addExcerpt','addContent'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('addDate').valueAsDate = new Date();
+    updateInfoFields();
+    loadStats();
+    loadEpisodeList();
+  } catch(e) {
+    showAlert('epError', '❌ Error: ' + e.message);
+  }
+}
+
+async function loadEpisodeList() {
+  const pl   = document.getElementById('managePlaylist').value;
+  const list = document.getElementById('episodeList');
+  list.innerHTML = '<p style="color:var(--gray);font-style:italic">Loading...</p>';
+
+  let episodes = [];
+  try {
+    if (firebaseReady) {
+      const snap = await db.collection('episodes').doc(pl).collection('items').orderBy('createdAt','desc').get();
+      episodes = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    } else {
+      episodes = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]').slice().reverse();
+    }
+  } catch(e) {
+    list.innerHTML = `<p style="color:#ff4444">Error: ${e.message}</p>`;
+    return;
+  }
+
+  if (!episodes.length) {
+    list.innerHTML = '<p style="color:var(--gray);font-style:italic;font-size:15px">No episodes yet.</p>';
+    return;
+  }
+
+  list.innerHTML = episodes.map((ep, i) => `
+    <div class="ep-item">
+      <div>
+        <div class="ep-item-title">${episodes.length - i}. ${ep.title}</div>
+        <div class="ep-item-meta">${ep.date || 'No date'} &nbsp;·&nbsp; ${ep.youtube ? '🎬 Video linked' : '⏳ No video yet'}</div>
+      </div>
+      <div class="ep-item-btns">
+        <button class="btn-edit" onclick="openEdit('${pl}','${ep.id}')">Edit</button>
+        <button class="btn-del" onclick="deleteEp('${pl}','${ep.id}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function deleteEp(pl, id) {
+  if (!confirm('Delete this episode permanently?')) return;
+  if (firebaseReady) {
+    await db.collection('episodes').doc(pl).collection('items').doc(id).delete();
+  } else {
+    let eps = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]');
+    eps = eps.filter(e => String(e.id) !== String(id));
+    localStorage.setItem('co_ep_' + pl, JSON.stringify(eps));
+  }
+  loadEpisodeList();
+  loadStats();
+}
+
+async function openEdit(pl, id) {
+  let ep;
+  if (firebaseReady) {
+    const doc = await db.collection('episodes').doc(pl).collection('items').doc(id).get();
+    ep = { ...doc.data(), id };
+  } else {
+    ep = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]').find(e => String(e.id) === String(id));
+  }
+  if (!ep) return;
+  document.getElementById('editTitle').value   = ep.title   || '';
+  document.getElementById('editDate').value    = ep.date    || '';
+  document.getElementById('editYoutube').value = ep.youtube || '';
+  document.getElementById('editExcerpt').value = ep.excerpt || '';
+  document.getElementById('editContent').value = ep.content || '';
+  document.getElementById('editId').value      = id;
+  document.getElementById('editPlaylist').value= pl;
+  document.getElementById('editModal').classList.add('open');
+}
+
+async function saveEdit() {
+  const id = document.getElementById('editId').value;
+  const pl = document.getElementById('editPlaylist').value;
+  const data = {
+    title:   document.getElementById('editTitle').value.trim(),
+    date:    document.getElementById('editDate').value,
+    youtube: document.getElementById('editYoutube').value.trim(),
+    excerpt: document.getElementById('editExcerpt').value.trim(),
+    content: document.getElementById('editContent').value.trim(),
+  };
+  if (firebaseReady) {
+    await db.collection('episodes').doc(pl).collection('items').doc(id).update(data);
+  } else {
+    let eps = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]');
+    eps = eps.map(e => String(e.id) === String(id) ? { ...e, ...data } : e);
+    localStorage.setItem('co_ep_' + pl, JSON.stringify(eps));
+  }
+  showAlert('editSuccess', '✓ Updated!');
+  setTimeout(closeModal, 1500);
+  loadEpisodeList();
+}
+
+function closeModal() { document.getElementById('editModal').classList.remove('open'); }
+
+// ════════════════════════════════
+// STATS
+// ════════════════════════════════
+async function loadStats() {
+  const pls = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
+  for (let i = 0; i < pls.length; i++) {
+    let count = 0;
+    try {
+      if (firebaseReady) {
+        const snap = await db.collection('episodes').doc(pls[i]).collection('items').get();
+        count = snap.size;
+      } else {
+        count = JSON.parse(localStorage.getItem('co_ep_' + pls[i]) || '[]').length;
+      }
+    } catch(e) {}
+    document.getElementById('s' + i).textContent = count;
+  }
+}
+
+// ════════════════════════════════
+// SITE TEXT
+// ════════════════════════════════
+async function loadSiteText() {
+  let d = {};
+  try {
+    if (firebaseReady) {
+      const doc = await db.collection('settings').doc('sitetext').get();
+      if (doc.exists) d = doc.data();
+    } else {
+      d = JSON.parse(localStorage.getItem('co_sitetext') || '{}');
+    }
+  } catch(e) {}
+  const map = {
+    tagline:'tagline', aboutHeading:'aboutHeading', aboutP1:'aboutP1', aboutP2:'aboutP2',
+    s1n:'s1n', s1l:'s1l', s2n:'s2n', s2l:'s2l', s3n:'s3n', s3l:'s3l', s4n:'s4n', s4l:'s4l',
+    footer:'footer'
+  };
+  Object.keys(map).forEach(k => {
+    const el = document.getElementById('st_' + k);
+    if (el && d[k] !== undefined) el.value = d[k];
+  });
+}
+
+async function saveSiteText() {
+  const keys = ['tagline','aboutHeading','aboutP1','aboutP2','s1n','s1l','s2n','s2l','s3n','s3l','s4n','s4l','footer'];
+  const data = {};
+  keys.forEach(k => { const el = document.getElementById('st_' + k); if (el) data[k] = el.value; });
+  if (firebaseReady) await db.collection('settings').doc('sitetext').set(data);
+  else localStorage.setItem('co_sitetext', JSON.stringify(data));
+  showAlert('siteTextSuccess', '✓ Saved!');
+}
+
+// ════════════════════════════════
+// SOCIAL LINKS
+// ════════════════════════════════
+async function loadSocialLinks() {
+  let d = {};
+  try {
+    if (firebaseReady) { const doc = await db.collection('settings').doc('social').get(); if (doc.exists) d = doc.data(); }
+    else d = JSON.parse(localStorage.getItem('co_social') || '{}');
+  } catch(e) {}
+  ['youtube','instagram','twitter','threads','reddit','telegram','whatsapp'].forEach(k => {
+    const el = document.getElementById('sl_' + k);
+    if (el && d[k]) el.value = d[k];
+  });
+}
+
+async function saveSocialLinks() {
+  const data = {};
+  ['youtube','instagram','twitter','threads','reddit','telegram','whatsapp'].forEach(k => {
+    const el = document.getElementById('sl_' + k); if (el) data[k] = el.value;
+  });
+  if (firebaseReady) await db.collection('settings').doc('social').set(data);
+  else localStorage.setItem('co_social', JSON.stringify(data));
+  showAlert('socialSuccess', '✓ Links saved!');
+}
+
+// ════════════════════════════════
+// THEME
+// ════════════════════════════════
+const THEME_DEFAULTS = { red:'#cc0000', bg:'#080808', text:'#f0ece4', card:'#161616' };
+
+async function loadTheme() {
+  let d = {};
+  try {
+    if (firebaseReady) { const doc = await db.collection('settings').doc('theme').get(); if (doc.exists) d = doc.data(); }
+    else d = JSON.parse(localStorage.getItem('co_theme') || '{}');
+  } catch(e) {}
+  Object.keys(THEME_DEFAULTS).forEach(k => {
+    const val = d[k] || THEME_DEFAULTS[k];
+    document.getElementById('th_' + k).value     = val;
+    document.getElementById('th_' + k + '_hex').value = val;
+    document.getElementById('prev_' + k).style.background = val;
+  });
+}
+
+async function saveTheme() {
+  const data = {};
+  Object.keys(THEME_DEFAULTS).forEach(k => { data[k] = document.getElementById('th_' + k).value; });
+  if (firebaseReady) await db.collection('settings').doc('theme').set(data);
+  else localStorage.setItem('co_theme', JSON.stringify(data));
+  showAlert('themeSuccess', '✓ Theme saved!');
+}
+
+function resetTheme() {
+  Object.keys(THEME_DEFAULTS).forEach(k => {
+    document.getElementById('th_' + k).value = THEME_DEFAULTS[k];
+    document.getElementById('th_' + k + '_hex').value = THEME_DEFAULTS[k];
+    document.getElementById('prev_' + k).style.background = THEME_DEFAULTS[k];
+  });
+}
+
+function syncColor(id) {
+  const val = document.getElementById(id).value;
+  document.getElementById(id + '_hex').value = val;
+  document.getElementById('prev_' + id.replace('th_','')).style.background = val;
+}
+
+function syncHex(id) {
+  const val = document.getElementById(id + '_hex').value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+    document.getElementById(id).value = val;
+    document.getElementById('prev_' + id.replace('th_','')).style.background = val;
+  }
+}
+
+// ════════════════════════════════
+// FIREBASE CONFIG SAVER
+// ════════════════════════════════
+function loadFirebaseConfig() {
+  const cfg = JSON.parse(localStorage.getItem('co_firebase_config') || 'null');
+  if (!cfg) return;
+  ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'].forEach(k => {
+    const el = document.getElementById('fb_' + k); if (el && cfg[k]) el.value = cfg[k];
+  });
+}
+
+function saveFirebaseConfig() {
+  const keys = ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'];
+  const cfg = {};
+  keys.forEach(k => { cfg[k] = document.getElementById('fb_' + k).value.trim(); });
+  if (!cfg.apiKey) { showAlert('fbError','❌ API Key is required!'); return; }
+
+  localStorage.setItem('co_firebase_config', JSON.stringify(cfg));
+
+  // Generate and download firebase-config.js
+  const js = `// CinéOpsy Firebase Config — Generated from Admin Panel
+const FIREBASE_CONFIG = ${JSON.stringify(cfg, null, 2)};
+const ADMIN_PASSWORD = "${getPw()}";`;
+
+  const blob = new Blob([js], { type: 'application/javascript' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'firebase-config.js';
+  a.click();
+
+  showAlert('fbSuccess', '✓ Config saved! File downloaded. Replace old firebase-config.js and reupload to Netlify.');
+}
+
+// ════════════════════════════════
+// HELPERS
+// ════════════════════════════════
+function showAlert(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (msg) el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// Init
+document.getElementById('addDate').valueAsDate = new Date();
+updateInfoFields();
+
+// ── NEWS FUNCTIONS ──
+async function addNews() {
+  const title = document.getElementById('newsTitle').value.trim();
+  const content = document.getElementById('newsContent').value.trim();
+  if (!title || !content) { document.getElementById('newsMsg').innerHTML = '<span style="color:#ff4444">Headline and content are required!</span>'; return; }
+
+  const dateVal = document.getElementById('newsDate').value;
+  const images = [];
+  for (let i = 0; i < 3; i++) {
+    const url = document.getElementById('img' + i + 'url').value.trim();
+    const cap = document.getElementById('img' + i + 'cap').value.trim();
+    if (url) images.push({url, caption: cap});
+  }
+  const tagsRaw = document.getElementById('newsTags').value;
+  const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
+
+  const data = {
+    title,
+    category: document.getElementById('newsCat').value,
+    date: dateVal ? new Date(dateVal).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}) : new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),
+    author: document.getElementById('newsAuthor').value.trim() || 'CinéOpsy',
+    coverImage: document.getElementById('newsCover').value.trim(),
+    excerpt: document.getElementById('newsExcerpt').value.trim(),
+    content,
+    images,
+    tags,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  const btn = document.querySelector('[onclick="addNews()"]');
+  btn.textContent = 'Publishing...'; btn.disabled = true;
+  document.getElementById('newsMsg').innerHTML = '';
+
+  try {
+    if (firebaseReady) {
+      await db.collection('news').add(data);
+      document.getElementById('newsMsg').innerHTML = '<span style="color:#44ff88">✅ News published! Live on website!</span>';
+      // Clear fields
+      ['newsTitle','newsContent','newsExcerpt','newsCover','newsAuthor','newsTags','img0url','img0cap','img1url','img1cap','img2url','img2cap'].forEach(id => {
+        const el = document.getElementById(id); if(el) el.value = '';
+      });
+      loadNewsList();
+    } else {
+      document.getElementById('newsMsg').innerHTML = '<span style="color:#ff4444">Firebase not connected!</span>';
+    }
+  } catch(e) {
+    document.getElementById('newsMsg').innerHTML = '<span style="color:#ff4444">Error: ' + e.message + '</span>';
+  }
+  btn.textContent = '📰 PUBLISH NEWS →'; btn.disabled = false;
+}
+
+async function loadNewsList() {
+  const list = document.getElementById('newsList');
+  if (!list) return;
+  list.innerHTML = '<p style="color:#666;font-style:italic">Loading...</p>';
+  try {
+    if (!firebaseReady) { list.innerHTML = '<p style="color:#666">Firebase not connected.</p>'; return; }
+    const snap = await db.collection('news').orderBy('createdAt','desc').get();
+    const news = snap.docs.map(d => ({...d.data(), id: d.id}));
+    if (!news.length) { list.innerHTML = '<p style="color:#666;font-style:italic">No news yet.</p>'; return; }
+    list.innerHTML = news.map(n => `
+      <div class="ep-item">
+        <div class="ep-info">
+          <span class="ep-pl-badge">${n.category||'Cinema'}</span>
+          <span class="ep-title-text">${n.title}</span>
+          <span class="ep-date-text">${n.date||''}</span>
+        </div>
+        <div class="ep-actions">
+          <button onclick="deleteNews('${n.id}')" class="btn-del">Delete</button>
+        </div>
+      </div>`).join('');
+  } catch(e) { list.innerHTML = '<p style="color:#f44">Error loading news.</p>'; }
+}
+
+async function deleteNews(id) {
+  if (!confirm('Delete this news article?')) return;
+  try {
+    await db.collection('news').doc(id).delete();
+    loadNewsList();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+// Load news list when tab is shown
+const origShowTab = window.showTab;
+window.showTab = function(tab, btn) {
+  origShowTab(tab, btn);
+  if (tab === 'news') loadNewsList();
+};
+
+</script>
+</body>
+</html>

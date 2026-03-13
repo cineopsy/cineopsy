@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style>
+/* ============================================
+   COMPREHENSIVE LIGHT MODE — ALL ELEMENTS
+   ============================================ */
+
+/* Base */
+:root.light body { background:#f5f5f0 !important; color:#111111 !important; }
+
+/* ── Navigation ── */
+:root.light nav { background:rgba(245,245,240,0.97) !important; border-bottom:1px solid rgba(0,0,0,0.1) !important; }
+:root.light .nav-logo .cine { color:#111111 !important; }
+:root.light .nav-logo .opsy { color:#cc0000 !important; }
+:root.light .nav-links a { color:rgba(20,20,20,0.6) !important; }
+:root.light .nav-links a:hover { color:#111111 !important; }
+:root.light .hamburger span { background:#111111 !important; }
+:root.light .theme-btn { border-color:rgba(0,0,0,0.2) !important; color:#111111 !important; }
+
+/* ── Footer ── */
+:root.light footer { background:#e8e8e4 !important; border-top:1px solid rgba(0,0,0,0.08) !important; }
+:root.light footer * { color:#111111 !important; }
+:root.light .footer-logo .cine { color:#111111 !important; }
+:root.light .footer-logo .opsy { color:#cc0000 !important; }
+:root.light .footer-tagline { color:rgba(20,20,20,0.55) !important; }
+:root.light .footer-copy { color:rgba(20,20,20,0.4) !important; }
+
+/* ── Hero ── */
+:root.light #hero { background:#f0f0eb !important; }
+:root.light .hero-title .cine { color:#111111 !important; }
+:root.light .hero-title .opsy { color:#cc0000 !important; }
+:root.light .hero-tagline { color:rgba(20,20,20,0.45) !important; }
+:root.light .hero-bg { opacity:0.5 !important; }
+:root.light .filmline { background:rgba(220,220,215,0.99) !important; }
+:root.light .fhole { background:#f0f0eb !important; border-color:rgba(0,0,0,0.1) !important; }
+
+/* ── Buttons ── */
+:root.light .btn-outline { border-color:rgba(0,0,0,0.25) !important; color:#111111 !important; background:transparent !important; }
+:root.light .btn-outline:hover { background:rgba(204,0,0,0.08) !important; color:#cc0000 !important; }
+:root.light .btn-primary { background:#cc0000 !important; color:#ffffff !important; }
+
+/* ── Section labels & titles ── */
+:root.light .section-label { color:#cc0000 !important; }
+:root.light .section-title { color:#111111 !important; }
+:root.light .section-title span { color:#cc0000 !important; }
+:root.light .section-sub { color:rgba(20,20,20,0.55) !important; }
+
+/* ── Cards ── */
+:root.light .playlist-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .playlist-card:hover { border-color:rgba(204,0,0,0.3) !important; }
+:root.light .pl-name { color:#111111 !important; }
+:root.light .pl-desc { color:rgba(20,20,20,0.6) !important; }
+:root.light .pl-day { color:#cc0000 !important; }
+:root.light .pl-freq { color:rgba(204,0,0,0.7) !important; border-top-color:rgba(0,0,0,0.08) !important; }
+
+/* ── Stat boxes ── */
+:root.light .stat-box { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .stat-num { color:#cc0000 !important; }
+:root.light .stat-lbl { color:rgba(20,20,20,0.55) !important; }
+
+/* ── About section ── */
+:root.light .about-text p { color:rgba(20,20,20,0.75) !important; }
+:root.light .about-text strong { color:#111111 !important; }
+
+/* ── Playlist hero ── */
+:root.light .pl-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.06),transparent) !important; border-bottom-color:rgba(204,0,0,0.15) !important; }
+:root.light .pl-hero-day { color:#cc0000 !important; }
+:root.light .pl-hero * { color:#111111 !important; }
+:root.light .pl-hero p { color:rgba(20,20,20,0.6) !important; }
+
+/* ── Episode cards ── */
+:root.light .ep-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .ep-card:hover { border-color:rgba(204,0,0,0.3) !important; }
+:root.light .ep-num { color:#cc0000 !important; }
+:root.light .ep-title { color:#111111 !important; }
+:root.light .ep-date { color:rgba(20,20,20,0.5) !important; }
+:root.light .ep-excerpt { color:rgba(20,20,20,0.6) !important; }
+:root.light .ep-arrow { color:#cc0000 !important; }
+
+/* ── Episode detail page ── */
+:root.light .ep-back { color:rgba(20,20,20,0.55) !important; }
+:root.light .ep-back:hover { color:#cc0000 !important; }
+:root.light .ep-badge { color:#cc0000 !important; }
+:root.light .ep-main-title { color:#111111 !important; }
+:root.light .ep-meta { color:rgba(20,20,20,0.5) !important; }
+:root.light .video-wrap { background:#e0e0db !important; border-color:rgba(0,0,0,0.08) !important; }
+:root.light .info-box { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .info-label { color:#cc0000 !important; }
+:root.light .info-val { color:#111111 !important; }
+:root.light .content-body { color:rgba(20,20,20,0.8) !important; }
+:root.light .content-body h3 { color:#111111 !important; }
+:root.light .content-body strong { color:#111111 !important; }
+:root.light .content-body em { color:rgba(20,20,20,0.6) !important; }
+:root.light .content-body blockquote { background:rgba(204,0,0,0.04) !important; color:rgba(20,20,20,0.7) !important; }
+
+/* ── Related cards ── */
+:root.light .rel-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .rel-cat { color:#cc0000 !important; }
+:root.light .rel-title { color:#111111 !important; }
+:root.light .rel-num { color:#cc0000 !important; }
+
+/* ── News page ── */
+:root.light .news-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.06),transparent) !important; border-bottom-color:rgba(204,0,0,0.2) !important; }
+:root.light .news-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .news-card:hover { border-color:rgba(204,0,0,0.3) !important; }
+:root.light .news-card-title { color:#111111 !important; }
+:root.light .news-card-date { color:rgba(20,20,20,0.5) !important; }
+:root.light .news-card-excerpt { color:rgba(20,20,20,0.6) !important; }
+:root.light .news-cat { color:#cc0000 !important; border-color:rgba(204,0,0,0.3) !important; }
+:root.light .cat-btn { color:rgba(20,20,20,0.6) !important; border-color:rgba(0,0,0,0.15) !important; }
+:root.light .cat-btn.active, :root.light .cat-btn:hover { color:#111111 !important; border-color:#cc0000 !important; background:rgba(204,0,0,0.06) !important; }
+:root.light .featured-badge { background:#cc0000 !important; color:#ffffff !important; }
+
+/* ── News article page ── */
+:root.light .article-cat { color:#cc0000 !important; border-color:rgba(204,0,0,0.3) !important; }
+:root.light .article-title { color:#111111 !important; }
+:root.light .article-meta { color:rgba(20,20,20,0.5) !important; }
+:root.light .article-body { color:rgba(20,20,20,0.8) !important; }
+:root.light .article-body h2 { color:#111111 !important; }
+:root.light .article-body h3 { color:#111111 !important; }
+:root.light .article-body strong { color:#111111 !important; }
+:root.light .article-body blockquote { background:rgba(204,0,0,0.04) !important; color:rgba(20,20,20,0.7) !important; }
+:root.light .article-tags .tag { color:rgba(20,20,20,0.6) !important; border-color:rgba(0,0,0,0.12) !important; }
+:root.light .article-back { color:rgba(20,20,20,0.55) !important; }
+:root.light .article-back:hover { color:#cc0000 !important; }
+:root.light .article-cover { border-color:rgba(0,0,0,0.08) !important; }
+
+/* ── Contact page ── */
+:root.light .contact-heading { color:#111111 !important; }
+:root.light .social-link { background:#e4e4e0 !important; color:#111111 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .social-link:hover { border-color:#cc0000 !important; color:#cc0000 !important; }
+:root.light input, :root.light textarea, :root.light select { background:#e8e8e4 !important; border-color:rgba(0,0,0,0.15) !important; color:#111111 !important; }
+:root.light input::placeholder, :root.light textarea::placeholder { color:rgba(20,20,20,0.35) !important; }
+:root.light input:focus, :root.light textarea:focus { border-color:#cc0000 !important; }
+
+/* ── Red divider ── */
+:root.light .red-divider { background:linear-gradient(90deg,transparent,rgba(204,0,0,0.35),transparent) !important; }
+
+/* ── Loading / Empty states ── */
+:root.light .loading-state { color:rgba(20,20,20,0.5) !important; }
+:root.light .empty-state { background:rgba(204,0,0,0.02) !important; border-color:rgba(204,0,0,0.15) !important; }
+:root.light .empty-title { color:rgba(20,20,20,0.6) !important; }
+:root.light .empty-sub { color:rgba(20,20,20,0.45) !important; }
+
+/* ── Generic white text fix ── */
+:root.light h1,:root.light h2,:root.light h3,:root.light h4 { color:#111111 !important; }
+:root.light p { color:rgba(20,20,20,0.75) !important; }
+
+/* ── Google Translate ── */
+:root.light .goog-te-gadget select { border-color:rgba(0,0,0,0.2) !important; color:#111111 !important; background:#f0f0eb !important; }
+
+/* ── News hero strip on homepage ── */
+:root.light #heroNewsStrip a { background:rgba(0,0,0,0.04) !important; border-color:rgba(0,0,0,0.08) !important; border-left-color:#cc0000 !important; }
+:root.light #heroNewsStrip a span:last-child { color:#111111 !important; }
+</style>
+
+<!-- Light Theme -->
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Beyond Borders — CinéOpsy</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap');
+:root{--red:#cc0000;--red-bright:#ff2222;--black:#080808;--black2:#0f0f0f;--black3:#161616;--white:#f0ece4;--gray:#888;--gray-light:#555;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Crimson Pro',Georgia,serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 40px;background:rgba(8,8,8,0.97);border-bottom:1px solid rgba(204,0,0,0.15);}
+.nav-logo img{height:52px;object-fit:contain;}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--red);transition:width 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{width:24px;height:2px;background:var(--white);transition:0.3s;}
+.red-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.page-wrap{max-width:1100px;margin:0 auto;padding:100px 30px 60px;}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.section-label::before{content:'';width:30px;height:1px;background:var(--red);}
+.section-title{font-family:'Cinzel',serif;font-size:clamp(24px,4vw,40px);font-weight:700;color:var(--white);margin-bottom:6px;line-height:1.1;}
+.section-title span{color:var(--red);}
+.section-sub{font-family:'Crimson Pro',serif;font-style:italic;font-size:16px;color:var(--gray);margin-bottom:40px;}
+.btn-primary{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;background:var(--red);color:var(--white);padding:12px 28px;text-decoration:none;border:1px solid var(--red);transition:all 0.2s;display:inline-block;cursor:pointer;}
+.btn-primary:hover{background:var(--red-bright);box-shadow:0 0 20px rgba(204,0,0,0.4);}
+.btn-outline{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;background:transparent;color:var(--white);padding:12px 28px;text-decoration:none;border:1px solid rgba(240,236,228,0.3);transition:all 0.2s;display:inline-block;cursor:pointer;}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
+footer{border-top:1px solid rgba(255,255,255,0.05);padding:30px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+footer img{height:36px;object-fit:contain;}
+.footer-copy{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);}
+.footer-tagline{font-family:'Crimson Pro',serif;font-style:italic;font-size:13px;color:rgba(204,0,0,0.5);}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s,transform 0.6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav{padding:10px 20px;}.nav-links{display:none;flex-direction:column;position:fixed;top:72px;left:0;right:0;background:rgba(8,8,8,0.98);padding:20px;gap:16px;border-bottom:1px solid rgba(204,0,0,0.2);}.nav-links.open{display:flex;}.hamburger{display:flex;}.page-wrap{padding:90px 16px 40px;}footer{flex-direction:column;text-align:center;padding:20px;}}
+</style>
+
+
+<style>
+.pl-hero{background:linear-gradient(to bottom,rgba(204,0,0,0.08),transparent);border-bottom:1px solid rgba(204,0,0,0.15);padding:80px 0 40px;text-align:center;}
+.pl-hero-icon{font-size:52px;margin-bottom:16px;}
+.pl-hero-day{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.episodes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:10px;}
+.ep-card{background:var(--black3);border:1px solid rgba(255,255,255,0.05);padding:24px;text-decoration:none;color:inherit;display:block;transition:transform 0.3s,border-color 0.3s;position:relative;overflow:hidden;}
+.ep-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transition:transform 0.3s;transform-origin:bottom;}
+.ep-card:hover{transform:translateY(-4px);border-color:rgba(204,0,0,0.3);}.ep-card:hover::before{transform:scaleY(1);}
+.ep-num{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.ep-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.3;}
+.ep-date{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:10px;}
+.ep-excerpt{font-size:13px;color:var(--gray);line-height:1.6;}
+.ep-arrow{position:absolute;bottom:20px;right:20px;color:var(--red);font-size:18px;opacity:0;transition:opacity 0.3s,transform 0.3s;}
+.ep-card:hover .ep-arrow{opacity:1;transform:translateX(4px);}
+.loading-state{text-align:center;padding:60px 20px;color:var(--gray);font-style:italic;font-size:16px;}
+.empty-state{text-align:center;padding:80px 20px;border:1px dashed rgba(204,0,0,0.2);background:rgba(204,0,0,0.03);}
+.empty-icon{font-size:48px;margin-bottom:16px;}
+.empty-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gray);margin-bottom:10px;}
+.empty-sub{font-size:15px;color:var(--gray);font-style:italic;}
+</style>
+
+<style>
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:3px;text-decoration:none;}
+.nav-logo .cine{color:#f0ece4;}.nav-logo .opsy{color:#cc0000;}
+.footer-logo{font-family:'Cinzel',serif;font-size:20px;font-weight:700;letter-spacing:3px;}
+.footer-logo .cine{color:#f0ece4;}.footer-logo .opsy{color:#cc0000;}
+</style>
+
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="news.html" style="color:#cc0000;font-weight:700">📰 News</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="weekly.html">Weekly</a></li>
+    <li><a href="verdict.html">Verdict</a></li>
+    <li><a href="whatif.html">What If</a></li>
+    <li><a href="casefiles.html">Case Files</a></li>
+    <li><a href="beyondborders.html">Beyond Borders</a></li>
+    <li><a href="specials.html">Specials</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-controls">
+    <div id="google_translate_element"></div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+  </div>
+</nav>
+
+<div class="pl-hero">
+  <div class="pl-hero-icon">🌍</div>
+  <div class="pl-hero-day">Every 2 Tuesdays</div>
+  <div class="section-label" style="justify-content:center">World Cinema</div>
+  <h1 class="section-title" style="font-size:clamp(28px,5vw,52px)">Beyond Borders</h1>
+  <p style="font-family:'Crimson Pro',serif;font-style:italic;font-size:17px;color:var(--gray);margin-top:10px;padding:0 20px">World cinema that never reached India. Films from across the globe — explained in Hindi.</p>
+</div>
+<div class="red-divider"></div>
+<section class="page-wrap">
+  <div class="section-label">All Episodes</div>
+  <h2 class="section-title reveal">Every <span>Episode</span></h2>
+  <p class="section-sub reveal">Click any episode to watch & read.</p>
+  <div class="episodes-grid" id="episodesGrid">
+    <div class="loading-state">Loading episodes...</div>
+  </div>
+  <div style="text-align:center;margin-top:40px" class="reveal">
+    <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary">Watch on YouTube</a>
+    <a href="index.html" class="btn-outline" style="margin-left:12px">← Back to Home</a>
+  </div>
+</section>
+
+<div class="red-divider"></div>
+<footer>
+  <div class="footer-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></div>
+  <div class="footer-tagline">Where Cinema Meets Biopsy</div>
+  <div class="footer-copy" id="footerCopy">© 2026 CinéOpsy. All rights reserved.</div>
+</footer>
+
+
+<script>
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
+// Set active nav link
+(function(){
+  const links = document.querySelectorAll('.nav-links a');
+  const page = location.pathname.split('/').pop() || 'index.html';
+  links.forEach(l => { if(l.getAttribute('href') === page) l.classList.add('active'); });
+})();
+// Reveal on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*80); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+
+<script>
+
+// ── Firebase Init ──
+let db = null;
+let firebaseReady = false;
+try {
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+  firebaseReady = true;
+} catch(e) { console.warn('Firebase not ready:', e.message); }
+
+// ── Load settings (tagline, social etc) ──
+async function loadSiteSettings() {
+  if (!firebaseReady) return;
+  try {
+    // Footer text
+    const st = await db.collection('settings').doc('sitetext').get();
+    if (st.exists && st.data().footer) {
+      const el = document.getElementById('footerCopy');
+      if (el) el.textContent = st.data().footer;
+    }
+    // Theme colors
+    const th = await db.collection('settings').doc('theme').get();
+    if (th.exists) {
+      const d = th.data();
+      const root = document.documentElement;
+      if (d.red)  root.style.setProperty('--red', d.red);
+      if (d.bg)   root.style.setProperty('--black', d.bg);
+      if (d.text) root.style.setProperty('--white', d.text);
+      if (d.card) root.style.setProperty('--black3', d.card);
+    }
+  } catch(e) {}
+}
+loadSiteSettings();
+
+
+const PLAYLIST_ID = 'beyondborders';
+const EP_FILE = 'beyondborders_ep.html';
+const EP_LABEL = 'Episode';
+
+async function loadEpisodes() {
+  const grid = document.getElementById('episodesGrid');
+  let episodes = [];
+
+  try {
+    if (firebaseReady) {
+      const snap = await db.collection('episodes').doc(PLAYLIST_ID).collection('items')
+                           .orderBy('createdAt','desc').get();
+      episodes = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    } else {
+      episodes = JSON.parse(localStorage.getItem('co_ep_' + PLAYLIST_ID) || '[]').slice().reverse();
+    }
+  } catch(e) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load</div><div class="empty-sub">Please refresh the page.</div></div>';
+    return;
+  }
+
+  if (!episodes.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🌍</div>
+      <div class="empty-title">Coming Soon</div>
+      <div class="empty-sub">First episode coming soon.<br>Subscribe on YouTube to get notified!</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = '';
+  episodes.forEach((ep, i) => {
+    const num = episodes.length - i;
+    const card = document.createElement('a');
+    card.href = EP_FILE + '?id=' + ep.id + '&pl=' + PLAYLIST_ID;
+    card.className = 'ep-card reveal';
+    card.innerHTML = `
+      <div class="ep-num">${EP_LABEL} ${num}</div>
+      <div class="ep-title">${ep.title}</div>
+      <div class="ep-date">${ep.date || ''}</div>
+      <div class="ep-excerpt">${ep.excerpt || ''}</div>
+      <div class="ep-arrow">→</div>`;
+    grid.appendChild(card);
+  });
+
+  // Reveal animation
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*60); });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+}
+
+loadEpisodes();
+</script>
+
+<script type="text/javascript">
+// Google Translate
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'hi,ta,te,ml,bn,mr,gu,pa,kn,ur,fr,es,de,ja,zh-CN,ar',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+// Theme toggle
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.classList.add('light');
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.innerHTML = '☀️ Light';
+  } else {
+    document.documentElement.classList.remove('light');
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.innerHTML = '🌙 Dark';
+  }
+}
+function toggleTheme() {
+  const isLight = document.documentElement.classList.contains('light');
+  const newTheme = isLight ? 'dark' : 'light';
+  localStorage.setItem('cineopsy_theme', newTheme);
+  applyTheme(newTheme);
+}
+// Apply saved theme on load
+(function() {
+  const saved = localStorage.getItem('cineopsy_theme') || 'dark';
+  applyTheme(saved);
+})();
+</script>
+</body></html>
