@@ -1,6 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<script>
+// ══ CRITICAL UI FUNCTIONS — Inline, no dependencies ══
+// These must work IMMEDIATELY, before any external scripts load
+
+function toggleTheme() {
+  var isLight = document.documentElement.classList.contains('light');
+  var next = isLight ? 'dark' : 'light';
+  localStorage.setItem('co_theme', next);
+  document.documentElement.classList.toggle('light', !isLight);
+  var btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = next === 'light' ? '☀️' : '🌙';
+  // Hero bg fix
+  var hero = document.getElementById('hero');
+  if (hero) hero.style.background = next === 'light' ? '#f0f0eb' : '#080808';
+  document.querySelectorAll('.filmstrip').forEach(function(el) {
+    el.style.background = next === 'light' ? 'rgba(215,215,210,0.99)' : 'rgba(6,6,6,0.99)';
+  });
+}
+
+function toggleMenu() {
+  var links = document.getElementById('navLinks');
+  if (links) links.classList.toggle('open');
+}
+
+function openSearch() {
+  var overlay = document.getElementById('searchOverlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() {
+    var inp = document.getElementById('searchInput');
+    if (inp) inp.focus();
+  }, 80);
+}
+
+function closeSearch() {
+  var overlay = document.getElementById('searchOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  var inp = document.getElementById('searchInput');
+  if (inp) inp.value = '';
+  var res = document.getElementById('searchResults');
+  if (res) res.innerHTML = '';
+}
+
+// Apply theme immediately
+(function() {
+  var t = localStorage.getItem('co_theme') || 'dark';
+  if (t === 'light') {
+    document.documentElement.classList.add('light');
+  }
+  // Update button after DOM loads
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('themeBtn');
+    if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
+    var hero = document.getElementById('hero');
+    if (hero && t === 'light') hero.style.background = '#f0f0eb';
+  });
+})();
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  var links = document.getElementById('navLinks');
+  if (links && links.classList.contains('open')) {
+    if (!e.target.closest('nav')) {
+      links.classList.remove('open');
+    }
+  }
+});
+
+// ESC closes search
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeSearch();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearch();
+  }
+});
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>404 — Scene Not Found — CinéOpsy</title>

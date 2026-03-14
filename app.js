@@ -14,37 +14,9 @@ function initFirebase() {
 }
 
 // ── Theme ──
-function applyTheme(t) {
-  document.documentElement.classList.toggle('light', t === 'light');
-  const btn = document.getElementById('themeBtn');
-  if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
-  // Fix hero bg
-  const hero = document.getElementById('hero');
-  if (hero) hero.style.background = t === 'light' ? '#f0f0eb' : '#080808';
-  // Fix filmstrip bg
-  document.querySelectorAll('.filmstrip').forEach(function(el) {
-    el.style.background = t === 'light' ? 'rgba(215,215,210,0.99)' : 'rgba(6,6,6,0.99)';
-  });
-}
-function toggleTheme() {
-  const isLight = document.documentElement.classList.contains('light');
-  const next = isLight ? 'dark' : 'light';
-  localStorage.setItem('co_theme', next);
-  applyTheme(next);
-}
 
 
 // ── Nav ──
-function toggleMenu() {
-  var links = document.getElementById('navLinks');
-  if (links) links.classList.toggle('open');
-}
-document.addEventListener('click', e => {
-  const links = document.getElementById('navLinks');
-  if (links?.classList.contains('open') && !e.target.closest('nav')) {
-    links.classList.remove('open');
-  }
-});
 
 // ── Scroll to Top ──
 window.addEventListener('scroll', () => {
@@ -80,30 +52,8 @@ function showToast(msg, ms = 3000) {
 
 // ── Search ──
 let _searchTimer;
-function openSearch() {
-  var o = document.getElementById('searchOverlay');
-  if (!o) return;
-  o.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(function() {
-    var inp = document.getElementById('searchInput');
-    if (inp) inp.focus();
-  }, 80);
-}
-function closeSearch() {
-  var o = document.getElementById('searchOverlay');
-  if (!o) return;
-  o.classList.remove('open');
-  document.body.style.overflow = '';
-  var inp = document.getElementById('searchInput');
-  if (inp) inp.value = '';
-  var res = document.getElementById('searchResults');
-  if (res) res.innerHTML = '';
-}
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeSearch();
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
-});
+
+
 function setupSearch() {
   const inp = document.getElementById('searchInput');
   if (!inp) return;
@@ -339,18 +289,7 @@ function getEpUrl(pl, id) {
 }
 function getParam(n) { return new URLSearchParams(location.search).get(n); }
 
-// ── Apply theme IMMEDIATELY on script load (before DOM ready) ──
-(function() {
-  var t = localStorage.getItem('co_theme') || 'dark';
-  if (t === 'light') document.documentElement.classList.add('light');
-  // Update button when DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('themeBtn');
-    if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
-    var hero = document.getElementById('hero');
-    if (hero) hero.style.background = t === 'light' ? '#f0f0eb' : '#080808';
-  });
-})();
+
 
 // ── Init on DOM ready ──
 document.addEventListener('DOMContentLoaded', function() {
