@@ -18,6 +18,13 @@ function applyTheme(t) {
   document.documentElement.classList.toggle('light', t === 'light');
   const btn = document.getElementById('themeBtn');
   if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
+  // Fix hero bg
+  const hero = document.getElementById('hero');
+  if (hero) hero.style.background = t === 'light' ? '#f0f0eb' : '#080808';
+  // Fix filmstrip bg
+  document.querySelectorAll('.filmstrip').forEach(function(el) {
+    el.style.background = t === 'light' ? 'rgba(215,215,210,0.99)' : 'rgba(6,6,6,0.99)';
+  });
 }
 function toggleTheme() {
   const isLight = document.documentElement.classList.contains('light');

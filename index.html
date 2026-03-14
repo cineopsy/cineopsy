@@ -101,7 +101,7 @@
   </div>
 </nav>
 
-<div id="hero">
+<div id="hero" style="padding-top:58px">
   <div class="hero-bg"></div>
   <div class="filmstrip top" id="fst"></div>
   <div class="hero-content">
@@ -188,6 +188,22 @@
 </div>
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 <script>
+// Apply correct hero bg on theme change
+function fixHeroBg() {
+  var hero = document.getElementById('hero');
+  if (!hero) return;
+  var isLight = document.documentElement.classList.contains('light');
+  hero.style.background = isLight ? '#f0f0eb' : '#080808';
+}
+// Watch for theme changes
+var _origToggle = window.toggleTheme;
+window.toggleTheme = function() {
+  _origToggle();
+  setTimeout(fixHeroBg, 10);
+};
+document.addEventListener('DOMContentLoaded', fixHeroBg);
+window.addEventListener('load', fixHeroBg);
+
 ['fst','fsb'].forEach(function(id){
   var el=document.getElementById(id);
   if(!el)return;

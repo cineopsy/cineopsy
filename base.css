@@ -450,3 +450,76 @@ nav#navbar {
 .newsletter-form { flex-direction:column !important; }
 .newsletter-input { border:1px solid rgba(255,255,255,0.18) !important; border-bottom:none !important; border-radius:3px 3px 0 0 !important; }
 .newsletter-btn { border-radius:0 0 3px 3px !important; }
+
+/* ══════════════════════════════════════
+   FIX 1: LIGHT MODE HERO — Black bg fix
+   ══════════════════════════════════════ */
+:root.light #hero {
+  background:#f0f0eb !important;
+  color:#111111 !important;
+}
+:root.light #hero * {
+  color:#111111;
+}
+:root.light .hero-title .cine { color:#111111 !important; }
+:root.light .hero-title .opsy { color:#cc0000 !important; }
+:root.light .hero-tag { color:rgba(20,20,20,0.5) !important; }
+:root.light .hero-line {
+  background:linear-gradient(90deg,transparent,rgba(204,0,0,0.6),#cc0000,rgba(204,0,0,0.6),transparent) !important;
+}
+:root.light .filmstrip {
+  background:rgba(215,215,210,0.99) !important;
+}
+:root.light .fhole {
+  background:#f0f0eb !important;
+  border-color:rgba(0,0,0,0.1) !important;
+}
+:root.light .hero-bg {
+  background:radial-gradient(ellipse at 35% 45%, rgba(204,0,0,0.07) 0%, transparent 55%) !important;
+}
+:root.light .btn-outline {
+  border-color:rgba(0,0,0,0.25) !important;
+  color:#111111 !important;
+  background:transparent !important;
+}
+:root.light .btn-outline:hover {
+  border-color:#cc0000 !important;
+  color:#cc0000 !important;
+}
+
+/* ══════════════════════════════════════
+   FIX 2: LIGHT MODE STAT LABELS — Invisible text fix
+   ══════════════════════════════════════ */
+:root.light .stat-lbl {
+  color:rgba(20,20,20,0.55) !important;
+}
+:root.light .stat-num {
+  color:#cc0000 !important;
+}
+:root.light .stat-box {
+  background:#e0e0db !important;
+  border-color:rgba(0,0,0,0.07) !important;
+}
+
+/* ══════════════════════════════════════
+   FIX 3: NEWS PAGE — Top gap fix
+   ══════════════════════════════════════ */
+.news-ticker {
+  margin-top:58px; /* account for fixed nav */
+}
+.news-hero {
+  padding-top:50px !important;
+  padding-bottom:36px !important;
+}
+
+/* ══════════════════════════════════════
+   FIX 4: HERO — proper min-height & centering
+   ══════════════════════════════════════ */
+#hero {
+  min-height:100vh;
+  padding-top:58px; /* nav height */
+}
+.hero-content {
+  z-index:2;
+  position:relative;
+}
