@@ -365,14 +365,18 @@ async function loadPageContent() {
   if (typeof CONTENT_DEFAULTS !== 'undefined') {
     SITE_CONTENT = Object.assign({}, CONTENT_DEFAULTS);
   }
-  // Override with Firebase values
+  // Override with Firebase - load BOTH content and about collections
   if (db) {
     try {
-      const doc = await db.collection('settings').doc('content').get();
-      if (doc.exists) {
-        Object.assign(SITE_CONTENT, doc.data());
-      }
-    } catch(e) {}
+      const [contentDoc, aboutDoc, manageDoc] = await Promise.all([
+        db.collection('settings').doc('content').get(),
+        db.collection('settings').doc('about').get(),
+        db.collection('settings').doc('manage').get(),
+      ]);
+      if (contentDoc.exists) Object.assign(SITE_CONTENT, contentDoc.data());
+      if (aboutDoc.exists) Object.assign(SITE_CONTENT, aboutDoc.data());
+      if (manageDoc.exists) Object.assign(SITE_CONTENT, manageDoc.data());
+    } catch(e) { console.warn('Content load:', e); }
   }
   applyContent();
 }
@@ -449,10 +453,32 @@ function applyContent() {
   setText('rrSuccessTitle', c.rrSuccessTitle);
   setText('rrSuccessSub', c.rrSuccessSub);
 
-  // ── ABOUT PAGE (dynamic from settings/about) ──
-  if (typeof loadAboutContentFromFirebase === 'function') {
-    loadAboutContentFromFirebase();
+  // ── ABOUT PAGE ──
+  // Creator fields
+  setText('creatorName', c.creatorName);
+  setText('creatorRole', c.creatorRole);
+  setText('creatorBio', c.creatorBio);
+  setText('aboutHeroTitle', c.heroTitle);
+  setText('aboutHeroSub', c.heroSub);
+  setText('aboutMissionQuote', c.missionQuote);
+  setText('aboutMissionSub', c.missionSub);
+  setText('aboutStory1Label', c.story1Label);
+  setText('aboutStory1Title', c.story1Title);
+  setText('aboutStory1P1', c.story1P1);
+  setText('aboutStory1P2', c.story1P2);
+  setText('aboutStory2Label', c.story2Label);
+  setText('aboutStory2Title', c.story2Title);
+  setText('aboutStory2P1', c.story2P1);
+  setText('aboutStory2P2', c.story2P2);
+  setText('aboutPillarsTitle', c.pillarsTitle);
+  for (var i = 0; i < 6; i++) {
+    setText('pillarTitle' + i, c['pillarTitle' + i]);
+    setText('pillarDesc' + i, c['pillarDesc' + i]);
   }
+  setText('aboutCreatorLabel', c.creatorLabel);
+  setText('aboutCreatorTitle', c.creatorTitle);
+  setText('aboutCTATitle', c.ctaTitle);
+  setText('aboutCTASub', c.ctaSub);
 
   // ── WATCHLIST ──
   setText('watchlistSub', c.watchlistSub);

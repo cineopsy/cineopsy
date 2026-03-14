@@ -2127,6 +2127,42 @@ const ABOUT_FIELDS = [
 ];
 
 async function loadAboutAdmin() {
+  // Step 1: Fill with current defaults from the page
+  const aboutDefaults = {
+    heroTitle: 'Where Cinema<br>Meets Biopsy',
+    heroSub: "We don't just watch films. We dissect them.",
+    missionQuote: '"Cinema is not just entertainment — it's a mirror of society, and we intend to hold it up clearly."',
+    missionSub: '— CinéOpsy',
+    story1Label: 'Our Story',
+    story1Title: 'Born from Two Worlds',
+    story1P1: 'CinéOpsy was born from an unusual intersection — medical science and cinema.',
+    story1P2: 'We believe every film deserves the same precision.',
+    story2Label: 'Our Approach',
+    story2Title: 'Diagnosis Over Opinion',
+    story2P1: 'Where most review channels give you a thumbs up or down, we give you a full diagnosis.',
+    story2P2: 'From Bollywood blockbusters to hidden world cinema gems — no fluff, no hype.',
+    pillarsTitle: 'Our Six Specialties',
+    pillarTitle0: 'Weekly', pillarDesc0: 'Box office, industry news and upcoming releases — every Thursday.',
+    pillarTitle1: 'Verdict', pillarDesc1: 'Honest, deep reviews with our signature Biopsy Score.',
+    pillarTitle2: 'What If', pillarDesc2: 'Alternate timeline analysis — what if the story went differently?',
+    pillarTitle3: 'Case Files', pillarDesc3: 'Medical diagnosis of cinema. Every film is a patient.',
+    pillarTitle4: 'Beyond Borders', pillarDesc4: 'World cinema that never reached India — explained in English.',
+    pillarTitle5: 'CinéOpsy Specials', pillarDesc5: 'Exclusive content and special productions by CinéOpsy.',
+    creatorLabel: 'Behind CinéOpsy',
+    creatorTitle: 'The Creator',
+    creatorName: 'Rajkamal Yadav',
+    creatorRole: 'Founder · Writer · Editor',
+    creatorBio: 'Paramedical student with a passion for cinema and storytelling. CinéOpsy is built on the belief that the analytical lens of healthcare — precision, honesty, depth — can transform how we understand film.',
+    ctaTitle: 'Ready to Dive In?',
+    ctaSub: 'Explore our series or subscribe to never miss an episode.',
+  };
+
+  ABOUT_FIELDS.forEach(([key, elId]) => {
+    const el = document.getElementById(elId);
+    if (el && aboutDefaults[key]) el.value = aboutDefaults[key];
+  });
+
+  // Step 2: Override with Firebase saved values
   if (!firebaseReady) return;
   try {
     const doc = await db.collection('settings').doc('about').get();
@@ -2134,7 +2170,7 @@ async function loadAboutAdmin() {
     const d = doc.data();
     ABOUT_FIELDS.forEach(([key, elId]) => {
       const el = document.getElementById(elId);
-      if (el && d[key] !== undefined) el.value = d[key];
+      if (el && d[key]) el.value = d[key];
     });
   } catch(e) {}
 }
@@ -2152,8 +2188,11 @@ async function saveAboutPage() {
   });
   
   try {
+    // Save to 'about' collection
     await db.collection('settings').doc('about').set(data);
-    msg.innerHTML = '<span style="color:#44ff88">✅ All about page content saved! Visit about.html to see changes.</span>';
+    // ALSO merge into 'content' collection so all pages pick it up
+    await db.collection('settings').doc('content').set(data, { merge: true });
+    msg.innerHTML = '<span style="color:#44ff88">✅ All about page content saved! Changes visible on website.</span>';
   } catch(e) {
     msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>';
   }
@@ -2170,23 +2209,37 @@ window.switchTab = function(e, name) {
 
 // ════ CONTENT TAB ════
 async function loadContentTab() {
-  if (!firebaseReady) return;
-  try {
-    const defaults = typeof CONTENT_DEFAULTS !== 'undefined' ? CONTENT_DEFAULTS : {};
-    // Populate with defaults first
-    Object.keys(defaults).forEach(key => {
-      const el = document.getElementById('ct_' + key);
-      if (el) el.value = defaults[key];
-    });
-    // Override with Firebase
-    const doc = await db.collection('settings').doc('content').get();
-    if (doc.exists) {
-      Object.entries(doc.data()).forEach(([key, val]) => {
-        const el = document.getElementById('ct_' + key);
-        if (el) el.value = val;
-      });
-    }
-  } catch(e) { console.warn('Content load error:', e); }
+  // Show loading state
+  document.querySelectorAll('[id^="ct_"]').forEach(el => {
+    el.placeholder = 'Loading...';
+    el.disabled = true;
+  });
+
+  // Step 1: Fill with defaults (current hardcoded values)
+  const defaults = typeof CONTENT_DEFAULTS !== 'undefined' ? CONTENT_DEFAULTS : {};
+  Object.keys(defaults).forEach(key => {
+    const el = document.getElementById('ct_' + key);
+    if (el) el.value = defaults[key];
+  });
+
+  // Step 2: Override with Firebase saved values
+  if (firebaseReady) {
+    try {
+      const doc = await db.collection('settings').doc('content').get();
+      if (doc.exists) {
+        Object.entries(doc.data()).forEach(([key, val]) => {
+          const el = document.getElementById('ct_' + key);
+          if (el && val) el.value = val;
+        });
+      }
+    } catch(e) {}
+  }
+
+  // Re-enable fields
+  document.querySelectorAll('[id^="ct_"]').forEach(el => {
+    el.disabled = false;
+    if (el.placeholder === 'Loading...') el.placeholder = '';
+  });
 }
 
 async function saveAllContent() {
@@ -2209,7 +2262,7 @@ async function saveAllContent() {
     await db.collection('settings').doc('content').set(data);
     msgs.forEach(id => {
       const el = document.getElementById(id);
-      if(el) el.innerHTML = '<span style="color:#44ff88">✅ All content saved! Every page updated instantly.</span>';
+      if(el) el.innerHTML = '<span style="color:#44ff88">✅ Saved! Refresh the website to see changes.</span>';
     });
   } catch(e) {
     msgs.forEach(id => {
