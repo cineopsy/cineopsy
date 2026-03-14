@@ -1,463 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<style>
-/* ============================================
-   COMPREHENSIVE LIGHT MODE — ALL ELEMENTS
-   ============================================ */
-
-/* Base */
-:root.light body { background:#f5f5f0 !important; color:#111111 !important; }
-
-/* ── Navigation ── */
-:root.light nav { background:rgba(245,245,240,0.97) !important; border-bottom:1px solid rgba(0,0,0,0.1) !important; }
-:root.light .nav-logo .cine { color:#111111 !important; }
-:root.light .nav-logo .opsy { color:#cc0000 !important; }
-:root.light .nav-links a { color:rgba(20,20,20,0.6) !important; }
-:root.light .nav-links a:hover { color:#111111 !important; }
-:root.light .hamburger span { background:#111111 !important; }
-:root.light .theme-btn { border-color:rgba(0,0,0,0.2) !important; color:#111111 !important; }
-
-/* ── Footer ── */
-:root.light footer { background:#e8e8e4 !important; border-top:1px solid rgba(0,0,0,0.08) !important; }
-:root.light footer * { color:#111111 !important; }
-:root.light .footer-logo .cine { color:#111111 !important; }
-:root.light .footer-logo .opsy { color:#cc0000 !important; }
-:root.light .footer-tagline { color:rgba(20,20,20,0.55) !important; }
-:root.light .footer-copy { color:rgba(20,20,20,0.4) !important; }
-
-/* ── Hero ── */
-:root.light #hero { background:#f0f0eb !important; }
-:root.light .hero-title .cine { color:#111111 !important; }
-:root.light .hero-title .opsy { color:#cc0000 !important; }
-:root.light .hero-tagline { color:rgba(20,20,20,0.45) !important; }
-:root.light .hero-bg { opacity:0.5 !important; }
-:root.light .filmline { background:rgba(220,220,215,0.99) !important; }
-:root.light .fhole { background:#f0f0eb !important; border-color:rgba(0,0,0,0.1) !important; }
-
-/* ── Buttons ── */
-:root.light .btn-outline { border-color:rgba(0,0,0,0.25) !important; color:#111111 !important; background:transparent !important; }
-:root.light .btn-outline:hover { background:rgba(204,0,0,0.08) !important; color:#cc0000 !important; }
-:root.light .btn-primary { background:#cc0000 !important; color:#ffffff !important; }
-
-/* ── Section labels & titles ── */
-:root.light .section-label { color:#cc0000 !important; }
-:root.light .section-title { color:#111111 !important; }
-:root.light .section-title span { color:#cc0000 !important; }
-:root.light .section-sub { color:rgba(20,20,20,0.55) !important; }
-
-/* ── Cards ── */
-:root.light .playlist-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .playlist-card:hover { border-color:rgba(204,0,0,0.3) !important; }
-:root.light .pl-name { color:#111111 !important; }
-:root.light .pl-desc { color:rgba(20,20,20,0.6) !important; }
-:root.light .pl-day { color:#cc0000 !important; }
-:root.light .pl-freq { color:rgba(204,0,0,0.7) !important; border-top-color:rgba(0,0,0,0.08) !important; }
-
-/* ── Stat boxes ── */
-:root.light .stat-box { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .stat-num { color:#cc0000 !important; }
-:root.light .stat-lbl { color:rgba(20,20,20,0.55) !important; }
-
-/* ── About section ── */
-:root.light .about-text p { color:rgba(20,20,20,0.75) !important; }
-:root.light .about-text strong { color:#111111 !important; }
-
-/* ── Playlist hero ── */
-:root.light .pl-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.06),transparent) !important; border-bottom-color:rgba(204,0,0,0.15) !important; }
-:root.light .pl-hero-day { color:#cc0000 !important; }
-:root.light .pl-hero * { color:#111111 !important; }
-:root.light .pl-hero p { color:rgba(20,20,20,0.6) !important; }
-
-/* ── Episode cards ── */
-:root.light .ep-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .ep-card:hover { border-color:rgba(204,0,0,0.3) !important; }
-:root.light .ep-num { color:#cc0000 !important; }
-:root.light .ep-title { color:#111111 !important; }
-:root.light .ep-date { color:rgba(20,20,20,0.5) !important; }
-:root.light .ep-excerpt { color:rgba(20,20,20,0.6) !important; }
-:root.light .ep-arrow { color:#cc0000 !important; }
-
-/* ── Episode detail page ── */
-:root.light .ep-back { color:rgba(20,20,20,0.55) !important; }
-:root.light .ep-back:hover { color:#cc0000 !important; }
-:root.light .ep-badge { color:#cc0000 !important; }
-:root.light .ep-main-title { color:#111111 !important; }
-:root.light .ep-meta { color:rgba(20,20,20,0.5) !important; }
-:root.light .video-wrap { background:#e0e0db !important; border-color:rgba(0,0,0,0.08) !important; }
-:root.light .info-box { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .info-label { color:#cc0000 !important; }
-:root.light .info-val { color:#111111 !important; }
-:root.light .content-body { color:rgba(20,20,20,0.8) !important; }
-:root.light .content-body h3 { color:#111111 !important; }
-:root.light .content-body strong { color:#111111 !important; }
-:root.light .content-body em { color:rgba(20,20,20,0.6) !important; }
-:root.light .content-body blockquote { background:rgba(204,0,0,0.04) !important; color:rgba(20,20,20,0.7) !important; }
-
-/* ── Related cards ── */
-:root.light .rel-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .rel-cat { color:#cc0000 !important; }
-:root.light .rel-title { color:#111111 !important; }
-:root.light .rel-num { color:#cc0000 !important; }
-
-/* ── News page ── */
-:root.light .news-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.06),transparent) !important; border-bottom-color:rgba(204,0,0,0.2) !important; }
-:root.light .news-card { background:#e4e4e0 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .news-card:hover { border-color:rgba(204,0,0,0.3) !important; }
-:root.light .news-card-title { color:#111111 !important; }
-:root.light .news-card-date { color:rgba(20,20,20,0.5) !important; }
-:root.light .news-card-excerpt { color:rgba(20,20,20,0.6) !important; }
-:root.light .news-cat { color:#cc0000 !important; border-color:rgba(204,0,0,0.3) !important; }
-:root.light .cat-btn { color:rgba(20,20,20,0.6) !important; border-color:rgba(0,0,0,0.15) !important; }
-:root.light .cat-btn.active, :root.light .cat-btn:hover { color:#111111 !important; border-color:#cc0000 !important; background:rgba(204,0,0,0.06) !important; }
-:root.light .featured-badge { background:#cc0000 !important; color:#ffffff !important; }
-
-/* ── News article page ── */
-:root.light .article-cat { color:#cc0000 !important; border-color:rgba(204,0,0,0.3) !important; }
-:root.light .article-title { color:#111111 !important; }
-:root.light .article-meta { color:rgba(20,20,20,0.5) !important; }
-:root.light .article-body { color:rgba(20,20,20,0.8) !important; }
-:root.light .article-body h2 { color:#111111 !important; }
-:root.light .article-body h3 { color:#111111 !important; }
-:root.light .article-body strong { color:#111111 !important; }
-:root.light .article-body blockquote { background:rgba(204,0,0,0.04) !important; color:rgba(20,20,20,0.7) !important; }
-:root.light .article-tags .tag { color:rgba(20,20,20,0.6) !important; border-color:rgba(0,0,0,0.12) !important; }
-:root.light .article-back { color:rgba(20,20,20,0.55) !important; }
-:root.light .article-back:hover { color:#cc0000 !important; }
-:root.light .article-cover { border-color:rgba(0,0,0,0.08) !important; }
-
-/* ── Contact page ── */
-:root.light .contact-heading { color:#111111 !important; }
-:root.light .social-link { background:#e4e4e0 !important; color:#111111 !important; border-color:rgba(0,0,0,0.07) !important; }
-:root.light .social-link:hover { border-color:#cc0000 !important; color:#cc0000 !important; }
-:root.light input, :root.light textarea, :root.light select { background:#e8e8e4 !important; border-color:rgba(0,0,0,0.15) !important; color:#111111 !important; }
-:root.light input::placeholder, :root.light textarea::placeholder { color:rgba(20,20,20,0.35) !important; }
-:root.light input:focus, :root.light textarea:focus { border-color:#cc0000 !important; }
-
-/* ── Red divider ── */
-:root.light .red-divider { background:linear-gradient(90deg,transparent,rgba(204,0,0,0.35),transparent) !important; }
-
-/* ── Loading / Empty states ── */
-:root.light .loading-state { color:rgba(20,20,20,0.5) !important; }
-:root.light .empty-state { background:rgba(204,0,0,0.02) !important; border-color:rgba(204,0,0,0.15) !important; }
-:root.light .empty-title { color:rgba(20,20,20,0.6) !important; }
-:root.light .empty-sub { color:rgba(20,20,20,0.45) !important; }
-
-/* ── Generic white text fix ── */
-:root.light h1,:root.light h2,:root.light h3,:root.light h4 { color:#111111 !important; }
-:root.light p { color:rgba(20,20,20,0.75) !important; }
-
-/* ── Google Translate ── */
-:root.light 
-
-/* ── News hero strip on homepage ── */
-:root.light #heroNewsStrip a { background:rgba(0,0,0,0.04) !important; border-color:rgba(0,0,0,0.08) !important; border-left-color:#cc0000 !important; }
-:root.light #heroNewsStrip a span:last-child { color:#111111 !important; }
-</style>
-
-<!-- Light Theme -->
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>CinéOpsy — Where Cinema Meets Biopsy</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
-
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap');
-:root{--red:#cc0000;--red-bright:#ff2222;--black:#080808;--black2:#0f0f0f;--black3:#161616;--white:#f0ece4;--gray:#888;--gray-light:#555;}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:'Crimson Pro',Georgia,serif;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 40px;background:rgba(8,8,8,0.97);border-bottom:1px solid rgba(204,0,0,0.15);}
-.nav-logo img{height:52px;object-fit:contain;}
-.nav-links{display:flex;gap:28px;list-style:none;align-items:center;}
-.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;position:relative;}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--red);transition:width 0.3s;}
-.nav-links a:hover,.nav-links a.active{color:var(--white);}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
-.hamburger span{width:24px;height:2px;background:var(--white);transition:0.3s;}
-.red-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
-.page-wrap{max-width:1100px;margin:0 auto;padding:100px 30px 60px;}
-.section-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:12px;}
-.section-label::before{content:'';width:30px;height:1px;background:var(--red);}
-.section-title{font-family:'Cinzel',serif;font-size:clamp(24px,4vw,40px);font-weight:700;color:var(--white);margin-bottom:6px;line-height:1.1;}
-.section-title span{color:var(--red);}
-.section-sub{font-family:'Crimson Pro',serif;font-style:italic;font-size:16px;color:var(--gray);margin-bottom:40px;}
-.btn-primary{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;background:var(--red);color:var(--white);padding:12px 28px;text-decoration:none;border:1px solid var(--red);transition:all 0.2s;display:inline-block;cursor:pointer;}
-.btn-primary:hover{background:var(--red-bright);box-shadow:0 0 20px rgba(204,0,0,0.4);}
-.btn-outline{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;background:transparent;color:var(--white);padding:12px 28px;text-decoration:none;border:1px solid rgba(240,236,228,0.3);transition:all 0.2s;display:inline-block;cursor:pointer;}
-.btn-outline:hover{border-color:var(--red);color:var(--red);}
-footer{border-top:1px solid rgba(255,255,255,0.05);padding:30px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-footer img{height:36px;object-fit:contain;}
-.footer-copy{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);}
-.footer-tagline{font-family:'Crimson Pro',serif;font-style:italic;font-size:13px;color:rgba(204,0,0,0.5);}
-.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s,transform 0.6s;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-@media(max-width:768px){nav{padding:10px 20px;}.nav-links{display:none;flex-direction:column;position:fixed;top:72px;left:0;right:0;background:rgba(8,8,8,0.98);padding:20px;gap:16px;border-bottom:1px solid rgba(204,0,0,0.2);}.nav-links.open{display:flex;}.hamburger{display:flex;}.page-wrap{padding:90px 16px 40px;}footer{flex-direction:column;text-align:center;padding:20px;}}
-</style>
-
-<style>
-
-.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:3px;text-decoration:none;}
-.nav-logo .cine{color:#f0ece4;}.nav-logo .opsy{color:#cc0000;}
-.footer-logo{font-family:'Cinzel',serif;font-size:20px;font-weight:700;letter-spacing:3px;}
-.footer-logo .cine{color:#f0ece4;}.footer-logo .opsy{color:#cc0000;}
-
-#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden;background:#080808;}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(150,0,0,0.15) 0%,transparent 55%),radial-gradient(ellipse at 70% 70%,rgba(80,0,0,0.1) 0%,transparent 50%);pointer-events:none;}
-.filmline{position:absolute;left:0;right:0;height:40px;background:rgba(10,10,10,0.98);display:flex;align-items:center;gap:7px;padding:0 10px;overflow:hidden;z-index:2;}
-.filmline.top{top:0;}.filmline.bot{bottom:0;}
-.fhole{width:20px;height:13px;flex-shrink:0;background:#080808;border-radius:3px;border:1px solid #1e1e1e;}
-.hero-content{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;}
-.hero-title{font-family:'Cinzel',serif;font-size:clamp(64px,13vw,140px);font-weight:900;line-height:0.92;letter-spacing:6px;margin-bottom:10px;animation:fadeUp 1s ease both;}
-.hero-title .cine{color:#f0ece4;display:block;}.hero-title .opsy{color:#cc0000;display:block;text-shadow:0 0 60px rgba(204,0,0,0.5);}
-.hero-slash{width:200px;height:2px;margin:16px auto;background:linear-gradient(90deg,transparent,#cc0000,#ff4444,#cc0000,transparent);animation:fadeUp 1s 0.3s ease both;}
-.hero-tagline{font-family:'Crimson Pro',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(240,236,228,0.5);letter-spacing:2px;margin-bottom:36px;animation:fadeUp 1s 0.5s ease both;}
-.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s 0.7s ease both;}
-.playlists-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2px;}
-.playlist-card{background:var(--black3);padding:28px 22px;border:1px solid rgba(255,255,255,0.04);text-decoration:none;color:inherit;display:block;transition:transform 0.3s,border-color 0.3s;position:relative;overflow:hidden;}
-.playlist-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
-.playlist-card:hover{transform:translateY(-4px);border-color:rgba(204,0,0,0.3);}.playlist-card:hover::after{transform:scaleX(1);}
-.pl-day{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
-.pl-icon{font-size:26px;margin-bottom:12px;}
-.pl-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px;}
-.pl-desc{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:14px;}
-.pl-freq{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(204,0,0,0.7);border-top:1px solid rgba(255,255,255,0.06);padding-top:12px;}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
-.about-text p{font-size:17px;line-height:1.8;color:rgba(240,236,228,0.75);margin-bottom:16px;}
-.about-text strong{color:var(--white);}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-.stat-box{background:var(--black3);padding:26px 20px;border:1px solid rgba(255,255,255,0.04);}
-.stat-num{font-family:'Cinzel',serif;font-size:34px;font-weight:700;color:var(--red);}
-.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:4px;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:768px){.about-grid{grid-template-columns:1fr;}}
-</style>
-
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#cc0000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-<style>
-/* ═══ SCROLL TO TOP ═══ */
-#scrollTopBtn{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:#cc0000;color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:18px;z-index:888;opacity:0;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(204,0,0,0.4);}
-#scrollTopBtn:hover{background:#aa0000;}
-
-/* ═══ READING PROGRESS ═══ */
-#readingProgress{position:fixed;top:0;left:0;height:3px;background:#cc0000;z-index:9999;width:0%;transition:width 0.1s;box-shadow:0 0 8px rgba(204,0,0,0.6);}
-
-/* ═══ SHARE BUTTONS ═══ */
-.share-section{margin:28px 0;padding:20px 0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);}
-.share-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:12px;}
-.share-btns{display:flex;gap:10px;flex-wrap:wrap;}
-.share-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:var(--white);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;border-radius:3px;}
-.share-btn:hover{border-color:#cc0000;color:#cc0000;}
-:root.light .share-btn{border-color:rgba(0,0,0,0.15);color:#111;}
-:root.light .share-btn:hover{border-color:#cc0000;color:#cc0000;}
-
-/* ═══ ENGAGEMENT BAR (likes, views, reading time, bookmark) ═══ */
-.engage-bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0;margin:16px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
-.engage-item{display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
-.like-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);padding:0;transition:color 0.2s;}
-.like-btn:hover,.like-btn.liked{color:#cc0000;}
-.like-btn.liked .like-icon{filter:none;}
-.bookmark-btn{background:none;border:1px solid rgba(255,255,255,0.15);cursor:pointer;color:var(--white);padding:6px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;border-radius:3px;}
-.bookmark-btn:hover,.bookmark-btn.saved{border-color:#cc0000;color:#cc0000;}
-:root.light .engage-bar{border-bottom-color:rgba(0,0,0,0.08);}
-:root.light .engage-item{color:rgba(20,20,20,0.5);}
-:root.light .like-btn{color:rgba(20,20,20,0.5);}
-:root.light .bookmark-btn{border-color:rgba(0,0,0,0.15);color:#111;}
-
-/* ═══ STAR RATING ═══ */
-.rating-section{margin:20px 0;padding:20px;background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.1);}
-.rating-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:12px;}
-.stars-input{display:flex;gap:6px;margin-bottom:10px;}
-.star{font-size:26px;cursor:pointer;transition:transform 0.15s;filter:grayscale(1);opacity:0.4;}
-.star:hover,.star.active{filter:none;opacity:1;transform:scale(1.15);}
-.rating-display{font-family:'Cinzel',serif;font-size:16px;color:var(--white);margin-top:8px;}
-:root.light .rating-section{background:rgba(204,0,0,0.03);}
-:root.light .rating-display{color:#111;}
-
-/* ═══ COMMENTS ═══ */
-.comments-section{margin:36px 0;}
-.comments-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
-.comment-count{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:#cc0000;background:rgba(204,0,0,0.1);padding:2px 8px;}
-.comment-form{margin-bottom:24px;padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);}
-.comment-form input,.comment-form textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:10px 14px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;transition:border-color 0.2s;margin-bottom:10px;display:block;}
-.comment-form input:focus,.comment-form textarea:focus{border-color:#cc0000;}
-.comment-form textarea{resize:vertical;min-height:90px;}
-.comment-submit{background:#cc0000;color:#fff;border:none;padding:10px 24px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s;}
-.comment-submit:hover{opacity:0.85;}
-.comment-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
-.comment-item:last-child{border-bottom:none;}
-.comment-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.comment-name{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#cc0000;}
-.comment-date{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
-.comment-text{font-size:15px;color:rgba(240,236,228,0.75);line-height:1.7;}
-:root.light .comment-form{background:rgba(0,0,0,0.02);border-color:rgba(0,0,0,0.07);}
-:root.light .comment-form input,:root.light .comment-form textarea{background:#f0f0eb;border-color:rgba(0,0,0,0.1);color:#111;}
-:root.light .comment-item{border-bottom-color:rgba(0,0,0,0.07);}
-:root.light .comment-text{color:rgba(20,20,20,0.75);}
-:root.light .comments-title{color:#111;}
-
-/* ═══ POLL ═══ */
-.poll-box{background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.15);padding:24px;margin:28px 0;}
-.poll-question{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:18px;line-height:1.4;}
-.poll-option{padding:12px 16px;border:1px solid rgba(255,255,255,0.1);margin-bottom:8px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
-.poll-option:hover{border-color:#cc0000;}
-.poll-option.poll-voted{border-color:#cc0000;background:rgba(204,0,0,0.08);}
-.poll-bar-wrap{display:flex;align-items:center;gap:12px;position:relative;}
-.poll-bar{position:absolute;left:0;top:0;bottom:0;background:rgba(204,0,0,0.12);transition:width 0.5s;z-index:0;}
-.poll-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:var(--white);position:relative;z-index:1;flex:1;}
-.poll-pct{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#cc0000;position:relative;z-index:1;}
-.poll-total{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:12px;}
-:root.light .poll-box{background:rgba(204,0,0,0.03);}
-:root.light .poll-question{color:#111;}
-:root.light .poll-option{border-color:rgba(0,0,0,0.1);}
-:root.light .poll-label{color:#111;}
-
-/* ═══ NEWSLETTER ═══ */
-.newsletter-box{background:linear-gradient(135deg,rgba(204,0,0,0.08),rgba(204,0,0,0.04));border:1px solid rgba(204,0,0,0.2);padding:36px;text-align:center;margin:48px 0;}
-.newsletter-icon{font-size:36px;margin-bottom:14px;}
-.newsletter-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:8px;}
-.newsletter-sub{font-size:16px;color:var(--gray);margin-bottom:24px;font-style:italic;}
-.newsletter-form{display:flex;gap:10px;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
-.newsletter-input{flex:1;min-width:200px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--white);padding:12px 16px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;transition:border-color 0.2s;}
-.newsletter-input:focus{border-color:#cc0000;}
-.newsletter-btn{background:#cc0000;color:#fff;border:none;padding:12px 24px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s;white-space:nowrap;}
-.newsletter-btn:hover{opacity:0.85;}
-:root.light .newsletter-box{background:linear-gradient(135deg,rgba(204,0,0,0.06),rgba(204,0,0,0.02));}
-:root.light .newsletter-title{color:#111;}
-:root.light .newsletter-input{background:#f0f0eb;border-color:rgba(0,0,0,0.15);color:#111;}
-
-/* ═══ SEARCH ═══ */
-.search-overlay{position:fixed;inset:0;background:rgba(8,8,8,0.95);z-index:10000;display:none;flex-direction:column;align-items:center;padding-top:80px;}
-.search-overlay.open{display:flex;}
-.search-wrap{width:min(640px,92vw);}
-.search-input-wrap{display:flex;align-items:center;border-bottom:2px solid #cc0000;margin-bottom:32px;}
-.search-input{flex:1;background:transparent;border:none;color:var(--white);font-family:'Cinzel',serif;font-size:clamp(20px,4vw,32px);padding:14px 0;outline:none;}
-.search-input::placeholder{color:rgba(240,236,228,0.2);}
-.search-close{background:none;border:none;color:var(--gray);font-size:24px;cursor:pointer;padding:8px;}
-.search-close:hover{color:#cc0000;}
-.search-results{max-height:60vh;overflow-y:auto;}
-.search-result{padding:14px;border-bottom:1px solid rgba(255,255,255,0.06);text-decoration:none;color:inherit;display:block;transition:background 0.2s;}
-.search-result:hover{background:rgba(204,0,0,0.06);}
-.search-result-type{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:4px;}
-.search-result-title{font-family:'Cinzel',serif;font-size:15px;color:var(--white);}
-.search-result-excerpt{font-size:13px;color:var(--gray);margin-top:4px;}
-.search-empty{text-align:center;padding:40px;color:var(--gray);font-style:italic;}
-:root.light .search-overlay{background:rgba(245,245,240,0.97);}
-:root.light .search-input{color:#111;}
-:root.light .search-result-title{color:#111;}
-
-/* ═══ WATCHLIST PAGE ═══ */
-.watchlist-empty{text-align:center;padding:80px 20px;color:var(--gray);font-style:italic;}
-
-/* ═══ TAGS ═══ */
-.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
-.tag-pill{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.12);color:var(--gray);padding:4px 12px;cursor:pointer;transition:all 0.2s;text-decoration:none;}
-.tag-pill:hover{border-color:#cc0000;color:#cc0000;}
-:root.light .tag-pill{border-color:rgba(0,0,0,0.12);color:rgba(20,20,20,0.6);}
-
-/* ═══ STREAMING GUIDE ═══ */
-.streaming-badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;}
-.streaming-badge{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:3px;font-weight:700;}
-.streaming-badge.netflix{background:#e50914;color:#fff;}
-.streaming-badge.prime{background:#00a8e0;color:#fff;}
-.streaming-badge.hotstar{background:#1f80e0;color:#fff;}
-.streaming-badge.zee5{background:#6b2d8b;color:#fff;}
-.streaming-badge.sonyliv{background:#e0001b;color:#fff;}
-.streaming-badge.theatres{background:#cc0000;color:#fff;}
-.streaming-badge.youtube{background:#ff0000;color:#fff;}
-</style>
-<script src="cineopsy-features.js"></script>
-
-<!-- SEO Meta Tags -->
-<meta name="description" content="Honest movie reviews, Bollywood news, world cinema analysis and more. Where Cinema Meets Biopsy.">
-<meta name="keywords" content="movie review, bollywood, cinema, film analysis, hindi movies, OTT">
+<meta name="description" content="Honest movie reviews, Bollywood news, world cinema analysis. Where Cinema Meets Biopsy.">
+<meta name="keywords" content="movie review, bollywood, cinema, cineopsy">
 <meta name="author" content="CinéOpsy">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://cineopsy.netlify.app/index.html">
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="CinéOpsy — Where Cinema Meets Biopsy">
-<meta property="og:description" content="Honest movie reviews, Bollywood news, world cinema analysis and more. Where Cinema Meets Biopsy.">
+<meta property="og:description" content="Honest movie reviews, Bollywood news, world cinema analysis. Where Cinema Meets Biopsy.">
 <meta property="og:image" content="https://cineopsy.netlify.app/og-image.jpg">
-<meta property="og:url" content="https://cineopsy.netlify.app/index.html">
 <meta property="og:site_name" content="CinéOpsy">
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@Cineopsy">
 <meta name="twitter:title" content="CinéOpsy — Where Cinema Meets Biopsy">
-<meta name="twitter:description" content="Honest movie reviews, Bollywood news, world cinema analysis and more. Where Cinema Meets Biopsy.">
+<meta name="twitter:description" content="Honest movie reviews, Bollywood news, world cinema analysis. Where Cinema Meets Biopsy.">
 <meta name="twitter:image" content="https://cineopsy.netlify.app/og-image.jpg">
-
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#cc0000"><meta name="apple-mobile-web-app-capable" content="yes">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-CBLTSGGPYB");</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<script src="app.js" defer></script>
 <style>
-/* ═══ PAGE TRANSITIONS ═══ */
-.page-transition{animation:pageIn 0.4s ease both;}
-@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-body>*:not(nav):not(#readingProgress):not(#scrollTopBtn):not(.search-overlay):not(script):not(style){animation:pageIn 0.5s ease both;}
-a{transition:color 0.2s,opacity 0.2s;}
-
-/* ═══ MOBILE BOTTOM NAV ═══ */
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-top:1px solid rgba(204,0,0,0.2);z-index:997;padding:6px 0 max(6px,env(safe-area-inset-bottom));grid-template-columns:repeat(5,1fr);}
-.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--gray);padding:6px 4px;transition:color 0.2s;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;}
-.bottom-nav-item:hover,.bottom-nav-item.active{color:#cc0000;}
-.bottom-nav-item .bn-icon{font-size:20px;line-height:1;}
-@media(max-width:768px){.bottom-nav{display:grid;}body{padding-bottom:70px;}}
-:root.light .bottom-nav{background:rgba(245,245,240,0.97);border-top-color:rgba(204,0,0,0.15);}
-:root.light .bottom-nav-item{color:rgba(20,20,20,0.5);}
-
-/* ═══ IMAGE LIGHTBOX ═══ */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;}
-.lightbox.open{display:flex;}
-.lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border:1px solid rgba(255,255,255,0.1);}
-.lightbox-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;z-index:1;padding:8px;line-height:1;}
-.lightbox-close:hover{color:#cc0000;}
-.lightbox-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.7);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;max-width:80vw;}
-img.lightbox-trigger{cursor:zoom-in;}
-
-/* ═══ BIOPSY SCORE ═══ */
-.biopsy-score{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);margin:16px 0;}
-.biopsy-score-num{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:#cc0000;line-height:1;}
-.biopsy-score-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);}
-.biopsy-score-verdict{font-family:'Crimson Pro',serif;font-style:italic;font-size:15px;color:var(--white);}
-:root.light .biopsy-score-verdict{color:#111;}
-
-/* ═══ STREAMING BADGES ═══ */
-.streaming-section{margin:16px 0;}
-.streaming-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
-
-/* ═══ READING TIME BADGE ═══ */
-.reading-time-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);background:rgba(255,255,255,0.04);padding:4px 10px;border:1px solid rgba(255,255,255,0.08);}
-:root.light .reading-time-badge{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.08);}
-
-/* ═══ FAN REVIEW SUBMISSION ═══ */
-.fan-review-box{background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.15);padding:28px;margin:32px 0;}
-.fan-review-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;}
-.fan-review-sub{font-size:15px;color:var(--gray);margin-bottom:20px;font-style:italic;}
-:root.light .fan-review-title{color:#111;}
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden;background:var(--black);}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 45%,rgba(140,0,0,0.13) 0%,transparent 55%);pointer-events:none;}
+.filmstrip{position:absolute;left:0;right:0;height:38px;background:rgba(6,6,6,0.99);display:flex;align-items:center;gap:7px;padding:0 10px;overflow:hidden;}
+.filmstrip.top{top:0;}.filmstrip.bot{bottom:0;}
+.fhole{width:20px;height:12px;flex-shrink:0;background:var(--black);border-radius:3px;border:1px solid #1c1c1c;}
+.hero-content{position:relative;z-index:1;}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(58px,13vw,138px);font-weight:900;line-height:0.9;letter-spacing:5px;margin-bottom:12px;}
+.hero-title .cine{color:#f0ece4;display:block;}
+.hero-title .opsy{color:#cc0000;display:block;text-shadow:0 0 50px rgba(204,0,0,0.4);}
+.hero-line{width:180px;height:2px;margin:16px auto;background:linear-gradient(90deg,transparent,#cc0000,#ff4444,#cc0000,transparent);}
+.hero-tag{font-family:'Crimson Pro',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(240,236,228,0.45);letter-spacing:2px;margin-bottom:28px;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.hero-news{width:100%;max-width:500px;margin:22px auto 18px;}
+.hero-news-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#cc0000;margin-bottom:9px;}
+.hero-news-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-left:2px solid #cc0000;margin-bottom:6px;text-decoration:none;transition:background 0.2s;}
+.hero-news-item:hover{background:rgba(204,0,0,0.07);}
+.hero-news-cat{font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#cc0000;white-space:nowrap;margin-top:2px;min-width:58px;}
+.hero-news-title{font-family:'Cinzel',serif;font-size:12px;color:#f0ece4;line-height:1.4;text-align:left;}
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:2px;}
+.pl-card{background:var(--black3);padding:26px 20px;border:1px solid rgba(255,255,255,0.04);text-decoration:none;color:inherit;display:block;transition:transform 0.3s,border-color 0.3s;position:relative;overflow:hidden;}
+.pl-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
+.pl-card:hover{transform:translateY(-4px);border-color:rgba(204,0,0,0.3);}
+.pl-card:hover::after{transform:scaleX(1);}
+.pl-day{font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+.pl-icon{font-size:26px;margin-bottom:10px;}
+.pl-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:7px;}
+.pl-desc{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:12px;}
+.pl-freq{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(204,0,0,0.7);border-top:1px solid rgba(255,255,255,0.05);padding-top:10px;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.about-text p{font-size:17px;line-height:1.85;color:rgba(240,236,228,0.72);margin-bottom:14px;}
+.about-text strong{color:var(--white);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.stat-box{background:var(--black3);padding:24px 18px;border:1px solid rgba(255,255,255,0.04);}
+.stat-num{font-family:'Cinzel',serif;font-size:32px;font-weight:700;color:var(--red);}
+.stat-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:4px;}
+:root.light #hero{background:#f0f0eb!important;}
+:root.light .hero-title .cine{color:#111111!important;}
+:root.light .filmstrip{background:rgba(218,218,213,0.99)!important;}
+:root.light .fhole{background:#f0f0eb!important;border-color:rgba(0,0,0,0.1)!important;}
+:root.light .pl-card{background:#e3e3de!important;border-color:rgba(0,0,0,0.06)!important;}
+:root.light .pl-name{color:#111!important;}.pl-desc :root.light{color:rgba(20,20,20,0.58)!important;}
+:root.light .stat-box{background:#e3e3de!important;}
+:root.light .stat-num{color:var(--red)!important;}
+:root.light .about-text p{color:rgba(20,20,20,0.72)!important;}
+:root.light .about-text strong{color:#111!important;}
+:root.light .hero-news-item{background:rgba(0,0,0,0.03)!important;border-color:rgba(0,0,0,0.07)!important;}
+:root.light .hero-news-title{color:#111!important;}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
+<div id="readingProgress"></div>
 <nav id="navbar">
   <a href="index.html" class="nav-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></a>
   <button class="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="navLinks">
     <li><a href="news.html" style="color:#cc0000;font-weight:700">📰 News</a></li>
-    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html" style="color:#f0ece4">Home</a></li>
     <li><a href="weekly.html">Weekly</a></li>
     <li><a href="verdict.html">Verdict</a></li>
     <li><a href="whatif.html">What If</a></li>
@@ -468,121 +96,71 @@ img.lightbox-trigger{cursor:zoom-in;}
     <li><a href="contact.html">Contact</a></li>
   </ul>
   <div class="nav-controls">
-    <button onclick="openSearch()" style="background:none;border:none;color:var(--white);cursor:pointer;font-size:16px;padding:4px 6px;transition:color 0.2s;" title="Search" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color=''">🔍</button>
+    <button class="search-btn" onclick="openSearch()" title="Search (Ctrl+K)">🔍</button>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
   </div>
 </nav>
 
 <div id="hero">
   <div class="hero-bg"></div>
-  <div class="filmline top" id="ft"></div>
+  <div class="filmstrip top" id="fst"></div>
   <div class="hero-content">
     <h1 class="hero-title"><span class="cine">CINE</span><span class="opsy">OPSY</span></h1>
-    <div class="hero-slash"></div>
-    <p class="hero-tagline" id="heroTagline">Where Cinema Meets Biopsy</p>
-    <div class="hero-btns" style="flex-direction:column;align-items:center;gap:0;width:100%;max-width:560px;">
-      <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary" id="ytBtn" style="width:100%;max-width:340px;text-align:center;margin-bottom:28px;">Watch on YouTube</a>
-      
-      <!-- Latest News Strip -->
-      <div id="heroNewsStrip" style="width:100%;margin-bottom:28px;display:none;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:12px;text-align:center;">📰 Latest News</div>
-        <div id="heroNewsItems" style="display:flex;flex-direction:column;gap:8px;"></div>
-        <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,236,228,0.4);margin-top:12px;display:block;text-align:center;transition:color 0.2s;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='rgba(240,236,228,0.4)'">View All News →</a>
-      </div>
-
-      <a href="#playlists" class="btn-outline" style="width:100%;max-width:340px;text-align:center;">Explore Series</a>
+    <div class="hero-line"></div>
+    <p class="hero-tag" id="heroTagline">Where Cinema Meets Biopsy</p>
+    <div class="hero-btns">
+      <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary">Watch on YouTube</a>
     </div>
+    <div class="hero-news" id="heroNews" style="display:none">
+      <div class="hero-news-label">📰 Latest News</div>
+      <div id="heroNewsItems"></div>
+      <a href="news.html" style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(240,236,228,0.35);display:block;margin-top:8px;transition:color 0.2s;" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color='rgba(240,236,228,0.35)'">View All News →</a>
+    </div>
+    <a href="#playlists" class="btn-outline" style="margin-top:20px">Explore Series ↓</a>
   </div>
-  <div class="filmline bot" id="fb"></div>
+  <div class="filmstrip bot" id="fsb"></div>
 </div>
 <div class="red-divider"></div>
 <section class="page-wrap" id="playlists">
   <div class="section-label">Our Series</div>
-  <h2 class="section-title reveal">Six Ways to <span>Dissect Cinema</span></h2>
-  <p class="section-sub reveal">Click any series to explore all episodes.</p>
-  <div class="playlists-grid">
-    <a href="weekly.html" class="playlist-card reveal">
-      <div class="pl-day">Every Thursday</div><div class="pl-icon">📰</div>
-      <div class="pl-name">CinéOpsy Weekly</div><div class="pl-desc">Box office, industry news, upcoming releases & weekly cinema recap.</div>
-      <div class="pl-freq">Weekly →</div>
-    </a>
-    <a href="verdict.html" class="playlist-card reveal">
-      <div class="pl-day">Every Friday</div><div class="pl-icon">🔬</div>
-      <div class="pl-name">Verdict</div><div class="pl-desc">Deep honest reviews of new releases. Watch it or Skip it.</div>
-      <div class="pl-freq">Weekly →</div>
-    </a>
-    <a href="whatif.html" class="playlist-card reveal">
-      <div class="pl-day">Alternate Sundays</div><div class="pl-icon">🤔</div>
-      <div class="pl-name">What If</div><div class="pl-desc">Alternate timeline analysis — exploring untold movie possibilities.</div>
-      <div class="pl-freq">Bi-weekly →</div>
-    </a>
-    <a href="casefiles.html" class="playlist-card reveal">
-      <div class="pl-day">Alternate Sundays</div><div class="pl-icon">🩺</div>
-      <div class="pl-name">Case Files</div><div class="pl-desc">Medical diagnosis of movies. Cinema on the operating table.</div>
-      <div class="pl-freq">Bi-weekly →</div>
-    </a>
-    <a href="beyondborders.html" class="playlist-card reveal">
-      <div class="pl-day">Every 2 Tuesdays</div><div class="pl-icon">🌍</div>
-      <div class="pl-name">Beyond Borders</div><div class="pl-desc">World cinema that never reached India — explained in Hindi.</div>
-      <div class="pl-freq">Every 2 Weeks →</div>
-    </a>
-    <a href="specials.html" class="playlist-card reveal">
-      <div class="pl-day">Special Releases</div><div class="pl-icon">🎞️</div>
-      <div class="pl-name">CinéOpsy Specials</div><div class="pl-desc">Special videos, unique content & exclusive CinéOpsy productions.</div>
-      <div class="pl-freq">Special →</div>
-    </a></div>
+  <h2 class="section-title">Six Ways to <span>Dissect Cinema</span></h2>
+  <p class="section-sub">Click any series to explore all episodes.</p>
+  <div class="pl-grid"><a href="weekly.html" class="pl-card"><div class="pl-day">Every Thursday</div><div class="pl-icon">📰</div><div class="pl-name">CinéOpsy Weekly</div><div class="pl-desc">Box office, industry news, upcoming releases & weekly cinema recap.</div><div class="pl-freq">Weekly →</div></a><a href="verdict.html" class="pl-card"><div class="pl-day">Every Friday</div><div class="pl-icon">🔬</div><div class="pl-name">Verdict</div><div class="pl-desc">Deep honest reviews of new releases. Watch it or Skip it.</div><div class="pl-freq">Weekly →</div></a><a href="whatif.html" class="pl-card"><div class="pl-day">Alternate Sundays</div><div class="pl-icon">🤔</div><div class="pl-name">What If</div><div class="pl-desc">Alternate timeline analysis — exploring untold movie possibilities.</div><div class="pl-freq">Bi-weekly →</div></a><a href="casefiles.html" class="pl-card"><div class="pl-day">Alternate Sundays</div><div class="pl-icon">🩺</div><div class="pl-name">Case Files</div><div class="pl-desc">Medical diagnosis of movies. Cinema on the operating table.</div><div class="pl-freq">Bi-weekly →</div></a><a href="beyondborders.html" class="pl-card"><div class="pl-day">Every 2 Tuesdays</div><div class="pl-icon">🌍</div><div class="pl-name">Beyond Borders</div><div class="pl-desc">World cinema that never reached India — explained in Hindi.</div><div class="pl-freq">Every 2 Weeks →</div></a><a href="specials.html" class="pl-card"><div class="pl-day">Special Releases</div><div class="pl-icon">🎞️</div><div class="pl-name">CinéOpsy Specials</div><div class="pl-desc">Special videos, unique content & exclusive CinéOpsy productions.</div><div class="pl-freq">Special →</div></a></div>
 </section>
 <div class="red-divider"></div>
 <section class="page-wrap">
   <div class="about-grid">
-    <div class="about-text reveal">
+    <div class="about-text">
       <div class="section-label">About CinéOpsy</div>
       <h2 class="section-title">We Don't Just<br><span>Watch Films.</span></h2><br>
-      <p id="aboutP1">From <strong>Bollywood to Hollywood</strong>, South Cinema to World Cinema — we bring you films that never made it to your screen, honest reviews of hidden gems, and cinema that goes beyond the surface.</p>
-      <p id="aboutP2"><strong>No fluff. No hype. Just cinema — seen clearly.</strong></p><br>
-      <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary" id="ytBtn2">Subscribe on YouTube</a>
+      <p>From <strong>Bollywood to Hollywood</strong>, South Cinema to World Cinema — honest reviews, hidden gems, and cinema beyond the surface.</p>
+      <p><strong>No fluff. No hype. Just cinema — seen clearly.</strong></p><br>
+      <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary">Subscribe on YouTube</a>
     </div>
-    <div class="stats-grid reveal">
-      <div class="stat-box"><div class="stat-num" id="st1n">6</div><div class="stat-lbl" id="st1l">Unique Series</div></div>
-      <div class="stat-box"><div class="stat-num" id="st2n">3–4</div><div class="stat-lbl" id="st2l">Videos / Week</div></div>
-      <div class="stat-box"><div class="stat-num" id="st3n">100%</div><div class="stat-lbl" id="st3l">Honest Reviews</div></div>
-      <div class="stat-box"><div class="stat-num" id="st4n">∞</div><div class="stat-lbl" id="st4l">Cinema Love</div></div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">Unique Series</div></div>
+      <div class="stat-box"><div class="stat-num">3–4</div><div class="stat-lbl">Videos / Week</div></div>
+      <div class="stat-box"><div class="stat-num">100%</div><div class="stat-lbl">Honest Reviews</div></div>
+      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-lbl">Cinema Love</div></div>
     </div>
   </div>
 </section>
-
-
-<!-- ═══ POPULAR EPISODES ═══ -->
-<div class="red-divider"></div>
-<section class="page-wrap">
-  <div class="section-label">Trending</div>
-  <h2 class="section-title reveal">Most <span>Viewed</span> Episodes</h2>
-  <p class="section-sub reveal">Episodes your fellow cinephiles love the most.</p>
-  <div class="episodes-grid" id="popularGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;">
-    <div style="color:var(--gray);font-style:italic;text-align:center;padding:40px;grid-column:1/-1">Loading popular episodes...</div>
-  </div>
-</section>
-
-<!-- ═══ WEEKLY POLL ═══ -->
 <div class="red-divider"></div>
 <section class="page-wrap">
   <div class="section-label">This Week</div>
-  <h2 class="section-title reveal">Weekly <span>Poll</span></h2>
-  <div id="weeklyPollContainer" style="max-width:560px;margin:24px auto 0;">
-    <div style="color:var(--gray);font-style:italic;text-align:center;padding:40px">Loading poll...</div>
-  </div>
+  <h2 class="section-title">Weekly <span>Poll</span></h2>
+  <div id="weeklyPoll" style="max-width:520px;margin-top:20px"><p style="color:var(--gray);font-style:italic">Loading poll...</p></div>
 </section>
-
-<!-- ═══ NEWSLETTER ═══ -->
 <div class="red-divider"></div>
 <section class="page-wrap">
-  <div class="newsletter-box reveal">
-    <div class="newsletter-icon">🎬</div>
-    <div class="newsletter-title">Never Miss a Frame</div>
-    <p class="newsletter-sub">Get notified when new reviews, news & episodes drop.</p>
+  <h2 class="section-title">Get <span>Notified</span></h2>
+  <div class="newsletter-box" style="max-width:500px;margin-top:18px">
+    <div style="font-size:28px;margin-bottom:10px">🎬</div>
+    <div class="newsletter-title">Subscribe to CinéOpsy</div>
+    <p class="newsletter-sub">Get notified when new reviews & episodes drop.</p>
     <div class="newsletter-form">
-      <input type="email" id="newsletterEmail" class="newsletter-input" placeholder="your@email.com">
-      <button class="newsletter-btn" id="newsletterBtn" onclick="subscribeNewsletter(document.getElementById('newsletterEmail').value, document.getElementById('newsletterBtn'))">Subscribe →</button>
+      <input type="email" id="nlEmail" class="newsletter-input" placeholder="your@email.com">
+      <button class="newsletter-btn" id="nlBtn" onclick="subscribeNewsletter(document.getElementById('nlEmail').value,document.getElementById('nlBtn'))">Subscribe →</button>
     </div>
   </div>
 </section>
@@ -592,257 +170,64 @@ img.lightbox-trigger{cursor:zoom-in;}
   <div class="footer-tagline">Where Cinema Meets Biopsy</div>
   <div class="footer-copy" id="footerCopy">© 2026 CinéOpsy. All rights reserved.</div>
 </footer>
-
-
-<script>
-function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
-// Set active nav link
-(function(){
-  const links = document.querySelectorAll('.nav-links a');
-  const page = location.pathname.split('/').pop() || 'index.html';
-  links.forEach(l => { if(l.getAttribute('href') === page) l.classList.add('active'); });
-})();
-// Reveal on scroll
-const obs = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*80); });
-},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
-</script>
-
-<script>
-
-let db = null, firebaseReady = false;
-try {
-  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-  db = firebase.firestore();
-  firebaseReady = true;
-} catch(e) { console.warn('Firebase:', e.message); }
-
-async function loadSiteSettings() {
-  if (!firebaseReady) return;
-  try {
-    const st = await db.collection('settings').doc('sitetext').get();
-    if (st.exists && st.data().footer) {
-      const el = document.getElementById('footerCopy');
-      if (el) el.textContent = st.data().footer;
-    }
-    const th = await db.collection('settings').doc('theme').get();
-    if (th.exists) {
-      const d = th.data(), r = document.documentElement;
-      if (d.red)  r.style.setProperty('--red', d.red);
-      if (d.bg)   r.style.setProperty('--black', d.bg);
-      if (d.text) r.style.setProperty('--white', d.text);
-      if (d.card) r.style.setProperty('--black3', d.card);
-    }
-  } catch(e) {}
-}
-loadSiteSettings();
-
-
-// Load dynamic content from Firebase
-async function loadHomeContent() {
-  if (!firebaseReady) return;
-  try {
-    const st = await db.collection('settings').doc('sitetext').get();
-    if (!st.exists) return;
-    const d = st.data();
-    if (d.tagline)       document.getElementById('heroTagline').textContent = d.tagline;
-    if (d.aboutP1)       document.getElementById('aboutP1').innerHTML = d.aboutP1;
-    if (d.aboutP2)       document.getElementById('aboutP2').innerHTML = d.aboutP2;
-    if (d.s1n) document.getElementById('st1n').textContent = d.s1n;
-    if (d.s1l) document.getElementById('st1l').textContent = d.s1l;
-    if (d.s2n) document.getElementById('st2n').textContent = d.s2n;
-    if (d.s2l) document.getElementById('st2l').textContent = d.s2l;
-    if (d.s3n) document.getElementById('st3n').textContent = d.s3n;
-    if (d.s3l) document.getElementById('st3l').textContent = d.s3l;
-    if (d.s4n) document.getElementById('st4n').textContent = d.s4n;
-    if (d.s4l) document.getElementById('st4l').textContent = d.s4l;
-
-    // Social links
-    const sl = await db.collection('settings').doc('social').get();
-    if (sl.exists && sl.data().youtube) {
-      const ytUrl = sl.data().youtube;
-      const ytBtn = document.getElementById('ytBtn');
-      const ytBtn2 = document.getElementById('ytBtn2');
-      if (ytBtn) ytBtn.href = ytUrl;
-      if (ytBtn2) ytBtn2.href = ytUrl;
-    }
-  } catch(e) {}
-}
-loadHomeContent();
-
-// Load latest 3 news in hero
-async function loadHeroNews() {
-  if (!firebaseReady) return;
-  try {
-    const snap = await db.collection('news').orderBy('createdAt','desc').limit(3).get();
-    if (snap.empty) return;
-    const strip = document.getElementById('heroNewsStrip');
-    const container = document.getElementById('heroNewsItems');
-    const news = snap.docs.map(d => ({...d.data(), id: d.id}));
-    container.innerHTML = news.map(n => `
-      <a href="news_article.html?id=${n.id}" style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-left:2px solid #cc0000;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='rgba(204,0,0,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">
-        <span style="font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#cc0000;white-space:nowrap;margin-top:3px;">${n.category||'News'}</span>
-        <span style="font-family:'Cinzel',serif;font-size:13px;color:#f0ece4;line-height:1.4;text-align:left;">${n.title}</span>
-      </a>`).join('');
-    strip.style.display = 'block';
-  } catch(e) {}
-}
-loadHeroNews();
-
-['ft','fb'].forEach(id=>{
-  const el=document.getElementById(id);if(!el)return;
-  for(let i=0;i<35;i++){const h=document.createElement('div');h.className='fhole';el.appendChild(h);}
-});
-</script>
-
-
-
-<script>
-// Theme toggle
-function applyTheme(theme) {
-  if (theme === 'light') {
-    document.documentElement.classList.add('light');
-    const btn = document.getElementById('themeBtn');
-    if (btn) btn.innerHTML = '☀️ Light';
-  } else {
-    document.documentElement.classList.remove('light');
-    const btn = document.getElementById('themeBtn');
-    if (btn) btn.innerHTML = '🌙 Dark';
-  }
-}
-function toggleTheme() {
-  const isLight = document.documentElement.classList.contains('light');
-  const newTheme = isLight ? 'dark' : 'light';
-  localStorage.setItem('cineopsy_theme', newTheme);
-  applyTheme(newTheme);
-}
-// Apply saved theme on load
-(function() {
-  const saved = localStorage.getItem('cineopsy_theme') || 'dark';
-  applyTheme(saved);
-})();
-</script>
-
-<script>
-// Load popular episodes (most viewed)
-async function loadPopularEpisodes() {
-  const grid = document.getElementById('popularGrid');
-  if (!grid || !window.db) return;
-  try {
-    const playlists = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
-    const snap = await window.db.collection('views').orderBy('count','desc').limit(6).get();
-    if (snap.empty) { grid.innerHTML = '<div style="color:var(--gray);font-style:italic;text-align:center;padding:40px;grid-column:1/-1">No episodes yet. Coming soon!</div>'; return; }
-    
-    const items = await Promise.all(snap.docs.map(async d => {
-      const v = d.data();
-      try {
-        const epSnap = await window.db.collection('episodes').doc(v.id.split('_').pop()).collection('items').doc(v.id).get();
-        if (!epSnap.exists) return null;
-        return { ...epSnap.data(), id: epSnap.id, playlist: v.id.split('_')[1] || 'weekly', views: v.count };
-      } catch(e) { return null; }
-    }));
-    
-    const valid = items.filter(Boolean);
-    if (!valid.length) { grid.innerHTML = '<div style="color:var(--gray);font-style:italic;text-align:center;padding:40px;grid-column:1/-1">Coming soon!</div>'; return; }
-    
-    grid.innerHTML = valid.map(ep => {
-      const epMap = { weekly:'weekly_ep.html',verdict:'verdict_ep.html',whatif:'whatif_ep.html',casefiles:'casefiles_ep.html',beyondborders:'beyondborders_ep.html',specials:'specials_ep.html' };
-      const url = (epMap[ep.playlist]||'weekly_ep.html') + '?id=' + ep.id + '&pl=' + ep.playlist;
-      return '<a href="' + url + '" class="ep-card reveal" style="text-decoration:none">' +
-        '<div class="ep-num">' + ep.playlist + '</div>' +
-        '<div class="ep-title">' + ep.title + '</div>' +
-        '<div class="ep-date">👁 ' + ep.views.toLocaleString() + ' views</div>' +
-        '<div class="ep-excerpt">' + (ep.excerpt||'').substring(0,80) + '</div>' +
-        '<div class="ep-arrow">→</div></a>';
-    }).join('');
-  } catch(e) {
-    grid.innerHTML = '<div style="color:var(--gray);font-style:italic;text-align:center;padding:40px;grid-column:1/-1">Coming soon!</div>';
-  }
-}
-
-// Load weekly poll
-async function loadWeeklyPoll() {
-  const container = document.getElementById('weeklyPollContainer');
-  if (!container || !window.db) return;
-  try {
-    const snap = await window.db.collection('polls').where('active','==',true).orderBy('createdAt','desc').limit(1).get();
-    if (snap.empty) { container.innerHTML = '<div style="color:var(--gray);font-style:italic;text-align:center;padding:40px">No poll this week. Check back soon!</div>'; return; }
-    const poll = { ...snap.docs[0].data(), id: snap.docs[0].id };
-    const voted = JSON.parse(localStorage.getItem('co_polls')||'{}');
-    const hasVoted = voted[poll.id] !== undefined;
-    const total = poll.totalVotes || 0;
-    
-    container.innerHTML = '<div class="poll-box" id="poll_' + poll.id + '">' +
-      '<div class="poll-question">' + poll.question + '</div>' +
-      (poll.options||[]).map((opt, i) => {
-        const votes = poll.votes?.['option'+i] || 0;
-        const pct = total > 0 ? Math.round((votes/total)*100) : 0;
-        if (hasVoted) {
-          return '<div class="poll-option poll-voted" data-label="' + opt + '">' +
-            '<div class="poll-bar-wrap"><div class="poll-bar" style="width:' + pct + '%"></div>' +
-            '<span class="poll-label">' + opt + '</span><span class="poll-pct">' + pct + '%</span></div></div>';
-        }
-        return '<div class="poll-option" data-label="' + opt + '" onclick="castVote('' + poll.id + '',' + i + ')">' +
-          '<div class="poll-bar-wrap"><div class="poll-bar" style="width:0%"></div>' +
-          '<span class="poll-label">' + opt + '</span></div></div>';
-      }).join('') +
-      '<div class="poll-total">' + total + ' votes</div></div>';
-  } catch(e) {}
-}
-
-async function castVote(pollId, optionIdx) {
-  await votePoll(pollId, optionIdx);
-  loadWeeklyPoll();
-}
-
-loadPopularEpisodes();
-loadWeeklyPoll();
-</script>
-
-<!-- Mobile Bottom Navigation -->
-<nav class="bottom-nav" id="bottomNav">
-  <a href="index.html" class="bottom-nav-item" id="bn-home"><span class="bn-icon">🏠</span>Home</a>
-  <a href="news.html" class="bottom-nav-item" id="bn-news"><span class="bn-icon">📰</span>News</a>
-  <a href="#" class="bottom-nav-item" onclick="openSearch();return false;" id="bn-search"><span class="bn-icon">🔍</span>Search</a>
-  <a href="watchlist.html" class="bottom-nav-item" id="bn-watchlist"><span class="bn-icon">🔖</span>Saved</a>
-  <a href="verdict.html" class="bottom-nav-item" id="bn-verdict"><span class="bn-icon">🔬</span>Verdict</a>
-</nav>
-
-<!-- Image Lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+<nav class="bottom-nav"><a href="index.html" class="bn-item active"><span class="bn-icon">🏠</span>Home</a><a href="news.html" class="bn-item"><span class="bn-icon">📰</span>News</a><a href="#" class="bn-item" onclick="openSearch();return false;"><span class="bn-icon">🔍</span>Search</a><a href="watchlist.html" class="bn-item"><span class="bn-icon">🔖</span>Saved</a><a href="verdict.html" class="bn-item"><span class="bn-icon">🔬</span>Verdict</a></nav>
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-inner">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search episodes, news..." autocomplete="off">
+      <button class="search-close" onclick="closeSearch()">✕</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+<div id="lightbox" onclick="if(event.target===this)closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightboxImg" src="" alt="">
-  <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
-
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 <script>
-// Image Lightbox
-function openLightbox(src, caption) {
-  document.getElementById('lightboxImg').src = src;
-  document.getElementById('lightboxCaption').textContent = caption || '';
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
+['fst','fsb'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  for(var i=0;i<40;i++){var h=document.createElement('div');h.className='fhole';el.appendChild(h);}
+});
+function loadHeroNews(){
+  if(!window.db)return;
+  window.db.collection('news').orderBy('createdAt','desc').limit(3).get().then(function(snap){
+    if(snap.empty)return;
+    var items='';
+    snap.docs.forEach(function(d){
+      var n=d.data();n.id=d.id;
+      items+='<a href="news_article.html?id='+n.id+'" class="hero-news-item"><span class="hero-news-cat">'+(n.category||'News')+'</span><span class="hero-news-title">'+escHtml(n.title)+'</span></a>';
+    });
+    document.getElementById('heroNewsItems').innerHTML=items;
+    document.getElementById('heroNews').style.display='block';
+  }).catch(function(){});
 }
-function closeLightbox(e) {
-  if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = '';
+function loadWeeklyPoll(){
+  var el=document.getElementById('weeklyPoll');
+  if(!el||!window.db)return;
+  window.db.collection('polls').where('active','==',true).orderBy('createdAt','desc').limit(1).get().then(function(snap){
+    if(snap.empty){el.innerHTML='<p style="color:var(--gray);font-style:italic">No poll this week.</p>';return;}
+    var poll=snap.docs[0].data();poll.id=snap.docs[0].id;
+    var voted=JSON.parse(localStorage.getItem('co_polls')||'{}');
+    var hasVoted=voted[poll.id]!==undefined;
+    var total=poll.totalVotes||1;
+    var opts='';
+    (poll.options||[]).forEach(function(opt,i){
+      var votes=(poll.votes&&poll.votes['option'+i])||0;
+      var pct=hasVoted?Math.round((votes/total)*100):0;
+      var click=hasVoted?'':'onclick="handlePollVote(''+poll.id+'','+i+')"';
+      opts+='<div class="poll-option" '+click+'><div class="poll-bar" style="width:'+pct+'%"></div><span class="poll-opt-label">'+escHtml(opt)+'</span>'+(hasVoted?'<span class="poll-pct">'+pct+'%</span>':'')+'</div>';
+    });
+    el.innerHTML='<div class="poll-box"><div class="poll-q">'+escHtml(poll.question)+'</div>'+opts+'<div class="poll-total">'+(poll.totalVotes||0)+' votes</div></div>';
+  }).catch(function(){el.innerHTML='<p style="color:var(--gray);font-style:italic">Poll unavailable.</p>';});
 }
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox({target: document.getElementById('lightbox')}); });
-
-// Auto-attach lightbox to article images
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.article-body img, .article-img-block img, .content-body img').forEach(img => {
-    img.classList.add('lightbox-trigger');
-    img.addEventListener('click', () => openLightbox(img.src, img.alt));
-  });
-  
-  // Set active bottom nav item
-  const path = location.pathname.split('/').pop() || 'index.html';
-  const map = {'index.html':'bn-home','news.html':'bn-news','news_article.html':'bn-news','watchlist.html':'bn-watchlist','verdict.html':'bn-verdict','verdict_ep.html':'bn-verdict'};
-  const activeId = map[path];
-  if (activeId) { const el = document.getElementById(activeId); if(el) el.classList.add('active'); }
+function handlePollVote(pollId,idx){
+  castVote(pollId,idx).then(function(ok){if(ok)loadWeeklyPoll();});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){loadHeroNews();loadWeeklyPoll();},400);
 });
 </script>
 </body></html>

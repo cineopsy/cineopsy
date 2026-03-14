@@ -1,121 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google Analytics -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>404 — Scene Not Found — CinéOpsy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
 <style>
-:root.light body{background:#f5f5f0!important;color:#111!important;}
-button.theme-btn{position:fixed;top:16px;right:16px;background:none;border:1px solid rgba(255,255,255,0.2);color:#f0ece4;padding:6px 12px;border-radius:20px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;z-index:100;}
-:root.light button.theme-btn{border-color:rgba(0,0,0,0.2);color:#111;}
-:root.light .err-title{color:#111!important;}
-:root.light .err-sub{color:rgba(20,20,20,0.6)!important;}
-:root.light .btn-o{border-color:rgba(0,0,0,0.2)!important;color:#111!important;}
-</style>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>404 — Page Not Found — CinéOpsy</title>
-<link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--red:#cc0000;--black:#080808;--white:#f0ece4;--gray:rgba(240,236,228,0.45);}
-body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;}
-.err-code{font-family:'Cinzel',serif;font-size:clamp(100px,20vw,200px);font-weight:900;line-height:1;color:var(--red);opacity:0.15;position:absolute;}
+body{background:#080808;color:#f0ece4;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;}
+:root.light body{background:#f5f5f0;color:#111;}
+.err-code{font-family:'Cinzel',serif;font-size:clamp(90px,18vw,180px);font-weight:900;color:#cc0000;opacity:0.12;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
 .err-content{position:relative;z-index:1;}
-.err-icon{font-size:60px;margin-bottom:20px;display:block;}
-.err-title{font-family:'Cinzel',serif;font-size:clamp(20px,4vw,36px);font-weight:700;margin-bottom:12px;}
-.err-title span{color:var(--red);}
-.err-sub{font-family:'Crimson Pro',serif;font-style:italic;font-size:17px;color:var(--gray);margin-bottom:36px;line-height:1.6;}
-.err-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-.btn-r{background:var(--red);color:#fff;padding:12px 28px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:opacity 0.2s;}
+.err-icon{font-size:56px;margin-bottom:18px;}
+.err-title{font-family:'Cinzel',serif;font-size:clamp(18px,4vw,32px);font-weight:700;margin-bottom:10px;}
+.err-title span{color:#cc0000;}
+.err-sub{font-size:16px;opacity:0.5;margin-bottom:32px;font-style:italic;}
+.err-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-r{background:#cc0000;color:#fff;padding:12px 26px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:opacity 0.2s;}
 .btn-r:hover{opacity:0.85;}
-.btn-o{border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:12px 28px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:border-color 0.2s;}
-.btn-o:hover{border-color:var(--red);}
-.err-links{margin-top:48px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;}
-.err-links a{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);text-decoration:none;transition:color 0.2s;}
-.err-links a:hover{color:var(--red);}
-</style>
-
-<!-- SEO Meta Tags -->
-<meta name="description" content="The page you are looking for does not exist.">
-<meta name="keywords" content="cineopsy, 404">
-<meta name="author" content="CinéOpsy">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://cineopsy.netlify.app/404.html">
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Page Not Found — CinéOpsy">
-<meta property="og:description" content="The page you are looking for does not exist.">
-<meta property="og:image" content="https://cineopsy.netlify.app/og-image.jpg">
-<meta property="og:url" content="https://cineopsy.netlify.app/404.html">
-<meta property="og:site_name" content="CinéOpsy">
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@Cineopsy">
-<meta name="twitter:title" content="Page Not Found — CinéOpsy">
-<meta name="twitter:description" content="The page you are looking for does not exist.">
-<meta name="twitter:image" content="https://cineopsy.netlify.app/og-image.jpg">
-
-<style>
-/* ═══ PAGE TRANSITIONS ═══ */
-.page-transition{animation:pageIn 0.4s ease both;}
-@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-body>*:not(nav):not(#readingProgress):not(#scrollTopBtn):not(.search-overlay):not(script):not(style){animation:pageIn 0.5s ease both;}
-a{transition:color 0.2s,opacity 0.2s;}
-
-/* ═══ MOBILE BOTTOM NAV ═══ */
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-top:1px solid rgba(204,0,0,0.2);z-index:997;padding:6px 0 max(6px,env(safe-area-inset-bottom));grid-template-columns:repeat(5,1fr);}
-.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--gray);padding:6px 4px;transition:color 0.2s;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;}
-.bottom-nav-item:hover,.bottom-nav-item.active{color:#cc0000;}
-.bottom-nav-item .bn-icon{font-size:20px;line-height:1;}
-@media(max-width:768px){.bottom-nav{display:grid;}body{padding-bottom:70px;}}
-:root.light .bottom-nav{background:rgba(245,245,240,0.97);border-top-color:rgba(204,0,0,0.15);}
-:root.light .bottom-nav-item{color:rgba(20,20,20,0.5);}
-
-/* ═══ IMAGE LIGHTBOX ═══ */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;}
-.lightbox.open{display:flex;}
-.lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border:1px solid rgba(255,255,255,0.1);}
-.lightbox-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;z-index:1;padding:8px;line-height:1;}
-.lightbox-close:hover{color:#cc0000;}
-.lightbox-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.7);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;max-width:80vw;}
-img.lightbox-trigger{cursor:zoom-in;}
-
-/* ═══ BIOPSY SCORE ═══ */
-.biopsy-score{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);margin:16px 0;}
-.biopsy-score-num{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:#cc0000;line-height:1;}
-.biopsy-score-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);}
-.biopsy-score-verdict{font-family:'Crimson Pro',serif;font-style:italic;font-size:15px;color:var(--white);}
-:root.light .biopsy-score-verdict{color:#111;}
-
-/* ═══ STREAMING BADGES ═══ */
-.streaming-section{margin:16px 0;}
-.streaming-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
-
-/* ═══ READING TIME BADGE ═══ */
-.reading-time-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);background:rgba(255,255,255,0.04);padding:4px 10px;border:1px solid rgba(255,255,255,0.08);}
-:root.light .reading-time-badge{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.08);}
-
-/* ═══ FAN REVIEW SUBMISSION ═══ */
-.fan-review-box{background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.15);padding:28px;margin:32px 0;}
-.fan-review-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;}
-.fan-review-sub{font-size:15px;color:var(--gray);margin-bottom:20px;font-style:italic;}
-:root.light .fan-review-title{color:#111;}
+.btn-o{border:1px solid rgba(255,255,255,0.2);color:#f0ece4;padding:12px 26px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all 0.2s;}
+.btn-o:hover{border-color:#cc0000;}
+.links{margin-top:36px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
+.links a{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:0.4;text-decoration:none;transition:opacity 0.2s;}
+.links a:hover{opacity:1;color:#cc0000;}
+.theme-toggle{position:fixed;top:16px;right:16px;background:none;border:1px solid rgba(255,255,255,0.2);color:#f0ece4;padding:5px 11px;border-radius:20px;cursor:pointer;font-size:14px;}
+:root.light .err-title{color:#111;}
+:root.light .btn-o{border-color:rgba(0,0,0,0.2);color:#111;}
+:root.light .theme-toggle{border-color:rgba(0,0,0,0.2);color:#111;}
 </style>
 </head>
 <body>
 <div class="err-code">404</div>
+<button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
 <div class="err-content">
-  <span class="err-icon">🎬</span>
+  <div class="err-icon">🎬</div>
   <h1 class="err-title">Scene <span>Not Found</span></h1>
-  <p class="err-sub">This page has been cut from the final edit.<br>The reel you're looking for doesn't exist.</p>
+  <p class="err-sub">This page has been cut from the final edit.</p>
   <div class="err-btns">
     <a href="index.html" class="btn-r">Back to Home</a>
     <a href="news.html" class="btn-o">Latest News</a>
   </div>
-  <div class="err-links">
+  <div class="links">
     <a href="weekly.html">Weekly</a>
     <a href="verdict.html">Verdict</a>
     <a href="whatif.html">What If</a>
@@ -124,58 +52,9 @@ img.lightbox-trigger{cursor:zoom-in;}
     <a href="specials.html">Specials</a>
   </div>
 </div>
-
-<!-- Mobile Bottom Navigation -->
-<nav class="bottom-nav" id="bottomNav">
-  <a href="index.html" class="bottom-nav-item" id="bn-home"><span class="bn-icon">🏠</span>Home</a>
-  <a href="news.html" class="bottom-nav-item" id="bn-news"><span class="bn-icon">📰</span>News</a>
-  <a href="#" class="bottom-nav-item" onclick="openSearch();return false;" id="bn-search"><span class="bn-icon">🔍</span>Search</a>
-  <a href="watchlist.html" class="bottom-nav-item" id="bn-watchlist"><span class="bn-icon">🔖</span>Saved</a>
-  <a href="verdict.html" class="bottom-nav-item" id="bn-verdict"><span class="bn-icon">🔬</span>Verdict</a>
-</nav>
-
-<!-- Image Lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightboxImg" src="" alt="">
-  <div class="lightbox-caption" id="lightboxCaption"></div>
-</div>
-
 <script>
-// Image Lightbox
-function openLightbox(src, caption) {
-  document.getElementById('lightboxImg').src = src;
-  document.getElementById('lightboxCaption').textContent = caption || '';
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox(e) {
-  if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox({target: document.getElementById('lightbox')}); });
-
-// Auto-attach lightbox to article images
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.article-body img, .article-img-block img, .content-body img').forEach(img => {
-    img.classList.add('lightbox-trigger');
-    img.addEventListener('click', () => openLightbox(img.src, img.alt));
-  });
-  
-  // Set active bottom nav item
-  const path = location.pathname.split('/').pop() || 'index.html';
-  const map = {'index.html':'bn-home','news.html':'bn-news','news_article.html':'bn-news','watchlist.html':'bn-watchlist','verdict.html':'bn-verdict','verdict_ep.html':'bn-verdict'};
-  const activeId = map[path];
-  if (activeId) { const el = document.getElementById(activeId); if(el) el.classList.add('active'); }
-});
+function applyTheme(t){document.documentElement.classList.toggle('light',t==='light');var b=document.getElementById('themeBtn');if(b)b.textContent=t==='light'?'☀️':'🌙';}
+function toggleTheme(){var l=document.documentElement.classList.contains('light');localStorage.setItem('co_theme',l?'dark':'light');applyTheme(l?'dark':'light');}
+applyTheme(localStorage.getItem('co_theme')||'dark');
 </script>
-
-<button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
-<script>
-function applyTheme(t){if(t==='light'){document.documentElement.classList.add('light');const b=document.getElementById('themeBtn');if(b)b.innerHTML='☀️';}else{document.documentElement.classList.remove('light');const b=document.getElementById('themeBtn');if(b)b.innerHTML='🌙';}}
-function toggleTheme(){const l=document.documentElement.classList.contains('light');localStorage.setItem('cineopsy_theme',l?'dark':'light');applyTheme(l?'dark':'light');}
-(function(){applyTheme(localStorage.getItem('cineopsy_theme')||'dark');})();
-</script>
-</body>
-</html>
+</body></html>
