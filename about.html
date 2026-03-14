@@ -26,7 +26,8 @@
 <script src="firebase-config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-<script src="app.js" defer></script><style>
+<script src="content-defaults.js"></script>
+<script src="app.js"></script><style>
 .about-hero{min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 28px 60px;background:var(--black);position:relative;overflow:hidden;}
 .about-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(140,0,0,0.12) 0%,transparent 65%);pointer-events:none;}
 .about-hero h1{font-family:'Cinzel',serif;font-size:clamp(32px,6vw,64px);font-weight:900;color:var(--white);line-height:1.1;position:relative;z-index:1;}
@@ -108,22 +109,22 @@
 
 <section class="page-wrap">
   <div class="mission">
-    <div class="mission-quote">"Cinema is not just entertainment — it's a mirror of society,<br>and we intend to hold it up clearly."</div>
-    <div class="mission-sub">— CinéOpsy</div>
+    <div class="mission-quote" id="aboutMissionQuote">"Cinema is not just entertainment — it's a mirror of society,<br>and we intend to hold it up clearly."</div>
+    <div class="mission-sub" id="aboutMissionSub">— CinéOpsy</div>
   </div>
 
   <div class="story-grid">
     <div class="story-block">
-      <div class="section-label">Our Story</div>
-      <h3>Born from Two Worlds</h3>
-      <p>CinéOpsy was born from an unusual intersection — <strong>medical science and cinema</strong>. The name itself reflects this: "Cine" from cinema, "Opsy" from biopsy — the medical procedure of examining tissue to reveal truth.</p>
-      <p>We believe every film deserves the same precision. Not a casual watch, but a <strong>deep examination</strong> — story, craft, intent, and impact.</p>
+      <div class="section-label" id="aboutStory1Label">Our Story</div>
+      <h3 id="aboutStory1Title">Born from Two Worlds</h3>
+      <p id="aboutStory1P1">CinéOpsy was born from an unusual intersection — <strong>medical science and cinema</strong>. The name itself reflects this: "Cine" from cinema, "Opsy" from biopsy — the medical procedure of examining tissue to reveal truth.</p>
+      <p id="aboutStory1P2">We believe every film deserves the same precision. Not a casual watch, but a <strong>deep examination</strong> — story, craft, intent, and impact.</p>
     </div>
     <div class="story-block">
-      <div class="section-label">Our Approach</div>
-      <h3>Diagnosis Over Opinion</h3>
-      <p>Where most review channels give you a thumbs up or down, we give you a <strong>full diagnosis</strong>. What worked. What didn't. Why it matters. What it says about cinema today.</p>
-      <p>From Bollywood blockbusters to hidden world cinema gems — <strong>no fluff, no hype</strong>, just honest, analytical cinema discourse.</p>
+      <div class="section-label" id="aboutStory2Label">Our Approach</div>
+      <h3 id="aboutStory2Title">Diagnosis Over Opinion</h3>
+      <p id="aboutStory2P1">Where most review channels give you a thumbs up or down, we give you a <strong>full diagnosis</strong>. What worked. What didn't. Why it matters. What it says about cinema today.</p>
+      <p id="aboutStory2P2">From Bollywood blockbusters to hidden world cinema gems — <strong>no fluff, no hype</strong>, just honest, analytical cinema discourse.</p>
     </div>
   </div>
 </section>
@@ -131,26 +132,26 @@
 <div class="red-divider"></div>
 <section class="page-wrap">
   <div class="section-label">What We Do</div>
-  <h2 class="section-title">Our Six <span>Specialties</span></h2>
+  <h2 class="section-title" id="aboutPillarsTitle">Our Six <span id="aboutPillarsTitleSpan">Specialties</span></h2>
   <div class="pillars">
-    <div class="pillar"><div class="pillar-icon">📰</div><div class="pillar-title">Weekly</div><div class="pillar-desc">Box office, industry news and upcoming releases — every Thursday.</div></div>
-    <div class="pillar"><div class="pillar-icon">🔬</div><div class="pillar-title">Verdict</div><div class="pillar-desc">Honest, deep reviews with our signature Biopsy Score.</div></div>
-    <div class="pillar"><div class="pillar-icon">🤔</div><div class="pillar-title">What If</div><div class="pillar-desc">Alternate timeline analysis — what if the story went differently?</div></div>
-    <div class="pillar"><div class="pillar-icon">🩺</div><div class="pillar-title">Case Files</div><div class="pillar-desc">Medical diagnosis of cinema. Every film is a patient.</div></div>
-    <div class="pillar"><div class="pillar-icon">🌍</div><div class="pillar-title">Beyond Borders</div><div class="pillar-desc">World cinema that never reached India — explained in English.</div></div>
-    <div class="pillar"><div class="pillar-icon">🎞️</div><div class="pillar-title">Specials</div><div class="pillar-desc">Exclusive content and special productions by CinéOpsy.</div></div>
+    <div class="pillar"><div class="pillar-icon">📰</div><div class="pillar-title" id="pillarTitle0">Weekly</div><div class="pillar-desc" id="pillarDesc0">Box office, industry news and upcoming releases — every Thursday.</div></div>
+    <div class="pillar"><div class="pillar-icon">🔬</div><div class="pillar-title" id="pillarTitle1">Verdict</div><div class="pillar-desc" id="pillarDesc1">Honest, deep reviews with our signature Biopsy Score.</div></div>
+    <div class="pillar"><div class="pillar-icon">🤔</div><div class="pillar-title" id="pillarTitle2">What If</div><div class="pillar-desc" id="pillarDesc2">Alternate timeline analysis — what if the story went differently?</div></div>
+    <div class="pillar"><div class="pillar-icon">🩺</div><div class="pillar-title" id="pillarTitle3">Case Files</div><div class="pillar-desc" id="pillarDesc3">Medical diagnosis of cinema. Every film is a patient.</div></div>
+    <div class="pillar"><div class="pillar-icon">🌍</div><div class="pillar-title" id="pillarTitle4">Beyond Borders</div><div class="pillar-desc" id="pillarDesc4">World cinema that never reached India — explained in English.</div></div>
+    <div class="pillar"><div class="pillar-icon">🎞️</div><div class="pillar-title">Specials</div><div class="pillar-desc" id="pillarDesc5">Exclusive content and special productions by CinéOpsy.</div></div>
   </div>
 </section>
 
 <div class="red-divider"></div>
 <section class="page-wrap">
-  <div class="section-label">Behind CinéOpsy</div>
-  <h2 class="section-title">The <span>Creator</span></h2>
+  <div class="section-label" id="aboutCreatorLabel">Behind CinéOpsy</div>
+  <h2 class="section-title" id="aboutCreatorTitle">The <span id="aboutCreatorTitleSpan">Creator</span></h2>
   <div class="team-card" style="max-width:700px;margin-top:24px">
     <div class="team-avatar">🎬</div>
     <div>
       <div class="team-name" id="creatorName">Rajkamal Yadav</div>
-      <div class="team-role">Founder · Writer · Editor</div>
+      <div class="team-role" id="creatorRole">Founder · Writer · Editor</div>
       <div class="team-bio" id="creatorBio">Paramedical student with a passion for cinema and storytelling. CinéOpsy is built on the belief that the analytical lens of healthcare — precision, honesty, depth — can transform how we understand film. Every review is a diagnosis. Every episode is an examination.</div>
     </div>
   </div>
@@ -158,8 +159,8 @@
 
 <div class="red-divider"></div>
 <section class="page-wrap" style="text-align:center">
-  <h2 class="section-title">Ready to <span>Dive In?</span></h2>
-  <p class="section-sub">Explore our series or subscribe to never miss an episode.</p>
+  <h2 class="section-title" id="aboutCTATitle">Ready to <span id="aboutCTATitleSpan">Dive In?</span></h2>
+  <p class="section-sub" id="aboutCTASub">Explore our series or subscribe to never miss an episode.</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px">
     <a href="verdict.html" class="btn-primary">Read Reviews</a>
     <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-outline">Subscribe on YouTube</a>
@@ -187,4 +188,56 @@
   <img id="lightboxImg" src="" alt="">
 </div>
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<script>
+async function loadAboutContent() {
+  if (!window.db) return;
+  try {
+    const doc = await window.db.collection('settings').doc('about').get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    
+    // Map field -> element ID
+    const fields = {
+      heroTitle: 'aboutHeroTitle',
+      heroSub: 'aboutHeroSub',
+      missionQuote: 'aboutMissionQuote',
+      missionSub: 'aboutMissionSub',
+      story1Label: 'aboutStory1Label',
+      story1Title: 'aboutStory1Title',
+      story1P1: 'aboutStory1P1',
+      story1P2: 'aboutStory1P2',
+      story2Label: 'aboutStory2Label',
+      story2Title: 'aboutStory2Title',
+      story2P1: 'aboutStory2P1',
+      story2P2: 'aboutStory2P2',
+      pillarsTitle: 'aboutPillarsTitle',
+      pillarTitle0: 'pillarTitle0', pillarDesc0: 'pillarDesc0',
+      pillarTitle1: 'pillarTitle1', pillarDesc1: 'pillarDesc1',
+      pillarTitle2: 'pillarTitle2', pillarDesc2: 'pillarDesc2',
+      pillarTitle3: 'pillarTitle3', pillarDesc3: 'pillarDesc3',
+      pillarTitle4: 'pillarTitle4', pillarDesc4: 'pillarDesc4',
+      pillarTitle5: 'pillarTitle5', pillarDesc5: 'pillarDesc5',
+      creatorLabel: 'aboutCreatorLabel',
+      creatorTitle: 'aboutCreatorTitle',
+      creatorName: 'creatorName',
+      creatorRole: 'creatorRole',
+      creatorBio: 'creatorBio',
+      ctaTitle: 'aboutCTATitle',
+      ctaSub: 'aboutCTASub',
+    };
+    
+    Object.keys(fields).forEach(key => {
+      if (d[key]) {
+        const el = document.getElementById(fields[key]);
+        if (el) el.innerHTML = d[key];
+      }
+    });
+  } catch(e) {}
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(loadAboutContent, 300);
+});
+</script>
 </body></html>

@@ -26,7 +26,8 @@
 <script src="firebase-config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-<script src="app.js" defer></script><style>
+<script src="content-defaults.js"></script>
+<script src="app.js"></script><style>
 .req-hero{background:linear-gradient(to bottom,rgba(204,0,0,0.08),transparent);border-bottom:1px solid rgba(204,0,0,0.15);padding:90px 0 40px;text-align:center;}
 .req-form{background:var(--black3);border:1px solid rgba(255,255,255,0.06);padding:32px;max-width:660px;margin:24px auto 0;}
 .req-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:11px 14px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;transition:border-color 0.2s;margin-bottom:14px;display:block;}
@@ -63,7 +64,7 @@
 <div class="req-hero">
   <div class="section-label" style="justify-content:center">Community</div>
   <h1 class="section-title" style="font-size:clamp(26px,5vw,50px)">Request a <span>Review</span></h1>
-  <p style="font-family:'Crimson Pro',serif;font-style:italic;font-size:17px;color:var(--gray);margin-top:10px">Want us to cover a specific movie? Tell us!</p>
+  <p style="font-family:'Crimson Pro',serif;font-style:italic;font-size:17px;color:var(--gray);margin-top:10px" id="rrHeroSub">Want us to cover a specific movie? Tell us!</p>
 </div>
 <div class="red-divider"></div>
 <section class="page-wrap" style="padding-top:80px">
@@ -93,8 +94,8 @@
   </div>
   <div class="req-success" id="reqSuccess">
     <div style="font-size:46px;margin-bottom:16px">🎬</div>
-    <h2 style="font-family:'Cinzel',serif;color:var(--white);margin-bottom:10px">Request Submitted!</h2>
-    <p style="color:var(--gray);font-style:italic">We have received your request and will consider it for upcoming episodes.</p>
+    <h2 style="font-family:'Cinzel',serif;color:var(--white);margin-bottom:10px" id="rrSuccessTitle">Request Submitted!</h2>
+    <p style="color:var(--gray);font-style:italic" id="rrSuccessSub">We have received your request and will consider it for upcoming episodes.</p>
     <a href="index.html" class="btn-primary" style="display:inline-block;margin-top:22px">Back to Home</a>
   </div>
 </section>

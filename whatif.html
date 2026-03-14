@@ -26,7 +26,8 @@
 <script src="firebase-config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-<script src="app.js" defer></script><style>
+<script src="content-defaults.js"></script>
+<script src="app.js"></script><style>
 .pl-hero{background:linear-gradient(to bottom,rgba(204,0,0,0.08),transparent);border-bottom:1px solid rgba(204,0,0,0.15);padding:90px 0 42px;text-align:center;}
 .pl-hero-icon{font-size:50px;margin-bottom:14px;}
 .pl-hero-day{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#cc0000;margin-bottom:8px;}
@@ -59,10 +60,10 @@
 </nav>
 <div class="pl-hero" style="margin-top:58px">
   <div class="pl-hero-icon">🤔</div>
-  <div class="pl-hero-day">Alternate Sundays</div>
-  <div class="section-label" style="justify-content:center">Alternate Timelines</div>
+  <div class="pl-hero-day" id="plHeroDay">Alternate Sundays</div>
+  <div class="section-label" style="justify-content:center" id="plHeroLabel">Alternate Timelines</div>
   <h1 class="section-title" style="font-size:clamp(26px,5vw,50px)">What If</h1>
-  <p style="font-family:'Crimson Pro',serif;font-style:italic;font-size:17px;color:var(--gray);margin-top:10px;padding:0 20px">Exploring alternate cinema universes — what if the story went differently?</p>
+  <p style="font-family:\'Crimson Pro\',serif;font-style:italic;font-size:17px;color:var(--gray);margin-top:8px;padding:0 20px" id="plHeroSub">Exploring alternate cinema universes — what if the story went differently?</p>
 </div>
 <div class="red-divider"></div>
 <section class="page-wrap">
@@ -96,6 +97,7 @@
 </div>
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 <script>
+window._PL_ID = "whatif";
 async function loadEpisodes(){
   var grid=document.getElementById('epGrid');
   if(!grid)return;

@@ -197,6 +197,8 @@ label, .field-label, .lbl { color:var(--adm-gray) !important; }
       <button class="tab" onclick="switchTab(event,'pinned')">📌 Pinned</button>
       <button class="tab" onclick="switchTab(event,'push')">🔔 Push</button>
       <button class="tab" onclick="switchTab(event,'manage')">⚙️ Manage</button>
+      <button class="tab" onclick="switchTab(event,'about')">ℹ️ About</button>
+      <button class="tab" onclick="switchTab(event,'content')">📝 Content</button>
       <button class="tab" onclick="switchTab(event,'requests')">🎬 Requests</button>
     </div>
 
@@ -651,6 +653,397 @@ label, .field-label, .lbl { color:var(--adm-gray) !important; }
           </div>
           <div id="dataMsg" style="margin-top:8px;font-size:13px"></div>
         </div>
+      </div>
+    </div>
+
+
+    <!-- ABOUT PAGE TAB -->
+    <div class="tab-pane" id="tab-about">
+      <div class="card">
+        <h3 class="card-title">ℹ️ About Page — Full Edit Control</h3>
+        <p style="color:var(--adm-gray,#888);font-size:13px;margin-bottom:20px">Every single word on the About page can be edited here.</p>
+
+        <!-- HERO SECTION -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 HERO SECTION</div>
+          <label class="field-label">Hero Title</label>
+          <input type="text" id="ab_heroTitle" class="field-input" placeholder="Where Cinema Meets Biopsy">
+          <label class="field-label">Hero Subtitle</label>
+          <input type="text" id="ab_heroSub" class="field-input" placeholder="We don't just watch films. We dissect them.">
+        </div>
+
+        <!-- MISSION SECTION -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">💬 MISSION STATEMENT</div>
+          <label class="field-label">Mission Quote</label>
+          <textarea id="ab_missionQuote" class="field-input" rows="3" style="resize:vertical" placeholder='"Cinema is not just entertainment..."'></textarea>
+          <label class="field-label">Mission Attribution</label>
+          <input type="text" id="ab_missionSub" class="field-input" placeholder="— CinéOpsy">
+        </div>
+
+        <!-- STORY SECTION 1 -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📖 OUR STORY (Left Block)</div>
+          <label class="field-label">Section Label</label>
+          <input type="text" id="ab_story1Label" class="field-input" placeholder="Our Story">
+          <label class="field-label">Block Title</label>
+          <input type="text" id="ab_story1Title" class="field-input" placeholder="Born from Two Worlds">
+          <label class="field-label">Paragraph 1</label>
+          <textarea id="ab_story1P1" class="field-input" rows="3" style="resize:vertical" placeholder="First paragraph..."></textarea>
+          <label class="field-label">Paragraph 2</label>
+          <textarea id="ab_story1P2" class="field-input" rows="3" style="resize:vertical" placeholder="Second paragraph..."></textarea>
+        </div>
+
+        <!-- STORY SECTION 2 -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📖 OUR APPROACH (Right Block)</div>
+          <label class="field-label">Section Label</label>
+          <input type="text" id="ab_story2Label" class="field-input" placeholder="Our Approach">
+          <label class="field-label">Block Title</label>
+          <input type="text" id="ab_story2Title" class="field-input" placeholder="Diagnosis Over Opinion">
+          <label class="field-label">Paragraph 1</label>
+          <textarea id="ab_story2P1" class="field-input" rows="3" style="resize:vertical" placeholder="First paragraph..."></textarea>
+          <label class="field-label">Paragraph 2</label>
+          <textarea id="ab_story2P2" class="field-input" rows="3" style="resize:vertical" placeholder="Second paragraph..."></textarea>
+        </div>
+
+        <!-- PILLARS -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎯 SIX PILLARS / SPECIALTIES</div>
+          <label class="field-label">Section Title</label>
+          <input type="text" id="ab_pillarsTitle" class="field-input" placeholder="Our Six Specialties">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
+              <label class="field-label" style="font-size:8px">PILLAR 1 TITLE</label>
+              <input type="text" id="ab_pillarTitle0" class="field-input" style="margin-bottom:6px" placeholder="Title 1">
+              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
+              <input type="text" id="ab_pillarDesc0" class="field-input" placeholder="Description 1">
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
+              <label class="field-label" style="font-size:8px">PILLAR 2 TITLE</label>
+              <input type="text" id="ab_pillarTitle1" class="field-input" style="margin-bottom:6px" placeholder="Title 2">
+              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
+              <input type="text" id="ab_pillarDesc1" class="field-input" placeholder="Description 2">
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
+              <label class="field-label" style="font-size:8px">PILLAR 3 TITLE</label>
+              <input type="text" id="ab_pillarTitle2" class="field-input" style="margin-bottom:6px" placeholder="Title 3">
+              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
+              <input type="text" id="ab_pillarDesc2" class="field-input" placeholder="Description 3">
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
+              <label class="field-label" style="font-size:8px">PILLAR 4 TITLE</label>
+              <input type="text" id="ab_pillarTitle3" class="field-input" style="margin-bottom:6px" placeholder="Title 4">
+              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
+              <input type="text" id="ab_pillarDesc3" class="field-input" placeholder="Description 4">
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
+              <label class="field-label" style="font-size:8px">PILLAR 5 TITLE</label>
+              <input type="text" id="ab_pillarTitle4" class="field-input" style="margin-bottom:6px" placeholder="Title 5">
+              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
+              <input type="text" id="ab_pillarDesc4" class="field-input" placeholder="Description 5">
+            </div>
+            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
+              <label class="field-label" style="font-size:8px">PILLAR 6 TITLE</label>
+              <input type="text" id="ab_pillarTitle5" class="field-input" style="margin-bottom:6px" placeholder="Title 6">
+              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
+              <input type="text" id="ab_pillarDesc5" class="field-input" placeholder="Description 6">
+            </div>
+          </div>
+        </div>
+
+        <!-- CREATOR BIO -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">👤 CREATOR / TEAM SECTION</div>
+          <label class="field-label">Section Label</label>
+          <input type="text" id="ab_creatorLabel" class="field-input" placeholder="Behind CinéOpsy">
+          <label class="field-label">Section Title</label>
+          <input type="text" id="ab_creatorTitle" class="field-input" placeholder="The Creator">
+          <label class="field-label">Creator Name</label>
+          <input type="text" id="ab_creatorName" class="field-input" placeholder="Rajkamal Yadav">
+          <label class="field-label">Creator Role/Title</label>
+          <input type="text" id="ab_creatorRole" class="field-input" placeholder="Founder · Writer · Editor">
+          <label class="field-label">Creator Bio</label>
+          <textarea id="ab_creatorBio" class="field-input" rows="5" style="resize:vertical" placeholder="Full bio text..."></textarea>
+        </div>
+
+        <!-- CTA SECTION -->
+        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔗 CALL TO ACTION (Bottom)</div>
+          <label class="field-label">CTA Title</label>
+          <input type="text" id="ab_ctaTitle" class="field-input" placeholder="Ready to Dive In?">
+          <label class="field-label">CTA Subtitle</label>
+          <input type="text" id="ab_ctaSub" class="field-input" placeholder="Explore our series or subscribe...">
+        </div>
+
+        <button onclick="saveAboutPage()" class="btn-save" style="width:100%;padding:16px;font-size:12px">💾 SAVE ALL ABOUT PAGE CHANGES →</button>
+        <div id="aboutSaveMsg" style="margin-top:12px;text-align:center;font-size:14px"></div>
+      </div>
+    </div>
+
+
+    <!-- CONTENT TAB -->
+    <div class="tab-pane" id="tab-content">
+      <div class="card">
+        <h3 class="card-title">📝 Website Content — Every Word Editable</h3>
+        <p style="color:var(--adm-gray,#888);font-size:13px;margin-bottom:8px">Edit any text on the website. Changes reflect immediately after saving.</p>
+        <button onclick="saveAllContent()" class="btn-save" style="width:100%;margin-bottom:20px;padding:14px">💾 SAVE ALL CONTENT CHANGES →</button>
+        <div id="contentSaveMsg" style="margin-bottom:16px;text-align:center;font-size:14px"></div>
+
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🌐 GLOBAL (All Pages)</div>
+          <label class="field-label">Site Name</label>
+          <input type="text" id="ct_siteName" class="field-input" style="margin-bottom:8px" placeholder="Site Name">
+          <label class="field-label">Site Tagline</label>
+          <input type="text" id="ct_tagline" class="field-input" style="margin-bottom:8px" placeholder="Site Tagline">
+          <label class="field-label">Footer Tagline</label>
+          <input type="text" id="ct_footerTagline" class="field-input" style="margin-bottom:8px" placeholder="Footer Tagline">
+          <label class="field-label">Footer Copyright Text</label>
+          <input type="text" id="ct_footerCopy" class="field-input" style="margin-bottom:8px" placeholder="Footer Copyright Text">
+          <label class="field-label">YouTube Channel URL</label>
+          <input type="text" id="ct_ytUrl" class="field-input" style="margin-bottom:8px" placeholder="YouTube Channel URL">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🏠 HOMEPAGE — Hero</div>
+          <label class="field-label">Hero Tagline (below CINEOPSY)</label>
+          <input type="text" id="ct_homeHeroTagline" class="field-input" style="margin-bottom:8px" placeholder="Hero Tagline (below CINEOPSY)">
+          <label class="field-label">Button 1 Text (Watch on YouTube)</label>
+          <input type="text" id="ct_homeHeroBtn1" class="field-input" style="margin-bottom:8px" placeholder="Button 1 Text (Watch on YouTube)">
+          <label class="field-label">Button 2 Text (Explore Series)</label>
+          <input type="text" id="ct_homeHeroBtn2" class="field-input" style="margin-bottom:8px" placeholder="Button 2 Text (Explore Series)">
+          <label class="field-label">Latest News Link Text</label>
+          <input type="text" id="ct_homeLatestNewsLink" class="field-input" style="margin-bottom:8px" placeholder="Latest News Link Text">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📺 HOMEPAGE — Series Section</div>
+          <label class="field-label">Section Label</label>
+          <input type="text" id="ct_homeSeriesLabel" class="field-input" style="margin-bottom:8px" placeholder="Section Label">
+          <label class="field-label">Section Title</label>
+          <input type="text" id="ct_homeSeriesTitle" class="field-input" style="margin-bottom:8px" placeholder="Section Title">
+          <label class="field-label">Section Subtitle</label>
+          <input type="text" id="ct_homeSeriesSub" class="field-input" style="margin-bottom:8px" placeholder="Section Subtitle">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">ℹ️ HOMEPAGE — About Section</div>
+          <label class="field-label">About Label</label>
+          <input type="text" id="ct_homeAboutLabel" class="field-input" style="margin-bottom:8px" placeholder="About Label">
+          <label class="field-label">About Title</label>
+          <input type="text" id="ct_homeAboutTitle" class="field-input" style="margin-bottom:8px" placeholder="About Title">
+          <label class="field-label">About Paragraph 1</label>
+          <textarea id="ct_homeAboutP1" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="About Paragraph 1"></textarea>
+          <label class="field-label">About Paragraph 2</label>
+          <textarea id="ct_homeAboutP2" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="About Paragraph 2"></textarea>
+          <label class="field-label">About Button Text</label>
+          <input type="text" id="ct_homeAboutBtn" class="field-input" style="margin-bottom:8px" placeholder="About Button Text">
+          <label class="field-label">Stat 1 Number</label>
+          <input type="text" id="ct_homeStat1Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 1 Number">
+          <label class="field-label">Stat 1 Label</label>
+          <input type="text" id="ct_homeStat1Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 1 Label">
+          <label class="field-label">Stat 2 Number</label>
+          <input type="text" id="ct_homeStat2Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 2 Number">
+          <label class="field-label">Stat 2 Label</label>
+          <input type="text" id="ct_homeStat2Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 2 Label">
+          <label class="field-label">Stat 3 Number</label>
+          <input type="text" id="ct_homeStat3Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 3 Number">
+          <label class="field-label">Stat 3 Label</label>
+          <input type="text" id="ct_homeStat3Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 3 Label">
+          <label class="field-label">Stat 4 Number</label>
+          <input type="text" id="ct_homeStat4Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 4 Number">
+          <label class="field-label">Stat 4 Label</label>
+          <input type="text" id="ct_homeStat4Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 4 Label">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📧 HOMEPAGE — Newsletter</div>
+          <label class="field-label">Section Title</label>
+          <input type="text" id="ct_homeNewsletterTitle" class="field-input" style="margin-bottom:8px" placeholder="Section Title">
+          <label class="field-label">Newsletter Box Title</label>
+          <input type="text" id="ct_homeNewsletterBoxTitle" class="field-input" style="margin-bottom:8px" placeholder="Newsletter Box Title">
+          <label class="field-label">Newsletter Box Subtitle</label>
+          <input type="text" id="ct_homeNewsletterBoxSub" class="field-input" style="margin-bottom:8px" placeholder="Newsletter Box Subtitle">
+          <label class="field-label">Subscribe Button Text</label>
+          <input type="text" id="ct_homeNewsletterBtn" class="field-input" style="margin-bottom:8px" placeholder="Subscribe Button Text">
+          <label class="field-label">Email Input Placeholder</label>
+          <input type="text" id="ct_homeNewsletterPlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Email Input Placeholder">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 HOMEPAGE — Featured & Social</div>
+          <label class="field-label">Featured Label</label>
+          <input type="text" id="ct_homeFeaturedLabel" class="field-input" style="margin-bottom:8px" placeholder="Featured Label">
+          <label class="field-label">Featured Title</label>
+          <input type="text" id="ct_homeFeaturedTitle" class="field-input" style="margin-bottom:8px" placeholder="Featured Title">
+          <label class="field-label">Featured Subtitle / Video Title</label>
+          <input type="text" id="ct_homeFeaturedSub" class="field-input" style="margin-bottom:8px" placeholder="Featured Subtitle / Video Title">
+          <label class="field-label">Social Section Title</label>
+          <input type="text" id="ct_homeSocialTitle" class="field-input" style="margin-bottom:8px" placeholder="Social Section Title">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📰 WEEKLY PLAYLIST PAGE</div>
+          <label class="field-label">Category Label (top badge)</label>
+          <input type="text" id="ct_weeklyLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
+          <label class="field-label">Playlist Name / Title</label>
+          <input type="text" id="ct_weeklyName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
+          <label class="field-label">Publish Day/Schedule</label>
+          <input type="text" id="ct_weeklyDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
+          <label class="field-label">Playlist Description</label>
+          <textarea id="ct_weeklyDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
+          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
+          <input type="text" id="ct_weeklyEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔬 VERDICT PLAYLIST PAGE</div>
+          <label class="field-label">Category Label (top badge)</label>
+          <input type="text" id="ct_verdictLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
+          <label class="field-label">Playlist Name / Title</label>
+          <input type="text" id="ct_verdictName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
+          <label class="field-label">Publish Day/Schedule</label>
+          <input type="text" id="ct_verdictDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
+          <label class="field-label">Playlist Description</label>
+          <textarea id="ct_verdictDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
+          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
+          <input type="text" id="ct_verdictEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🤔 WHATIF PLAYLIST PAGE</div>
+          <label class="field-label">Category Label (top badge)</label>
+          <input type="text" id="ct_whatifLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
+          <label class="field-label">Playlist Name / Title</label>
+          <input type="text" id="ct_whatifName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
+          <label class="field-label">Publish Day/Schedule</label>
+          <input type="text" id="ct_whatifDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
+          <label class="field-label">Playlist Description</label>
+          <textarea id="ct_whatifDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
+          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
+          <input type="text" id="ct_whatifEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🩺 CASEFILES PLAYLIST PAGE</div>
+          <label class="field-label">Category Label (top badge)</label>
+          <input type="text" id="ct_casefilesLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
+          <label class="field-label">Playlist Name / Title</label>
+          <input type="text" id="ct_casefilesName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
+          <label class="field-label">Publish Day/Schedule</label>
+          <input type="text" id="ct_casefilesDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
+          <label class="field-label">Playlist Description</label>
+          <textarea id="ct_casefilesDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
+          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
+          <input type="text" id="ct_casefilesEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🌍 BEYONDBORDERS PLAYLIST PAGE</div>
+          <label class="field-label">Category Label (top badge)</label>
+          <input type="text" id="ct_beyondbordersLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
+          <label class="field-label">Playlist Name / Title</label>
+          <input type="text" id="ct_beyondbordersName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
+          <label class="field-label">Publish Day/Schedule</label>
+          <input type="text" id="ct_beyondbordersDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
+          <label class="field-label">Playlist Description</label>
+          <textarea id="ct_beyondbordersDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
+          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
+          <input type="text" id="ct_beyondbordersEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎞️ SPECIALS PLAYLIST PAGE</div>
+          <label class="field-label">Category Label (top badge)</label>
+          <input type="text" id="ct_specialsLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
+          <label class="field-label">Playlist Name / Title</label>
+          <input type="text" id="ct_specialsName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
+          <label class="field-label">Publish Day/Schedule</label>
+          <input type="text" id="ct_specialsDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
+          <label class="field-label">Playlist Description</label>
+          <textarea id="ct_specialsDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
+          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
+          <input type="text" id="ct_specialsEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📰 NEWS PAGE</div>
+          <label class="field-label">Breaking Label</label>
+          <input type="text" id="ct_newsBreakingLabel" class="field-input" style="margin-bottom:8px" placeholder="Breaking Label">
+          <label class="field-label">Page Title</label>
+          <input type="text" id="ct_newsHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
+          <label class="field-label">Page Subtitle</label>
+          <input type="text" id="ct_newsHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
+          <label class="field-label">Default Ticker Text (before news loads)</label>
+          <textarea id="ct_newsTickerDefault" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Default Ticker Text (before news loads)"></textarea>
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">✉️ CONTACT PAGE</div>
+          <label class="field-label">Hero Label</label>
+          <input type="text" id="ct_contactHeroLabel" class="field-input" style="margin-bottom:8px" placeholder="Hero Label">
+          <label class="field-label">Hero Title</label>
+          <input type="text" id="ct_contactHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Hero Title">
+          <label class="field-label">Hero Subtitle</label>
+          <input type="text" id="ct_contactHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Hero Subtitle">
+          <label class="field-label">Social Section Label</label>
+          <input type="text" id="ct_contactSocialLabel" class="field-input" style="margin-bottom:8px" placeholder="Social Section Label">
+          <label class="field-label">Social Section Title</label>
+          <input type="text" id="ct_contactSocialTitle" class="field-input" style="margin-bottom:8px" placeholder="Social Section Title">
+          <label class="field-label">Name Field Placeholder</label>
+          <input type="text" id="ct_contactFormNamePlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Name Field Placeholder">
+          <label class="field-label">Email Field Placeholder</label>
+          <input type="text" id="ct_contactFormEmailPlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Email Field Placeholder">
+          <label class="field-label">Message Field Placeholder</label>
+          <input type="text" id="ct_contactFormMsgPlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Message Field Placeholder">
+          <label class="field-label">Submit Button Text</label>
+          <input type="text" id="ct_contactFormBtn" class="field-input" style="margin-bottom:8px" placeholder="Submit Button Text">
+          <label class="field-label">Success Title</label>
+          <input type="text" id="ct_contactSuccessTitle" class="field-input" style="margin-bottom:8px" placeholder="Success Title">
+          <label class="field-label">Success Subtitle</label>
+          <input type="text" id="ct_contactSuccessSub" class="field-input" style="margin-bottom:8px" placeholder="Success Subtitle">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔬 REVIEWS GALLERY PAGE</div>
+          <label class="field-label">Hero Label</label>
+          <input type="text" id="ct_reviewsHeroLabel" class="field-input" style="margin-bottom:8px" placeholder="Hero Label">
+          <label class="field-label">Page Title</label>
+          <input type="text" id="ct_reviewsHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
+          <label class="field-label">Page Subtitle</label>
+          <input type="text" id="ct_reviewsHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 REVIEW REQUEST PAGE</div>
+          <label class="field-label">Hero Label</label>
+          <input type="text" id="ct_rrHeroLabel" class="field-input" style="margin-bottom:8px" placeholder="Hero Label">
+          <label class="field-label">Page Title</label>
+          <input type="text" id="ct_rrHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
+          <label class="field-label">Page Subtitle</label>
+          <input type="text" id="ct_rrHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
+          <label class="field-label">Movie Title Placeholder</label>
+          <input type="text" id="ct_rrMoviePlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Movie Title Placeholder">
+          <label class="field-label">Reason Placeholder</label>
+          <textarea id="ct_rrReasonPlaceholder" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Reason Placeholder"></textarea>
+          <label class="field-label">Submit Button Text</label>
+          <input type="text" id="ct_rrBtn" class="field-input" style="margin-bottom:8px" placeholder="Submit Button Text">
+          <label class="field-label">Success Title</label>
+          <input type="text" id="ct_rrSuccessTitle" class="field-input" style="margin-bottom:8px" placeholder="Success Title">
+          <label class="field-label">Success Subtitle</label>
+          <textarea id="ct_rrSuccessSub" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Success Subtitle"></textarea>
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔖 WATCHLIST PAGE</div>
+          <label class="field-label">Page Title</label>
+          <input type="text" id="ct_watchlistTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
+          <label class="field-label">Page Subtitle</label>
+          <input type="text" id="ct_watchlistSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
+          <label class="field-label">Empty State Title</label>
+          <input type="text" id="ct_watchlistEmptyTitle" class="field-input" style="margin-bottom:8px" placeholder="Empty State Title">
+          <label class="field-label">Empty State Subtitle</label>
+          <input type="text" id="ct_watchlistEmptySub" class="field-input" style="margin-bottom:8px" placeholder="Empty State Subtitle">
+          <label class="field-label">Empty State Button</label>
+          <input type="text" id="ct_watchlistEmptyBtn" class="field-input" style="margin-bottom:8px" placeholder="Empty State Button">
+        </div>
+        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 404 ERROR PAGE</div>
+          <label class="field-label">Error Title</label>
+          <input type="text" id="ct_e404Title" class="field-input" style="margin-bottom:8px" placeholder="Error Title">
+          <label class="field-label">Error Subtitle</label>
+          <input type="text" id="ct_e404Sub" class="field-input" style="margin-bottom:8px" placeholder="Error Subtitle">
+          <label class="field-label">Button 1 Text</label>
+          <input type="text" id="ct_e404Btn1" class="field-input" style="margin-bottom:8px" placeholder="Button 1 Text">
+          <label class="field-label">Button 2 Text</label>
+          <input type="text" id="ct_e404Btn2" class="field-input" style="margin-bottom:8px" placeholder="Button 2 Text">
+        </div>
+        <button onclick="saveAllContent()" class="btn-save" style="width:100%;margin-top:8px;padding:14px">💾 SAVE ALL CONTENT CHANGES →</button>
+        <div id="contentSaveMsg2" style="margin-top:12px;text-align:center;font-size:14px"></div>
       </div>
     </div>
 
@@ -1700,6 +2093,137 @@ const _mgPrev = window.switchTab;
 window.switchTab = function(e, name) {
   _mgPrev(e, name);
   if (name === 'manage') loadManageTab();
+};
+
+
+// ════ ABOUT PAGE ADMIN ════
+const ABOUT_FIELDS = [
+  ['heroTitle','ab_heroTitle'],
+  ['heroSub','ab_heroSub'],
+  ['missionQuote','ab_missionQuote'],
+  ['missionSub','ab_missionSub'],
+  ['story1Label','ab_story1Label'],
+  ['story1Title','ab_story1Title'],
+  ['story1P1','ab_story1P1'],
+  ['story1P2','ab_story1P2'],
+  ['story2Label','ab_story2Label'],
+  ['story2Title','ab_story2Title'],
+  ['story2P1','ab_story2P1'],
+  ['story2P2','ab_story2P2'],
+  ['pillarsTitle','ab_pillarsTitle'],
+  ['pillarTitle0','ab_pillarTitle0'], ['pillarDesc0','ab_pillarDesc0'],
+  ['pillarTitle1','ab_pillarTitle1'], ['pillarDesc1','ab_pillarDesc1'],
+  ['pillarTitle2','ab_pillarTitle2'], ['pillarDesc2','ab_pillarDesc2'],
+  ['pillarTitle3','ab_pillarTitle3'], ['pillarDesc3','ab_pillarDesc3'],
+  ['pillarTitle4','ab_pillarTitle4'], ['pillarDesc4','ab_pillarDesc4'],
+  ['pillarTitle5','ab_pillarTitle5'], ['pillarDesc5','ab_pillarDesc5'],
+  ['creatorLabel','ab_creatorLabel'],
+  ['creatorTitle','ab_creatorTitle'],
+  ['creatorName','ab_creatorName'],
+  ['creatorRole','ab_creatorRole'],
+  ['creatorBio','ab_creatorBio'],
+  ['ctaTitle','ab_ctaTitle'],
+  ['ctaSub','ab_ctaSub'],
+];
+
+async function loadAboutAdmin() {
+  if (!firebaseReady) return;
+  try {
+    const doc = await db.collection('settings').doc('about').get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    ABOUT_FIELDS.forEach(([key, elId]) => {
+      const el = document.getElementById(elId);
+      if (el && d[key] !== undefined) el.value = d[key];
+    });
+  } catch(e) {}
+}
+
+async function saveAboutPage() {
+  const msg = document.getElementById('aboutSaveMsg');
+  const btn = document.querySelector('[onclick="saveAboutPage()"]');
+  if (!firebaseReady) { msg.innerHTML = '<span style="color:#f44">Firebase not connected!</span>'; return; }
+  if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
+  
+  const data = {};
+  ABOUT_FIELDS.forEach(([key, elId]) => {
+    const el = document.getElementById(elId);
+    if (el) data[key] = el.value.trim();
+  });
+  
+  try {
+    await db.collection('settings').doc('about').set(data);
+    msg.innerHTML = '<span style="color:#44ff88">✅ All about page content saved! Visit about.html to see changes.</span>';
+  } catch(e) {
+    msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>';
+  }
+  if (btn) { btn.textContent = '💾 SAVE ALL ABOUT PAGE CHANGES →'; btn.disabled = false; }
+}
+
+// Hook about tab
+const _abPrev = window.switchTab;
+window.switchTab = function(e, name) {
+  _abPrev(e, name);
+  if (name === 'about') loadAboutAdmin();
+};
+
+
+// ════ CONTENT TAB ════
+async function loadContentTab() {
+  if (!firebaseReady) return;
+  try {
+    const defaults = typeof CONTENT_DEFAULTS !== 'undefined' ? CONTENT_DEFAULTS : {};
+    // Populate with defaults first
+    Object.keys(defaults).forEach(key => {
+      const el = document.getElementById('ct_' + key);
+      if (el) el.value = defaults[key];
+    });
+    // Override with Firebase
+    const doc = await db.collection('settings').doc('content').get();
+    if (doc.exists) {
+      Object.entries(doc.data()).forEach(([key, val]) => {
+        const el = document.getElementById('ct_' + key);
+        if (el) el.value = val;
+      });
+    }
+  } catch(e) { console.warn('Content load error:', e); }
+}
+
+async function saveAllContent() {
+  const msgs = ['contentSaveMsg','contentSaveMsg2'];
+  msgs.forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = '<span style="color:#888">Saving...</span>'; });
+  
+  if (!firebaseReady) {
+    msgs.forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = '<span style="color:#f44">Firebase not connected!</span>'; });
+    return;
+  }
+  
+  // Collect all ct_ fields
+  const data = {};
+  document.querySelectorAll('[id^="ct_"]').forEach(el => {
+    const key = el.id.replace('ct_', '');
+    if (el.value.trim()) data[key] = el.value.trim();
+  });
+  
+  try {
+    await db.collection('settings').doc('content').set(data);
+    msgs.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = '<span style="color:#44ff88">✅ All content saved! Every page updated instantly.</span>';
+    });
+  } catch(e) {
+    msgs.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>';
+    });
+  }
+}
+
+// Hook content tab
+const _ctPrev = window.switchTab;
+window.switchTab = function(e, name) {
+  _ctPrev(e, name);
+  if (name === 'content') loadContentTab();
 };
 
 </script>

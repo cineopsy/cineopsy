@@ -32,11 +32,12 @@ function toggleTheme() {
   localStorage.setItem('co_theme', next);
   applyTheme(next);
 }
-(function(){ applyTheme(localStorage.getItem('co_theme') || 'dark'); })();
+
 
 // ── Nav ──
 function toggleMenu() {
-  document.getElementById('navLinks')?.classList.toggle('open');
+  var links = document.getElementById('navLinks');
+  if (links) links.classList.toggle('open');
 }
 document.addEventListener('click', e => {
   const links = document.getElementById('navLinks');
@@ -80,20 +81,23 @@ function showToast(msg, ms = 3000) {
 // ── Search ──
 let _searchTimer;
 function openSearch() {
-  const o = document.getElementById('searchOverlay');
+  var o = document.getElementById('searchOverlay');
   if (!o) return;
   o.classList.add('open');
   document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('searchInput')?.focus(), 80);
+  setTimeout(function() {
+    var inp = document.getElementById('searchInput');
+    if (inp) inp.focus();
+  }, 80);
 }
 function closeSearch() {
-  const o = document.getElementById('searchOverlay');
+  var o = document.getElementById('searchOverlay');
   if (!o) return;
   o.classList.remove('open');
   document.body.style.overflow = '';
-  const inp = document.getElementById('searchInput');
+  var inp = document.getElementById('searchInput');
   if (inp) inp.value = '';
-  const res = document.getElementById('searchResults');
+  var res = document.getElementById('searchResults');
   if (res) res.innerHTML = '';
 }
 document.addEventListener('keydown', e => {
@@ -335,8 +339,21 @@ function getEpUrl(pl, id) {
 }
 function getParam(n) { return new URLSearchParams(location.search).get(n); }
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
+// ── Apply theme IMMEDIATELY on script load (before DOM ready) ──
+(function() {
+  var t = localStorage.getItem('co_theme') || 'dark';
+  if (t === 'light') document.documentElement.classList.add('light');
+  // Update button when DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('themeBtn');
+    if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
+    var hero = document.getElementById('hero');
+    if (hero) hero.style.background = t === 'light' ? '#f0f0eb' : '#080808';
+  });
+})();
+
+// ── Init on DOM ready ──
+document.addEventListener('DOMContentLoaded', function() {
   initFirebase();
   setupSearch();
   setupLightbox();
@@ -395,3 +412,112 @@ async function loadManageSettings() {
     if (cb && d.creatorBio) cb.textContent = d.creatorBio;
   } catch(e) {}
 }
+
+// ════════════════════════════════════════
+// CONTENT MANAGEMENT SYSTEM
+// Loads all website text from Firebase
+// Falls back to CONTENT_DEFAULTS
+// ════════════════════════════════════════
+
+let SITE_CONTENT = {};
+
+async function loadPageContent() {
+  // Merge defaults first
+  if (typeof CONTENT_DEFAULTS !== 'undefined') {
+    SITE_CONTENT = Object.assign({}, CONTENT_DEFAULTS);
+  }
+  // Override with Firebase values
+  if (db) {
+    try {
+      const doc = await db.collection('settings').doc('content').get();
+      if (doc.exists) {
+        Object.assign(SITE_CONTENT, doc.data());
+      }
+    } catch(e) {}
+  }
+  applyContent();
+}
+
+function applyContent() {
+  const c = SITE_CONTENT;
+  if (!c || Object.keys(c).length === 0) return;
+
+  // Helper: set text if element exists
+  function setText(id, val) {
+    if (!val) return;
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+  function setAttr(id, attr, val) {
+    if (!val) return;
+    var el = document.getElementById(id);
+    if (el) el[attr] = val;
+  }
+  function setPlaceholder(id, val) {
+    if (!val) return;
+    var el = document.getElementById(id);
+    if (el) el.placeholder = val;
+  }
+
+  // ── GLOBAL ──
+  setText('footerTagline', c.footerTagline);
+  setText('footerCopy', c.footerCopy);
+
+  // ── HOMEPAGE ──
+  setText('heroTagline', c.homeHeroTagline);
+  setText('homeSeriesTitle', c.homeSeriesTitle);
+  setText('homeSeriesSub', c.homeSeriesSub);
+  setText('homeAboutP1', c.homeAboutP1);
+  setText('homeAboutP2', c.homeAboutP2);
+  setText('homeStat1Num', c.homeStat1Num); setText('homeStat1Label', c.homeStat1Label);
+  setText('homeStat2Num', c.homeStat2Num); setText('homeStat2Label', c.homeStat2Label);
+  setText('homeStat3Num', c.homeStat3Num); setText('homeStat3Label', c.homeStat3Label);
+  setText('homeStat4Num', c.homeStat4Num); setText('homeStat4Label', c.homeStat4Label);
+  setText('homeNewsletterBoxTitle', c.homeNewsletterBoxTitle);
+  setText('homeNewsletterBoxSub', c.homeNewsletterBoxSub);
+  setAttr('nlBtn', 'textContent', c.homeNewsletterBtn);
+  setPlaceholder('nlEmail', c.homeNewsletterPlaceholder);
+  setText('featuredTitle', c.homeFeaturedSub);
+
+  // ── NEWS PAGE ──
+  setText('newsHeroSub', c.newsHeroSub);
+  setText('tickerText', c.newsTickerDefault);
+
+  // ── PLAYLIST PAGES ──
+  const plMap = {
+    plHeroDay: null, plHeroLabel: null, plHeroTitle: null, plHeroSub: null
+  };
+  // Each playlist page has these IDs
+  setText('plHeroDay', c[window._PL_ID + 'Day']);
+  setText('plHeroLabel', c[window._PL_ID + 'Label']);
+  setText('plHeroTitle', c[window._PL_ID + 'Name']);
+  setText('plHeroSub', c[window._PL_ID + 'Desc']);
+
+  // ── CONTACT PAGE ──
+  setText('contactHeroSub', c.contactHeroSub);
+  setText('contactSuccessTitle', c.contactSuccessTitle);
+  setText('contactSuccessSub', c.contactSuccessSub);
+
+  // ── REVIEWS PAGE ──
+  setText('reviewsHeroSub', c.reviewsHeroSub);
+
+  // ── REVIEW REQUEST PAGE ──
+  setText('rrHeroSub', c.rrHeroSub);
+  setPlaceholder('reqMovie', c.rrMoviePlaceholder);
+  setPlaceholder('reqReason', c.rrReasonPlaceholder);
+  setPlaceholder('reqName', c.rrNamePlaceholder);
+  setPlaceholder('reqEmail', c.rrEmailPlaceholder);
+  setText('rrSuccessTitle', c.rrSuccessTitle);
+  setText('rrSuccessSub', c.rrSuccessSub);
+
+  // ── WATCHLIST ──
+  setText('watchlistSub', c.watchlistSub);
+  setText('watchlistEmptyTitle', c.watchlistEmptyTitle);
+  setText('watchlistEmptySub', c.watchlistEmptySub);
+}
+
+// Call on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  // Small delay to let Firebase init first
+  setTimeout(loadPageContent, 200);
+});

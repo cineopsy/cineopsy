@@ -26,7 +26,8 @@
 <script src="firebase-config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-<script src="app.js" defer></script>
+<script src="content-defaults.js"></script>
+<script src="app.js"></script>
 <style>
 #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden;background:var(--black);}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 45%,rgba(140,0,0,0.13) 0%,transparent 55%);pointer-events:none;}
@@ -156,8 +157,8 @@
 <div class="red-divider"></div>
 <section class="page-wrap" id="playlists">
   <div class="section-label">Our Series</div>
-  <h2 class="section-title">Six Ways to <span>Dissect Cinema</span></h2>
-  <p class="section-sub">Click any series to explore all episodes.</p>
+  <h2 class="section-title" id="homeSeriesTitle">Six Ways to <span>Dissect Cinema</span></h2>
+  <p class="section-sub" id="homeSeriesSub">Click any series to explore all episodes.</p>
   <div class="pl-grid"><a href="weekly.html" class="pl-card"><div class="pl-day">Every Thursday</div><div class="pl-icon">📰</div><div class="pl-name">CinéOpsy Weekly</div><div class="pl-desc">Box office, industry news, upcoming releases & weekly cinema recap.</div><div class="pl-freq">Weekly →</div></a><a href="verdict.html" class="pl-card"><div class="pl-day">Every Friday</div><div class="pl-icon">🔬</div><div class="pl-name">Verdict</div><div class="pl-desc">Deep honest reviews of new releases. Watch it or Skip it.</div><div class="pl-freq">Weekly →</div></a><a href="whatif.html" class="pl-card"><div class="pl-day">Alternate Sundays</div><div class="pl-icon">🤔</div><div class="pl-name">What If</div><div class="pl-desc">Alternate timeline analysis — exploring untold movie possibilities.</div><div class="pl-freq">Bi-weekly →</div></a><a href="casefiles.html" class="pl-card"><div class="pl-day">Alternate Sundays</div><div class="pl-icon">🩺</div><div class="pl-name">Case Files</div><div class="pl-desc">Medical diagnosis of movies. Cinema on the operating table.</div><div class="pl-freq">Bi-weekly →</div></a><a href="beyondborders.html" class="pl-card"><div class="pl-day">Every 2 Tuesdays</div><div class="pl-icon">🌍</div><div class="pl-name">Beyond Borders</div><div class="pl-desc">World cinema that never reached India — explained in Hindi.</div><div class="pl-freq">Every 2 Weeks →</div></a><a href="specials.html" class="pl-card"><div class="pl-day">Special Releases</div><div class="pl-icon">🎞️</div><div class="pl-name">CinéOpsy Specials</div><div class="pl-desc">Special videos, unique content & exclusive CinéOpsy productions.</div><div class="pl-freq">Special →</div></a></div>
 </section>
 <div class="red-divider"></div>
@@ -171,10 +172,10 @@
       <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary">Subscribe on YouTube</a>
     </div>
     <div class="stats-grid">
-      <div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">Unique Series</div></div>
-      <div class="stat-box"><div class="stat-num">3–4</div><div class="stat-lbl">Videos / Week</div></div>
-      <div class="stat-box"><div class="stat-num">100%</div><div class="stat-lbl">Honest Reviews</div></div>
-      <div class="stat-box"><div class="stat-num">∞</div><div class="stat-lbl">Cinema Love</div></div>
+      <div class="stat-box"><div class="stat-num" id="homeStat1Num">6</div><div class="stat-lbl" id="homeStat1Label">Unique Series</div></div>
+      <div class="stat-box"><div class="stat-num" id="homeStat2Num">3–4</div><div class="stat-lbl" id="homeStat2Label">Videos / Week</div></div>
+      <div class="stat-box"><div class="stat-num" id="homeStat3Num">100%</div><div class="stat-lbl" id="homeStat3Label">Honest Reviews</div></div>
+      <div class="stat-box"><div class="stat-num" id="homeStat4Num">∞</div><div class="stat-lbl" id="homeStat4Label">Cinema Love</div></div>
     </div>
   </div>
 </section>
@@ -222,8 +223,8 @@
   <h2 class="section-title">Get <span>Notified</span></h2>
   <div class="newsletter-box" style="max-width:500px;margin-top:18px">
     <div style="font-size:28px;margin-bottom:10px">🎬</div>
-    <div class="newsletter-title">Subscribe to CinéOpsy</div>
-    <p class="newsletter-sub">Get notified when new reviews & episodes drop.</p>
+    <div class="newsletter-title" id="homeNewsletterBoxTitle">Subscribe to CinéOpsy</div>
+    <p class="newsletter-sub" id="homeNewsletterBoxSub">Get notified when new reviews & episodes drop.</p>
     <div class="newsletter-form">
       <input type="email" id="nlEmail" class="newsletter-input" placeholder="your@email.com">
       <button class="newsletter-btn" id="nlBtn" onclick="subscribeNewsletter(document.getElementById('nlEmail').value,document.getElementById('nlBtn'))">

@@ -1,0 +1,141 @@
+// CinéOpsy — Default Content
+// All website text stored here, overrideable from Firebase
+const CONTENT_DEFAULTS = {
+
+  // ── GLOBAL / SHARED ──
+  siteName: "CinéOpsy",
+  tagline: "Where Cinema Meets Biopsy",
+  footerTagline: "Where Cinema Meets Biopsy",
+  footerCopy: "© 2026 CinéOpsy. All rights reserved.",
+  ytUrl: "https://youtube.com/@Cineopsy",
+  navNewsLabel: "📰 News",
+
+  // ── HOMEPAGE ──
+  homeHeroTitle: "CINEOPSY",
+  homeHeroTagline: "Where Cinema Meets Biopsy",
+  homeHeroBtn1: "Watch on YouTube",
+  homeHeroBtn2: "Explore Series",
+  homeLatestNewsLabel: "📰 Latest News",
+  homeLatestNewsLink: "View All News →",
+  homeSeriesLabel: "Our Series",
+  homeSeriesTitle: "Six Ways to Dissect Cinema",
+  homeSeriesSub: "Click any series to explore all episodes.",
+  homeAboutLabel: "About CinéOpsy",
+  homeAboutTitle: "We Don't Just Watch Films.",
+  homeAboutTitleSpan: "Watch Films.",
+  homeAboutP1: "From <strong>Bollywood to Hollywood</strong>, South Cinema to World Cinema — honest reviews, hidden gems, and cinema beyond the surface.",
+  homeAboutP2: "<strong>No fluff. No hype. Just cinema — seen clearly.</strong>",
+  homeAboutBtn: "Subscribe on YouTube",
+  homeStat1Num: "6", homeStat1Label: "Unique Series",
+  homeStat2Num: "3–4", homeStat2Label: "Videos / Week",
+  homeStat3Num: "100%", homeStat3Label: "Honest Reviews",
+  homeStat4Num: "∞", homeStat4Label: "Cinema Love",
+  homePollLabel: "This Week",
+  homePollTitle: "Weekly Poll",
+  homeSocialLabel: "Community",
+  homeSocialTitle: "Join the Community",
+  homeSocialSub: "",
+  homeFeaturedLabel: "Featured",
+  homeFeaturedTitle: "Latest Special",
+  homeFeaturedSub: "The Quiet White Coat — World Lab Technician Day Special",
+  homeNewsletterTitle: "Get Notified",
+  homeNewsletterBoxTitle: "Subscribe to CinéOpsy",
+  homeNewsletterBoxSub: "Get notified when new reviews & episodes drop.",
+  homeNewsletterBtn: "Subscribe →",
+  homeNewsletterPlaceholder: "your@email.com",
+
+  // ── PLAYLIST PAGES ──
+  weeklyLabel: "Weekly News",
+  weeklyName: "CinéOpsy Weekly",
+  weeklyDay: "Every Thursday",
+  weeklyDesc: "Box office reports, industry news and upcoming releases — every Thursday.",
+  weeklyEpLabel: "Episode",
+
+  verdictLabel: "Movie Reviews",
+  verdictName: "Verdict",
+  verdictDay: "Every Friday",
+  verdictDesc: "Deep, honest reviews of new releases. Watch it or Skip it.",
+  verdictEpLabel: "Review",
+
+  whatifLabel: "Alternate Timelines",
+  whatifName: "What If",
+  whatifDay: "Alternate Sundays",
+  whatifDesc: "Exploring alternate cinema universes — what if the story went differently?",
+  whatifEpLabel: "Episode",
+
+  casefilesLabel: "Medical Diagnosis",
+  casefilesName: "Case Files",
+  casefilesDay: "Alternate Sundays",
+  casefilesDesc: "Medical diagnosis of movies. Every film is a patient on our table.",
+  casefilesEpLabel: "Case",
+
+  beyondbordersLabel: "World Cinema",
+  beyondbordersName: "Beyond Borders",
+  beyondbordersDay: "Every 2 Tuesdays",
+  beyondbordersDesc: "World cinema that never reached India — explained in English.",
+  beyondbordersEpLabel: "Episode",
+
+  specialsLabel: "Special Content",
+  specialsName: "CinéOpsy Specials",
+  specialsDay: "Special Releases",
+  specialsDesc: "Special videos, unique content & exclusive CinéOpsy productions.",
+  specialsEpLabel: "Special",
+
+  // ── NEWS PAGE ──
+  newsBreakingLabel: "Breaking",
+  newsHeroTitle: "Cinema News",
+  newsHeroTitleSpan: "News",
+  newsHeroSub: "Latest from Bollywood, Hollywood, OTT & World Cinema",
+  newsTickerDefault: "🎬 CinéOpsy News — Latest from the world of cinema · Bollywood · Hollywood · OTT · World Cinema",
+
+  // ── CONTACT PAGE ──
+  contactHeroLabel: "Connect",
+  contactHeroTitle: "Get in Touch",
+  contactHeroTitleSpan: "Touch",
+  contactHeroSub: "Feel free to reach out for feedback, suggestions or collaborations.",
+  contactSocialLabel: "Find Us",
+  contactSocialTitle: "Social Media",
+  contactSocialTitleSpan: "Media",
+  contactFormNamePlaceholder: "Your name",
+  contactFormEmailPlaceholder: "your@email.com",
+  contactFormMsgPlaceholder: "Your message...",
+  contactFormBtn: "Send Message →",
+  contactSuccessTitle: "Message Sent!",
+  contactSuccessSub: "We will get back to you soon. Thank you for reaching out!",
+
+  // ── REVIEWS GALLERY ──
+  reviewsHeroLabel: "🔬 Verdict",
+  reviewsHeroTitle: "Reviews Gallery",
+  reviewsHeroTitleSpan: "Gallery",
+  reviewsHeroSub: "Every film examined. Every verdict delivered.",
+
+  // ── REVIEW REQUEST ──
+  rrHeroLabel: "Community",
+  rrHeroTitle: "Request a Review",
+  rrHeroTitleSpan: "Review",
+  rrHeroSub: "Want us to cover a specific movie? Tell us!",
+  rrMoviePlaceholder: "e.g. Inception, Dangal, Parasite...",
+  rrReasonPlaceholder: "Tell us why this movie deserves a CinéOpsy analysis...",
+  rrNamePlaceholder: "Your name",
+  rrEmailPlaceholder: "your@email.com",
+  rrBtn: "🎬 Submit Request →",
+  rrSuccessTitle: "Request Submitted!",
+  rrSuccessSub: "We have received your request and will consider it for upcoming episodes.",
+
+  // ── WATCHLIST ──
+  watchlistTitle: "My Watchlist",
+  watchlistTitleSpan: "Watchlist",
+  watchlistSub: "Episodes and articles you saved for later.",
+  watchlistEmptyTitle: "Nothing saved yet",
+  watchlistEmptySub: "Click Save on any episode or article to add it here.",
+  watchlistEmptyBtn: "Explore Content →",
+  watchlistClearBtn: "Clear All",
+
+  // ── 404 PAGE ──
+  e404Icon: "🎬",
+  e404Title: "Scene Not Found",
+  e404TitleSpan: "Not Found",
+  e404Sub: "This page has been cut from the final edit.",
+  e404Btn1: "Back to Home",
+  e404Btn2: "Latest News",
+};
