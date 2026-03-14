@@ -149,7 +149,7 @@
 :root.light p { color:rgba(20,20,20,0.75) !important; }
 
 /* ── Google Translate ── */
-:root.light .goog-te-gadget select { border-color:rgba(0,0,0,0.2) !important; color:#111111 !important; background:#f0f0eb !important; }
+:root.light 
 
 /* ── News hero strip on homepage ── */
 :root.light #heroNewsStrip a { background:rgba(0,0,0,0.04) !important; border-color:rgba(0,0,0,0.08) !important; border-left-color:#cc0000 !important; }
@@ -221,6 +221,212 @@ footer{padding:40px 30px;text-align:center;background:var(--black2);}
 .rel-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--white);line-height:1.3;}
 </style>
 
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#cc0000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<style>
+/* ═══ SCROLL TO TOP ═══ */
+#scrollTopBtn{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:#cc0000;color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:18px;z-index:888;opacity:0;transition:opacity 0.3s;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(204,0,0,0.4);}
+#scrollTopBtn:hover{background:#aa0000;}
+
+/* ═══ READING PROGRESS ═══ */
+#readingProgress{position:fixed;top:0;left:0;height:3px;background:#cc0000;z-index:9999;width:0%;transition:width 0.1s;box-shadow:0 0 8px rgba(204,0,0,0.6);}
+
+/* ═══ SHARE BUTTONS ═══ */
+.share-section{margin:28px 0;padding:20px 0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);}
+.share-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:12px;}
+.share-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.share-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:var(--white);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;border-radius:3px;}
+.share-btn:hover{border-color:#cc0000;color:#cc0000;}
+:root.light .share-btn{border-color:rgba(0,0,0,0.15);color:#111;}
+:root.light .share-btn:hover{border-color:#cc0000;color:#cc0000;}
+
+/* ═══ ENGAGEMENT BAR (likes, views, reading time, bookmark) ═══ */
+.engage-bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:14px 0;margin:16px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.engage-item{display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
+.like-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);padding:0;transition:color 0.2s;}
+.like-btn:hover,.like-btn.liked{color:#cc0000;}
+.like-btn.liked .like-icon{filter:none;}
+.bookmark-btn{background:none;border:1px solid rgba(255,255,255,0.15);cursor:pointer;color:var(--white);padding:6px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;border-radius:3px;}
+.bookmark-btn:hover,.bookmark-btn.saved{border-color:#cc0000;color:#cc0000;}
+:root.light .engage-bar{border-bottom-color:rgba(0,0,0,0.08);}
+:root.light .engage-item{color:rgba(20,20,20,0.5);}
+:root.light .like-btn{color:rgba(20,20,20,0.5);}
+:root.light .bookmark-btn{border-color:rgba(0,0,0,0.15);color:#111;}
+
+/* ═══ STAR RATING ═══ */
+.rating-section{margin:20px 0;padding:20px;background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.1);}
+.rating-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:12px;}
+.stars-input{display:flex;gap:6px;margin-bottom:10px;}
+.star{font-size:26px;cursor:pointer;transition:transform 0.15s;filter:grayscale(1);opacity:0.4;}
+.star:hover,.star.active{filter:none;opacity:1;transform:scale(1.15);}
+.rating-display{font-family:'Cinzel',serif;font-size:16px;color:var(--white);margin-top:8px;}
+:root.light .rating-section{background:rgba(204,0,0,0.03);}
+:root.light .rating-display{color:#111;}
+
+/* ═══ COMMENTS ═══ */
+.comments-section{margin:36px 0;}
+.comments-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.comment-count{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:#cc0000;background:rgba(204,0,0,0.1);padding:2px 8px;}
+.comment-form{margin-bottom:24px;padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);}
+.comment-form input,.comment-form textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:10px 14px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;transition:border-color 0.2s;margin-bottom:10px;display:block;}
+.comment-form input:focus,.comment-form textarea:focus{border-color:#cc0000;}
+.comment-form textarea{resize:vertical;min-height:90px;}
+.comment-submit{background:#cc0000;color:#fff;border:none;padding:10px 24px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s;}
+.comment-submit:hover{opacity:0.85;}
+.comment-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.comment-item:last-child{border-bottom:none;}
+.comment-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.comment-name{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#cc0000;}
+.comment-date{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
+.comment-text{font-size:15px;color:rgba(240,236,228,0.75);line-height:1.7;}
+:root.light .comment-form{background:rgba(0,0,0,0.02);border-color:rgba(0,0,0,0.07);}
+:root.light .comment-form input,:root.light .comment-form textarea{background:#f0f0eb;border-color:rgba(0,0,0,0.1);color:#111;}
+:root.light .comment-item{border-bottom-color:rgba(0,0,0,0.07);}
+:root.light .comment-text{color:rgba(20,20,20,0.75);}
+:root.light .comments-title{color:#111;}
+
+/* ═══ POLL ═══ */
+.poll-box{background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.15);padding:24px;margin:28px 0;}
+.poll-question{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:18px;line-height:1.4;}
+.poll-option{padding:12px 16px;border:1px solid rgba(255,255,255,0.1);margin-bottom:8px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.poll-option:hover{border-color:#cc0000;}
+.poll-option.poll-voted{border-color:#cc0000;background:rgba(204,0,0,0.08);}
+.poll-bar-wrap{display:flex;align-items:center;gap:12px;position:relative;}
+.poll-bar{position:absolute;left:0;top:0;bottom:0;background:rgba(204,0,0,0.12);transition:width 0.5s;z-index:0;}
+.poll-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;color:var(--white);position:relative;z-index:1;flex:1;}
+.poll-pct{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#cc0000;position:relative;z-index:1;}
+.poll-total{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:12px;}
+:root.light .poll-box{background:rgba(204,0,0,0.03);}
+:root.light .poll-question{color:#111;}
+:root.light .poll-option{border-color:rgba(0,0,0,0.1);}
+:root.light .poll-label{color:#111;}
+
+/* ═══ NEWSLETTER ═══ */
+.newsletter-box{background:linear-gradient(135deg,rgba(204,0,0,0.08),rgba(204,0,0,0.04));border:1px solid rgba(204,0,0,0.2);padding:36px;text-align:center;margin:48px 0;}
+.newsletter-icon{font-size:36px;margin-bottom:14px;}
+.newsletter-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.newsletter-sub{font-size:16px;color:var(--gray);margin-bottom:24px;font-style:italic;}
+.newsletter-form{display:flex;gap:10px;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+.newsletter-input{flex:1;min-width:200px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--white);padding:12px 16px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;transition:border-color 0.2s;}
+.newsletter-input:focus{border-color:#cc0000;}
+.newsletter-btn{background:#cc0000;color:#fff;border:none;padding:12px 24px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s;white-space:nowrap;}
+.newsletter-btn:hover{opacity:0.85;}
+:root.light .newsletter-box{background:linear-gradient(135deg,rgba(204,0,0,0.06),rgba(204,0,0,0.02));}
+:root.light .newsletter-title{color:#111;}
+:root.light .newsletter-input{background:#f0f0eb;border-color:rgba(0,0,0,0.15);color:#111;}
+
+/* ═══ SEARCH ═══ */
+.search-overlay{position:fixed;inset:0;background:rgba(8,8,8,0.95);z-index:10000;display:none;flex-direction:column;align-items:center;padding-top:80px;}
+.search-overlay.open{display:flex;}
+.search-wrap{width:min(640px,92vw);}
+.search-input-wrap{display:flex;align-items:center;border-bottom:2px solid #cc0000;margin-bottom:32px;}
+.search-input{flex:1;background:transparent;border:none;color:var(--white);font-family:'Cinzel',serif;font-size:clamp(20px,4vw,32px);padding:14px 0;outline:none;}
+.search-input::placeholder{color:rgba(240,236,228,0.2);}
+.search-close{background:none;border:none;color:var(--gray);font-size:24px;cursor:pointer;padding:8px;}
+.search-close:hover{color:#cc0000;}
+.search-results{max-height:60vh;overflow-y:auto;}
+.search-result{padding:14px;border-bottom:1px solid rgba(255,255,255,0.06);text-decoration:none;color:inherit;display:block;transition:background 0.2s;}
+.search-result:hover{background:rgba(204,0,0,0.06);}
+.search-result-type{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:4px;}
+.search-result-title{font-family:'Cinzel',serif;font-size:15px;color:var(--white);}
+.search-result-excerpt{font-size:13px;color:var(--gray);margin-top:4px;}
+.search-empty{text-align:center;padding:40px;color:var(--gray);font-style:italic;}
+:root.light .search-overlay{background:rgba(245,245,240,0.97);}
+:root.light .search-input{color:#111;}
+:root.light .search-result-title{color:#111;}
+
+/* ═══ WATCHLIST PAGE ═══ */
+.watchlist-empty{text-align:center;padding:80px 20px;color:var(--gray);font-style:italic;}
+
+/* ═══ TAGS ═══ */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
+.tag-pill{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.12);color:var(--gray);padding:4px 12px;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.tag-pill:hover{border-color:#cc0000;color:#cc0000;}
+:root.light .tag-pill{border-color:rgba(0,0,0,0.12);color:rgba(20,20,20,0.6);}
+
+/* ═══ STREAMING GUIDE ═══ */
+.streaming-badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;}
+.streaming-badge{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:3px;font-weight:700;}
+.streaming-badge.netflix{background:#e50914;color:#fff;}
+.streaming-badge.prime{background:#00a8e0;color:#fff;}
+.streaming-badge.hotstar{background:#1f80e0;color:#fff;}
+.streaming-badge.zee5{background:#6b2d8b;color:#fff;}
+.streaming-badge.sonyliv{background:#e0001b;color:#fff;}
+.streaming-badge.theatres{background:#cc0000;color:#fff;}
+.streaming-badge.youtube{background:#ff0000;color:#fff;}
+</style>
+<script src="cineopsy-features.js"></script>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Latest cinema news and updates from CinéOpsy.">
+<meta name="keywords" content="cinema news, film news, bollywood">
+<meta name="author" content="CinéOpsy">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cineopsy.netlify.app/news_article.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="News — CinéOpsy">
+<meta property="og:description" content="Latest cinema news and updates from CinéOpsy.">
+<meta property="og:image" content="https://cineopsy.netlify.app/og-image.jpg">
+<meta property="og:url" content="https://cineopsy.netlify.app/news_article.html">
+<meta property="og:site_name" content="CinéOpsy">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Cineopsy">
+<meta name="twitter:title" content="News — CinéOpsy">
+<meta name="twitter:description" content="Latest cinema news and updates from CinéOpsy.">
+<meta name="twitter:image" content="https://cineopsy.netlify.app/og-image.jpg">
+
+<style>
+/* ═══ PAGE TRANSITIONS ═══ */
+.page-transition{animation:pageIn 0.4s ease both;}
+@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+body>*:not(nav):not(#readingProgress):not(#scrollTopBtn):not(.search-overlay):not(script):not(style){animation:pageIn 0.5s ease both;}
+a{transition:color 0.2s,opacity 0.2s;}
+
+/* ═══ MOBILE BOTTOM NAV ═══ */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,8,0.97);backdrop-filter:blur(12px);border-top:1px solid rgba(204,0,0,0.2);z-index:997;padding:6px 0 max(6px,env(safe-area-inset-bottom));grid-template-columns:repeat(5,1fr);}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--gray);padding:6px 4px;transition:color 0.2s;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;}
+.bottom-nav-item:hover,.bottom-nav-item.active{color:#cc0000;}
+.bottom-nav-item .bn-icon{font-size:20px;line-height:1;}
+@media(max-width:768px){.bottom-nav{display:grid;}body{padding-bottom:70px;}}
+:root.light .bottom-nav{background:rgba(245,245,240,0.97);border-top-color:rgba(204,0,0,0.15);}
+:root.light .bottom-nav-item{color:rgba(20,20,20,0.5);}
+
+/* ═══ IMAGE LIGHTBOX ═══ */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border:1px solid rgba(255,255,255,0.1);}
+.lightbox-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;z-index:1;padding:8px;line-height:1;}
+.lightbox-close:hover{color:#cc0000;}
+.lightbox-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.7);font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;max-width:80vw;}
+img.lightbox-trigger{cursor:zoom-in;}
+
+/* ═══ BIOPSY SCORE ═══ */
+.biopsy-score{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);margin:16px 0;}
+.biopsy-score-num{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:#cc0000;line-height:1;}
+.biopsy-score-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);}
+.biopsy-score-verdict{font-family:'Crimson Pro',serif;font-style:italic;font-size:15px;color:var(--white);}
+:root.light .biopsy-score-verdict{color:#111;}
+
+/* ═══ STREAMING BADGES ═══ */
+.streaming-section{margin:16px 0;}
+.streaming-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
+
+/* ═══ READING TIME BADGE ═══ */
+.reading-time-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);background:rgba(255,255,255,0.04);padding:4px 10px;border:1px solid rgba(255,255,255,0.08);}
+:root.light .reading-time-badge{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.08);}
+
+/* ═══ FAN REVIEW SUBMISSION ═══ */
+.fan-review-box{background:rgba(204,0,0,0.04);border:1px solid rgba(204,0,0,0.15);padding:28px;margin:32px 0;}
+.fan-review-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.fan-review-sub{font-size:15px;color:var(--gray);margin-bottom:20px;font-style:italic;}
+:root.light .fan-review-title{color:#111;}
+</style>
 </head>
 <body>
 <nav id="navbar">
@@ -235,16 +441,44 @@ footer{padding:40px 30px;text-align:center;background:var(--black2);}
     <li><a href="casefiles.html">Case Files</a></li>
     <li><a href="beyondborders.html">Beyond Borders</a></li>
     <li><a href="specials.html">Specials</a></li>
+    <li><a href="review-request.html">Request Review</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
   <div class="nav-controls">
-    <div id="google_translate_element"></div>
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    <button onclick="openSearch()" style="background:none;border:none;color:var(--white);cursor:pointer;font-size:16px;padding:4px 6px;transition:color 0.2s;" title="Search" onmouseover="this.style.color='#cc0000'" onmouseout="this.style.color=''">🔍</button>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
   </div>
 </nav>
 <div class="article-wrap">
+  <div class="engage-bar" id="engageBar">
+    <button class="like-btn" id="likeBtn"><span class="like-icon">🤍</span>&nbsp;<span id="likeCount">0</span> Likes</button>
+    <span class="engage-item">👁 <span id="viewCount">...</span> Views</span>
+    <span class="engage-item" id="readingTimeEl"></span>
+    <button class="bookmark-btn" id="bookmarkBtn">🔖 Save</button>
+  </div>
   <a href="news.html" class="article-back">← Back to News</a>
-  <div id="articleContent"><p style="color:var(--gray);font-style:italic;text-align:center;padding:60px 0">Loading...</p></div>
+  <div id="articleContent"><p style="color:var(--gray);font-style:italic;text-align:center;padding:60px 0">Loading...</p>
+  <div class="share-section">
+    <div class="share-label">Share this article</div>
+    <div class="share-btns">
+      <button class="share-btn" onclick="shareContent('whatsapp',document.title,location.href)">📱 WhatsApp</button>
+      <button class="share-btn" onclick="shareContent('twitter',document.title,location.href)">🐦 Twitter / X</button>
+      <button class="share-btn" onclick="shareContent('telegram',document.title,location.href)">✈️ Telegram</button>
+      <button class="share-btn" onclick="shareContent('copy',document.title,location.href)">🔗 Copy Link</button>
+    </div>
+  </div>
+  <div class="comments-section">
+    <div class="comments-title">💬 Comments <span class="comment-count" id="commentCount">0</span></div>
+    <div class="comment-form">
+      <form id="commentForm" onsubmit="return false;">
+        <input type="text" id="commentName" placeholder="Your name" maxlength="50" required>
+        <textarea id="commentText" placeholder="Share your thoughts..." maxlength="500" rows="3" required></textarea>
+        <button type="button" class="comment-submit" onclick="handleNewsComment()">Post Comment →</button>
+      </form>
+    </div>
+    <div id="commentsList"></div>
+  </div>
+  </div>
   <div class="related-section">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:8px">More News</div>
     <div class="related-grid" id="relatedGrid"></div>
@@ -269,7 +503,7 @@ function parseContent(content, images) {
   if (images && images.length) {
     images.forEach((img, i) => {
       const tag = '[IMG' + i + ']';
-      const block = '<div class="article-img-block"><img src="' + img.url + '" alt="' + (img.caption||'') + '" onerror="this.style.display=\'none\'">' +
+      const block = '<div class="article-img-block"><img loading="lazy" src="' + img.url + '" alt="' + (img.caption||'') + '" onerror="this.style.display=\'none\'">' +
         (img.caption ? '<div class="article-img-caption">' + img.caption + '</div>' : '') + '</div>';
       html = html.split(tag).join(block);
     });
@@ -293,8 +527,11 @@ async function loadArticle() {
   if (!article) { document.getElementById('articleContent').innerHTML = '<p>Article not found.</p>'; return; }
 
   document.title = article.title + ' — CinéOpsy';
+  setTimeout(() => initNewsFeatures(article.id, article.title), 100);
+  const rtEl = document.getElementById('readingTimeEl');
+  if (rtEl && article.content) rtEl.textContent = '⏱ ' + calcReadingTime(article.content);
   const coverImg = article.coverImage
-    ? '<img src="' + article.coverImage + '" alt="' + article.title + '" class="article-cover" onerror="this.style.display=\'none\'">'
+    ? '<img loading="lazy" src="' + article.coverImage + '" alt="' + article.title + '" class="article-cover" onerror="this.style.display=\'none\'">'
     : '';
   const tags = (article.tags || []).map(t => '<span class="tag">' + t + '</span>').join('');
   document.getElementById('articleContent').innerHTML =
@@ -321,18 +558,8 @@ async function loadArticle() {
 loadArticle();
 </script>
 
-<script type="text/javascript">
-// Google Translate
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'en',
-    includedLanguages: 'hi,ta,te,ml,bn,mr,gu,pa,kn,ur,fr,es,de,ja,zh-CN,ar',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
 <script>
 // Theme toggle
 function applyTheme(theme) {
@@ -357,5 +584,91 @@ function toggleTheme() {
   const saved = localStorage.getItem('cineopsy_theme') || 'dark';
   applyTheme(saved);
 })();
+</script>
+
+async function initNewsFeatures(articleId, articleTitle) {
+  if (!articleId) return;
+  const views = await incrementView('news', articleId);
+  const viewEl = document.getElementById('viewCount');
+  if (viewEl && views) viewEl.textContent = views.toLocaleString();
+  const likes = await getLikeCount('news', articleId);
+  const likeEl = document.getElementById('likeCount');
+  if (likeEl) likeEl.textContent = likes;
+  const likeBtn = document.getElementById('likeBtn');
+  if (likeBtn && isLiked(articleId)) { likeBtn.classList.add('liked'); likeBtn.querySelector('.like-icon').textContent = '❤️'; }
+  if (window.db) {
+    try {
+      const snap = await window.db.collection('comments').doc('news_' + articleId).collection('items').get();
+      const ccEl = document.getElementById('commentCount'); if (ccEl) ccEl.textContent = snap.size;
+    } catch(e) {}
+    await loadComments('news', articleId, document.getElementById('commentsList'));
+  }
+  const bkBtn = document.getElementById('bookmarkBtn');
+  if (bkBtn && isBookmarked(articleId)) { bkBtn.innerHTML = '✅ Saved'; bkBtn.classList.add('saved'); }
+  if (likeBtn) {
+    likeBtn.addEventListener('click', async () => {
+      const liked = await toggleLike('news', articleId, document.getElementById('likeCount'));
+      likeBtn.classList.toggle('liked', liked);
+      likeBtn.querySelector('.like-icon').textContent = liked ? '❤️' : '🤍';
+    });
+  }
+  if (bkBtn) {
+    bkBtn.addEventListener('click', () => { toggleBookmark(articleId, articleTitle, location.href, bkBtn); bkBtn.classList.toggle('saved'); });
+  }
+}
+
+async function handleNewsComment() {
+  const id = new URLSearchParams(location.search).get('id');
+  const name = document.getElementById('commentName').value;
+  const text = document.getElementById('commentText').value;
+  await submitComment('news', id, name, text, document.getElementById('commentsList'), document.getElementById('commentCount'));
+  document.getElementById('commentName').value = '';
+  document.getElementById('commentText').value = '';
+}
+
+<!-- Mobile Bottom Navigation -->
+<nav class="bottom-nav" id="bottomNav">
+  <a href="index.html" class="bottom-nav-item" id="bn-home"><span class="bn-icon">🏠</span>Home</a>
+  <a href="news.html" class="bottom-nav-item" id="bn-news"><span class="bn-icon">📰</span>News</a>
+  <a href="#" class="bottom-nav-item" onclick="openSearch();return false;" id="bn-search"><span class="bn-icon">🔍</span>Search</a>
+  <a href="watchlist.html" class="bottom-nav-item" id="bn-watchlist"><span class="bn-icon">🔖</span>Saved</a>
+  <a href="verdict.html" class="bottom-nav-item" id="bn-verdict"><span class="bn-icon">🔬</span>Verdict</a>
+</nav>
+
+<!-- Image Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+// Image Lightbox
+function openLightbox(src, caption) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxCaption').textContent = caption || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox({target: document.getElementById('lightbox')}); });
+
+// Auto-attach lightbox to article images
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.article-body img, .article-img-block img, .content-body img').forEach(img => {
+    img.classList.add('lightbox-trigger');
+    img.addEventListener('click', () => openLightbox(img.src, img.alt));
+  });
+  
+  // Set active bottom nav item
+  const path = location.pathname.split('/').pop() || 'index.html';
+  const map = {'index.html':'bn-home','news.html':'bn-news','news_article.html':'bn-news','watchlist.html':'bn-watchlist','verdict.html':'bn-verdict','verdict_ep.html':'bn-verdict'};
+  const activeId = map[path];
+  if (activeId) { const el = document.getElementById(activeId); if(el) el.classList.add('active'); }
+});
 </script>
 </body></html>
