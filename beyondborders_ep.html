@@ -66,7 +66,6 @@
 <div id="readingProgress"></div>
 <nav id="navbar">
   <a href="index.html" class="nav-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></a>
-  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="navLinks">
     <li><a href="news.html" style="color:#cc0000;font-weight:700">📰 News</a></li>
     <li><a href="index.html">Home</a></li>
@@ -74,14 +73,15 @@
     <li><a href="verdict.html">Verdict</a></li>
     <li><a href="whatif.html">What If</a></li>
     <li><a href="casefiles.html">Case Files</a></li>
-    <li><a href="beyondborders.html" style="color:#f0ece4">Beyond Borders</a></li>
+    <li><a href="beyondborders.html">Beyond Borders</a></li>
     <li><a href="specials.html">Specials</a></li>
     <li><a href="review-request.html">Request Review</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
   <div class="nav-controls">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
     <button class="search-btn" onclick="openSearch()" title="Search (Ctrl+K)">🔍</button>
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 <section class="page-wrap">
@@ -142,7 +142,7 @@
   <div class="footer-tagline">Where Cinema Meets Biopsy</div>
   <div class="footer-copy" id="footerCopy">© 2026 CinéOpsy. All rights reserved.</div>
 </footer>
-<nav class="bottom-nav"><a href="index.html" class="bn-item active"><span class="bn-icon">🏠</span>Home</a><a href="news.html" class="bn-item"><span class="bn-icon">📰</span>News</a><a href="#" class="bn-item" onclick="openSearch();return false;"><span class="bn-icon">🔍</span>Search</a><a href="watchlist.html" class="bn-item"><span class="bn-icon">🔖</span>Saved</a><a href="verdict.html" class="bn-item"><span class="bn-icon">🔬</span>Verdict</a></nav>
+<nav class="bottom-nav"><a href="index.html" class="bn-item"><span class="bn-icon">🏠</span>Home</a><a href="news.html" class="bn-item"><span class="bn-icon">📰</span>News</a><a href="#" class="bn-item" onclick="openSearch();return false;"><span class="bn-icon">🔍</span>Search</a><a href="watchlist.html" class="bn-item"><span class="bn-icon">🔖</span>Saved</a></nav>
 <div class="search-overlay" id="searchOverlay">
   <div class="search-inner">
     <div class="search-bar">
