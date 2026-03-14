@@ -523,3 +523,140 @@ nav#navbar {
   z-index:2;
   position:relative;
 }
+
+/* ══ SEARCH OVERLAY — FULL FIX ══ */
+.search-overlay {
+  position:fixed !important;
+  inset:0 !important;
+  background:rgba(8,8,8,0.97) !important;
+  z-index:10000 !important;
+  display:none;
+  flex-direction:column !important;
+  align-items:center !important;
+  padding:100px 20px 40px !important;
+}
+.search-overlay.open { display:flex !important; }
+.search-inner { width:min(620px,92vw); }
+.search-bar {
+  display:flex !important;
+  align-items:center !important;
+  border-bottom:2px solid #cc0000 !important;
+  margin-bottom:24px !important;
+  background:transparent !important;
+}
+.search-bar input {
+  flex:1 !important;
+  background:transparent !important;
+  border:none !important;
+  outline:none !important;
+  color:#f0ece4 !important;
+  font-family:'Cinzel',serif !important;
+  font-size:clamp(18px,3.5vw,28px) !important;
+  padding:12px 0 !important;
+  caret-color:#cc0000 !important;
+}
+.search-bar input::placeholder { color:rgba(240,236,228,0.25) !important; }
+.search-close {
+  background:none !important;
+  border:none !important;
+  color:rgba(240,236,228,0.5) !important;
+  font-size:24px !important;
+  cursor:pointer !important;
+  padding:8px !important;
+  line-height:1 !important;
+  transition:color 0.2s !important;
+}
+.search-close:hover { color:#cc0000 !important; }
+.search-results { max-height:55vh; overflow-y:auto; }
+.search-result {
+  display:block !important;
+  padding:13px 0 !important;
+  border-bottom:1px solid rgba(255,255,255,0.07) !important;
+  text-decoration:none !important;
+  color:#f0ece4 !important;
+  transition:background 0.2s !important;
+}
+.search-result-type {
+  font-family:'Barlow Condensed',sans-serif !important;
+  font-size:9px !important;
+  letter-spacing:3px !important;
+  text-transform:uppercase !important;
+  color:#cc0000 !important;
+  margin-bottom:4px !important;
+}
+.search-result-title {
+  font-family:'Cinzel',serif !important;
+  font-size:14px !important;
+  color:#f0ece4 !important;
+}
+.search-empty {
+  text-align:center !important;
+  padding:36px !important;
+  color:rgba(240,236,228,0.4) !important;
+  font-style:italic !important;
+}
+
+/* Light mode search - strong overrides */
+:root.light .search-overlay {
+  background:rgba(240,240,235,0.98) !important;
+}
+:root.light .search-bar input {
+  color:#111111 !important;
+  caret-color:#cc0000 !important;
+}
+:root.light .search-bar input::placeholder {
+  color:rgba(20,20,20,0.25) !important;
+}
+:root.light .search-close { color:rgba(20,20,20,0.4) !important; }
+:root.light .search-close:hover { color:#cc0000 !important; }
+:root.light .search-result { color:#111111 !important; border-bottom-color:rgba(0,0,0,0.07) !important; }
+:root.light .search-result:hover { background:rgba(204,0,0,0.05) !important; }
+:root.light .search-result-title { color:#111111 !important; }
+:root.light .search-empty { color:rgba(20,20,20,0.4) !important; }
+
+/* ══ NAV MENU DARK MODE — FULL FIX ══ */
+@media(max-width:900px) {
+  .nav-links {
+    display:none;
+    position:fixed !important;
+    top:58px !important;
+    left:0 !important;
+    right:0 !important;
+    background:#0d0d0d !important;
+    flex-direction:column !important;
+    padding:20px 28px !important;
+    gap:14px !important;
+    border-bottom:1px solid rgba(204,0,0,0.3) !important;
+    z-index:998 !important;
+    box-shadow:0 8px 24px rgba(0,0,0,0.6) !important;
+  }
+  .nav-links.open { display:flex !important; }
+  .nav-links a {
+    color:#f0ece4 !important;
+    font-size:13px !important;
+    letter-spacing:2px !important;
+    padding:6px 0 !important;
+    border-bottom:1px solid rgba(255,255,255,0.06) !important;
+    display:block !important;
+  }
+  .nav-links li:last-child a { border-bottom:none !important; }
+  .nav-links a:hover { color:#cc0000 !important; }
+}
+
+/* Light mode nav menu */
+:root.light .nav-links {
+  background:#f0f0eb !important;
+  border-bottom-color:rgba(204,0,0,0.15) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,0.1) !important;
+}
+:root.light .nav-links a {
+  color:#111111 !important;
+  border-bottom-color:rgba(0,0,0,0.06) !important;
+}
+:root.light .nav-links a:hover { color:#cc0000 !important; }
+
+/* News ticker animation */
+@keyframes ticker {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-100%); }
+}
