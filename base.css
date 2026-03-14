@@ -660,3 +660,45 @@ nav#navbar {
   from { transform: translateX(100vw); }
   to   { transform: translateX(-100%); }
 }
+
+/* ══ ABOUT PAGE LIGHT MODE ══ */
+:root.light .about-hero { background:#f0f0eb !important; }
+:root.light .about-hero h1 { color:#111111 !important; }
+:root.light .about-hero p { color:rgba(20,20,20,0.5) !important; }
+:root.light .pillar { background:#deded9 !important; border-top-color:#cc0000 !important; }
+:root.light .pillar-title { color:#111111 !important; }
+:root.light .pillar-desc { color:rgba(20,20,20,0.65) !important; }
+:root.light .pillar-icon { filter:none !important; }
+:root.light .mission { background:rgba(204,0,0,0.04) !important; border-color:rgba(204,0,0,0.15) !important; }
+:root.light .mission-quote { color:#111111 !important; }
+:root.light .mission-sub { color:rgba(20,20,20,0.5) !important; }
+:root.light .story-block h3 { color:#111111 !important; }
+:root.light .story-block p { color:rgba(20,20,20,0.72) !important; }
+:root.light .story-block strong { color:#111111 !important; }
+:root.light .team-card { background:#deded9 !important; border-color:rgba(0,0,0,0.08) !important; }
+:root.light .team-name { color:#111111 !important; }
+:root.light .team-role { color:#cc0000 !important; }
+:root.light .team-bio { color:rgba(20,20,20,0.72) !important; }
+:root.light .team-avatar { background:rgba(204,0,0,0.08) !important; border-color:rgba(204,0,0,0.2) !important; }
+
+/* ══ REVIEWS PAGE LIGHT MODE ══ */
+:root.light .reviews-hero { background:linear-gradient(to bottom,rgba(204,0,0,0.05),transparent) !important; }
+:root.light .review-card { background:#deded9 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .review-title { color:#111111 !important; }
+:root.light .review-meta { color:rgba(20,20,20,0.45) !important; }
+:root.light .review-exc { color:rgba(20,20,20,0.58) !important; }
+:root.light .reviews-count { color:rgba(20,20,20,0.5) !important; }
+:root.light .sort-select { background:#deded9 !important; border-color:rgba(0,0,0,0.12) !important; color:#111 !important; }
+:root.light .filters-bar { border-bottom-color:rgba(0,0,0,0.07) !important; }
+
+/* ══ CONTACT PAGE LIGHT MODE ══ */
+:root.light .contact-hero { border-bottom-color:rgba(204,0,0,0.12) !important; }
+:root.light .social-link { background:#deded9 !important; color:#111111 !important; border-color:rgba(0,0,0,0.07) !important; }
+
+/* ══ NEWSLETTER BOX LIGHT MODE ══ */
+:root.light .newsletter-box { background:rgba(204,0,0,0.03) !important; border-color:rgba(204,0,0,0.15) !important; }
+:root.light .newsletter-title { color:#111111 !important; }
+
+/* ══ REQ FORM LIGHT MODE ══ */
+:root.light .req-form { background:#deded9 !important; border-color:rgba(0,0,0,0.07) !important; }
+:root.light .req-input { background:#f0f0eb !important; border-color:rgba(0,0,0,0.1) !important; color:#111111 !important; }

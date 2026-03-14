@@ -449,6 +449,11 @@ function applyContent() {
   setText('rrSuccessTitle', c.rrSuccessTitle);
   setText('rrSuccessSub', c.rrSuccessSub);
 
+  // ── ABOUT PAGE (dynamic from settings/about) ──
+  if (typeof loadAboutContentFromFirebase === 'function') {
+    loadAboutContentFromFirebase();
+  }
+
   // ── WATCHLIST ──
   setText('watchlistSub', c.watchlistSub);
   setText('watchlistEmptyTitle', c.watchlistEmptyTitle);
@@ -457,6 +462,15 @@ function applyContent() {
 
 // Call on DOM ready
 document.addEventListener('DOMContentLoaded', function() {
-  // Small delay to let Firebase init first
-  setTimeout(loadPageContent, 200);
+  // Retry until Firebase ready
+  var attempts = 0;
+  function tryLoad() {
+    attempts++;
+    if (window.db || attempts > 10) {
+      loadPageContent();
+    } else {
+      setTimeout(tryLoad, 200);
+    }
+  }
+  setTimeout(tryLoad, 300);
 });

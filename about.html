@@ -254,7 +254,7 @@ document.addEventListener('keydown', function(e) {
   <div class="footer-tagline">Where Cinema Meets Biopsy</div>
   <div class="footer-copy" id="footerCopy">© 2026 CinéOpsy. All rights reserved.</div>
 </footer>
-<nav class="bottom-nav"><a href="index.html" class="bn-item active"><span class="bn-icon">🏠</span>Home</a><a href="news.html" class="bn-item"><span class="bn-icon">📰</span>News</a><a href="#" class="bn-item" onclick="openSearch();return false;"><span class="bn-icon">🔍</span>Search</a><a href="watchlist.html" class="bn-item"><span class="bn-icon">🔖</span>Saved</a><a href="verdict.html" class="bn-item"><span class="bn-icon">🔬</span>Verdict</a></nav>
+<nav class="bottom-nav"><a href="index.html" class="bn-item  active"><span class="bn-icon">🏠</span>Home</a><a href="news.html" class="bn-item"><span class="bn-icon">📰</span>News</a><a href="#" class="bn-item" onclick="openSearch();return false;"><span class="bn-icon">🔍</span>Search</a><a href="watchlist.html" class="bn-item"><span class="bn-icon">🔖</span>Saved</a></nav>
 <div class="search-overlay" id="searchOverlay">
   <div class="search-inner">
     <div class="search-bar">
@@ -271,8 +271,14 @@ document.addEventListener('keydown', function(e) {
 <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <script>
-async function loadAboutContent() {
+// Expose for app.js to call
+window.loadAboutContentFromFirebase = async function() {
   if (!window.db) return;
+  return loadAboutContent();
+};
+
+async function loadAboutContent() {
+  if (!window.db) { setTimeout(loadAboutContent, 300); return; }
   try {
     const doc = await window.db.collection('settings').doc('about').get();
     if (!doc.exists) return;
@@ -318,7 +324,13 @@ async function loadAboutContent() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(loadAboutContent, 300);
+  var tries = 0;
+  function tryAbout() {
+    tries++;
+    if (window.db) { loadAboutContent(); }
+    else if (tries < 15) { setTimeout(tryAbout, 200); }
+  }
+  setTimeout(tryAbout, 400);
 });
 </script>
 </body></html>
