@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Reviews Gallery — CinéOpsy Verdict</title>
+<meta name="description" content="Browse all CinéOpsy movie reviews. Filter by rating, genre, or streaming platform.">
+<meta name="keywords" content="movie reviews, bollywood reviews, film ratings, cineopsy">
+<meta name="author" content="CinéOpsy">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cineopsy.netlify.app/reviews.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Reviews Gallery — CinéOpsy Verdict">
+<meta property="og:description" content="Browse all CinéOpsy movie reviews. Filter by rating, genre, or streaming platform.">
+<meta property="og:image" content="https://cineopsy.netlify.app/og-image.jpg">
+<meta property="og:site_name" content="CinéOpsy">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Cineopsy">
+<meta name="twitter:title" content="Reviews Gallery — CinéOpsy Verdict">
+<meta name="twitter:description" content="Browse all CinéOpsy movie reviews. Filter by rating, genre, or streaming platform.">
+<meta name="twitter:image" content="https://cineopsy.netlify.app/og-image.jpg">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#cc0000"><meta name="apple-mobile-web-app-capable" content="yes">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-CBLTSGGPYB");</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<script src="app.js" defer></script><style>
+.reviews-hero{background:linear-gradient(to bottom,rgba(204,0,0,0.09),transparent);border-bottom:1px solid rgba(204,0,0,0.15);padding:90px 0 36px;text-align:center;margin-top:58px;}
+.filters-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.filter-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-right:4px;}
+.f-btn{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.12);background:transparent;color:var(--gray);padding:5px 12px;cursor:pointer;transition:all 0.2s;border-radius:2px;}
+.f-btn.active,.f-btn:hover{border-color:#cc0000;color:var(--white);background:rgba(204,0,0,0.08);}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:8px;}
+.review-card{background:var(--black3);border:1px solid rgba(255,255,255,0.05);text-decoration:none;color:inherit;display:block;transition:transform 0.3s,border-color 0.3s;overflow:hidden;position:relative;}
+.review-card:hover{transform:translateY(-4px);border-color:rgba(204,0,0,0.3);}
+.review-card-img{width:100%;height:180px;object-fit:cover;background:#111;}
+.review-card-ph{width:100%;height:180px;background:linear-gradient(135deg,#111,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:42px;}
+.review-card-body{padding:18px;}
+.review-score{position:absolute;top:12px;right:12px;background:#cc0000;color:#fff;font-family:'Cinzel',serif;font-size:15px;font-weight:700;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.4);}
+.review-genre{font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;border:1px solid rgba(204,0,0,0.3);padding:2px 8px;display:inline-block;margin-bottom:8px;}
+.review-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px;line-height:1.3;}
+.review-meta{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
+.review-exc{font-size:12px;color:var(--gray);line-height:1.5;}
+.verdict-badge{display:inline-block;padding:3px 10px;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-top:8px;}
+.verdict-watch{background:rgba(68,200,100,0.15);border:1px solid rgba(68,200,100,0.3);color:#44c864;}
+.verdict-skip{background:rgba(204,0,0,0.1);border:1px solid rgba(204,0,0,0.3);color:#cc0000;}
+.sort-select{background:var(--black3);border:1px solid rgba(255,255,255,0.12);color:var(--white);padding:6px 12px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;outline:none;cursor:pointer;border-radius:2px;margin-left:auto;}
+.reviews-count{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+
+:root.light .reviews-hero{background:linear-gradient(to bottom,rgba(204,0,0,0.05),transparent)!important;}
+:root.light .review-card{background:#e0e0db!important;border-color:rgba(0,0,0,0.07)!important;}
+:root.light .review-title{color:#111!important;}
+:root.light .f-btn{border-color:rgba(0,0,0,0.12)!important;color:rgba(20,20,20,0.6)!important;}
+:root.light .f-btn.active,:root.light .f-btn:hover{border-color:#cc0000!important;color:#111!important;}
+:root.light .sort-select{background:#e0e0db!important;border-color:rgba(0,0,0,0.12)!important;color:#111!important;}
+:root.light .filters-bar{border-bottom-color:rgba(0,0,0,0.07)!important;}
+</style>
+</head>
+<body>
+<div id="readingProgress"></div>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="news.html" style="color:#cc0000;font-weight:700">📰 News</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="weekly.html">Weekly</a></li>
+    <li><a href="verdict.html">Verdict</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li><a href="whatif.html">What If</a></li>
+    <li><a href="casefiles.html">Case Files</a></li>
+    <li><a href="beyondborders.html">Beyond Borders</a></li>
+    <li><a href="specials.html">Specials</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="review-request.html">Request Review</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-controls">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <button class="search-btn" onclick="openSearch()" title="Search (Ctrl+K)">🔍</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="reviews-hero">
+  <div class="section-label" style="justify-content:center">🔬 Verdict</div>
+  <h1 class="section-title" style="font-size:clamp(28px,5vw,52px)">Reviews <span>Gallery</span></h1>
+  <p style="font-family:'Crimson Pro',serif;font-style:italic;font-size:17px;color:var(--gray);margin-top:8px">Every film examined. Every verdict delivered.</p>
+</div>
+<div class="red-divider"></div>
+<section class="page-wrap">
+  <div class="filters-bar">
+    <div class="filter-group">
+      <span class="filter-label">Genre:</span>
+      <button class="f-btn active" onclick="setFilter('genre','all',this)">All</button>
+      <button class="f-btn" onclick="setFilter('genre','Action',this)">Action</button>
+      <button class="f-btn" onclick="setFilter('genre','Drama',this)">Drama</button>
+      <button class="f-btn" onclick="setFilter('genre','Thriller',this)">Thriller</button>
+      <button class="f-btn" onclick="setFilter('genre','Comedy',this)">Comedy</button>
+      <button class="f-btn" onclick="setFilter('genre','Horror',this)">Horror</button>
+    </div>
+    <select class="sort-select" onchange="setSortReviews(this.value)">
+      <option value="newest">Newest First</option>
+      <option value="highest">Highest Score</option>
+      <option value="lowest">Lowest Score</option>
+    </select>
+  </div>
+  <div class="reviews-count" id="reviewsCount" style="margin-bottom:16px">Loading...</div>
+  <div class="reviews-grid" id="reviewsGrid">
+    <div class="state-box"><p style="color:var(--gray);font-style:italic">Loading reviews...</p></div>
+  </div>
+</section>
+<div class="red-divider"></div>
+<footer>
+  <div class="footer-logo"><span class="cine">CINE</span><span class="opsy">OPSY</span></div>
+  <div class="footer-tagline">Where Cinema Meets Biopsy</div>
+  <div class="footer-copy" id="footerCopy">© 2026 CinéOpsy. All rights reserved.</div>
+</footer>
+<nav class="bottom-nav"><a href="index.html" class="bn-item active"><span class="bn-icon">🏠</span>Home</a><a href="news.html" class="bn-item"><span class="bn-icon">📰</span>News</a><a href="#" class="bn-item" onclick="openSearch();return false;"><span class="bn-icon">🔍</span>Search</a><a href="watchlist.html" class="bn-item"><span class="bn-icon">🔖</span>Saved</a><a href="verdict.html" class="bn-item"><span class="bn-icon">🔬</span>Verdict</a></nav>
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-inner">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search episodes, news..." autocomplete="off">
+      <button class="search-close" onclick="closeSearch()">✕</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+<div id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+<script>
+var allReviews = [];
+var currentFilter = {genre:'all'};
+var currentSort = 'newest';
+
+async function loadReviews(){
+  if(!window.db) return;
+  try{
+    var snap = await window.db.collection('episodes').doc('verdict').collection('items').orderBy('createdAt','desc').get();
+    allReviews = snap.docs.map(function(d){var e=d.data();e.id=d.id;return e;});
+    renderReviews();
+  }catch(e){
+    document.getElementById('reviewsGrid').innerHTML='<div class="state-box"><div class="state-icon">⚠️</div><div class="state-title">Could not load reviews</div></div>';
+  }
+}
+
+function renderReviews(){
+  var grid = document.getElementById('reviewsGrid');
+  var count = document.getElementById('reviewsCount');
+  var filtered = allReviews.filter(function(r){
+    if(currentFilter.genre !== 'all'){
+      var genre = (r.info && r.info.find(function(x){return x.label && x.label.toLowerCase().includes('genre');}));
+      if(!genre || !genre.val.toLowerCase().includes(currentFilter.genre.toLowerCase())) return false;
+    }
+    return true;
+  });
+  // Sort
+  if(currentSort === 'highest') filtered.sort(function(a,b){return (parseFloat(b.biopsyScore)||0)-(parseFloat(a.biopsyScore)||0);});
+  else if(currentSort === 'lowest') filtered.sort(function(a,b){return (parseFloat(a.biopsyScore)||0)-(parseFloat(b.biopsyScore)||0);});
+  
+  if(count) count.textContent = filtered.length + ' review' + (filtered.length!==1?'s':'');
+  if(!filtered.length){
+    grid.innerHTML='<div class="state-box"><div class="state-icon">🔬</div><div class="state-title">No reviews yet</div><div class="state-sub">First verdict coming soon!</div></div>';
+    return;
+  }
+  grid.innerHTML = '';
+  filtered.forEach(function(r){
+    var a=document.createElement('a');
+    a.href='verdict_ep.html?id='+r.id+'&pl=verdict';
+    a.className='review-card';
+    var img=r.coverImage?'<img src="'+r.coverImage+'" alt="'+escHtml(r.title)+'" class="review-card-img" loading="lazy">':'<div class="review-card-ph">🔬</div>';
+    var score=r.biopsyScore?'<div class="review-score">'+r.biopsyScore+'</div>':'';
+    var streaming='';
+    if(r.streaming&&r.streaming.length){
+      streaming='<div style="margin-top:8px">'+r.streaming.map(function(s){
+        var cls={'netflix':'netflix','prime':'prime','hotstar':'hotstar','theatres':'theatres','youtube':'youtube'}[s.toLowerCase().replace(/\s/g,'')]||'other';
+        return '<span class="s-badge '+cls+'" style="font-size:8px;padding:2px 7px">'+escHtml(s)+'</span>';
+      }).join(' ')+'</div>';
+    }
+    var info=r.info&&r.info.length?r.info.find(function(x){return x.label&&x.label.toLowerCase().includes('genre');}):null;
+    var genre=info?info.val:'';
+    var verdict=r.info&&r.info.find(function(x){return x.label&&x.label.toLowerCase().includes('verdict');});
+    var vBadge='';
+    if(verdict&&verdict.val){
+      var isWatch=verdict.val.toLowerCase().includes('watch');
+      vBadge='<div class="verdict-badge '+(isWatch?'verdict-watch':'verdict-skip')+'">'+escHtml(verdict.val)+'</div>';
+    }
+    a.innerHTML=img+score+'<div class="review-card-body"><div class="review-genre">'+(genre||'Cinema')+'</div><div class="review-title">'+escHtml(r.title)+'</div><div class="review-meta">'+(r.date||'')+'</div><div class="review-exc">'+escHtml((r.excerpt||'').substring(0,75))+'</div>'+vBadge+streaming+'</div>';
+    grid.appendChild(a);
+  });
+}
+
+function setFilter(type,val,btn){
+  currentFilter[type]=val;
+  btn.closest('.filter-group').querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderReviews();
+}
+function setSortReviews(val){currentSort=val;renderReviews();}
+
+document.addEventListener('DOMContentLoaded',function(){setTimeout(loadReviews,300);});
+</script>
+</body></html>

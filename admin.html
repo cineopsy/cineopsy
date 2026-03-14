@@ -120,6 +120,26 @@ body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;
 .nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:3px;text-decoration:none;}
 .nav-logo .cine{color:#f0ece4;}.nav-logo .opsy{color:#cc0000;}
 
+
+/* Admin Dark/Light Mode */
+:root { --adm-bg:#0d0d0d; --adm-card:#161616; --adm-border:rgba(255,255,255,0.08); --adm-text:#f0ece4; --adm-gray:rgba(240,236,228,0.5); }
+:root.light { --adm-bg:#f0f0eb; --adm-card:#e8e8e4; --adm-border:rgba(0,0,0,0.1); --adm-text:#111111; --adm-gray:rgba(20,20,20,0.5); }
+body { background:var(--adm-bg) !important; color:var(--adm-text) !important; }
+.admin-wrap, .card { background:var(--adm-card) !important; border-color:var(--adm-border) !important; }
+.field-input, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="date"], textarea, select { background:var(--adm-bg) !important; border-color:var(--adm-border) !important; color:var(--adm-text) !important; }
+label, .field-label, .lbl { color:var(--adm-gray) !important; }
+.stat-card { background:var(--adm-card) !important; border-color:var(--adm-border) !important; }
+.tab { color:var(--adm-gray) !important; border-bottom-color:var(--adm-border) !important; }
+.tab.active, .tab:hover { color:var(--adm-text) !important; }
+.ep-item { background:var(--adm-card) !important; border-color:var(--adm-border) !important; }
+.ep-title-text, .ep-date-text { color:var(--adm-text) !important; }
+.login-box { background:var(--adm-card) !important; }
+.login-box input { background:var(--adm-bg) !important; color:var(--adm-text) !important; }
+.tabs-wrap { border-bottom-color:var(--adm-border) !important; background:var(--adm-card) !important; }
+:root.light .admin-header { background:rgba(240,240,235,0.97) !important; border-bottom:1px solid rgba(0,0,0,0.08) !important; }
+:root.light .num { color:#cc0000 !important; }
+:root.light small { color:rgba(20,20,20,0.45) !important; }
+
 </style>
 </head>
 <body>
@@ -176,6 +196,7 @@ body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;
       <button class="tab" onclick="switchTab(event,'newsletter')">📧 Newsletter</button>
       <button class="tab" onclick="switchTab(event,'pinned')">📌 Pinned</button>
       <button class="tab" onclick="switchTab(event,'push')">🔔 Push</button>
+      <button class="tab" onclick="switchTab(event,'manage')">⚙️ Manage</button>
       <button class="tab" onclick="switchTab(event,'requests')">🎬 Requests</button>
     </div>
 
@@ -580,6 +601,56 @@ body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;
         </div>
         <div id="reqStats" style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap"></div>
         <div id="reviewRequestsList"><p style="color:#555;font-style:italic">Loading requests...</p></div>
+      </div>
+    </div>
+
+
+    <!-- MANAGE TAB -->
+    <div class="tab-pane" id="tab-manage">
+      <div class="card">
+        <h3 class="card-title">⚙️ Site Management</h3>
+
+        <!-- Homepage Featured Video -->
+        <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--adm-border)">
+          <div class="section-label" style="font-size:11px;margin-bottom:10px">🎬 HOMEPAGE FEATURED VIDEO</div>
+          <small style="color:var(--adm-gray);display:block;margin-bottom:10px">YouTube video ID or full URL shown as featured content on homepage</small>
+          <input type="text" id="mgFeaturedVideo" class="field-input" placeholder="YouTube video ID or URL (e.g. F5Ck7d9PMG0)">
+          <input type="text" id="mgFeaturedTitle" class="field-input" placeholder="Video title shown on homepage" style="margin-top:8px">
+          <button onclick="saveFeaturedVideo()" class="btn-save" style="margin-top:8px">Save Featured Video →</button>
+          <div id="featuredVideoMsg" style="margin-top:8px;font-size:13px"></div>
+        </div>
+
+        <!-- About Page Content -->
+        <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--adm-border)">
+          <div class="section-label" style="font-size:11px;margin-bottom:10px">👤 CREATOR BIO (About Page)</div>
+          <input type="text" id="mgCreatorName" class="field-input" placeholder="Creator name">
+          <textarea id="mgCreatorBio" class="field-input" rows="4" placeholder="Creator bio text..." style="margin-top:8px;resize:vertical"></textarea>
+          <button onclick="saveCreatorBio()" class="btn-save" style="margin-top:8px">Save Bio →</button>
+          <div id="creatorBioMsg" style="margin-top:8px;font-size:13px"></div>
+        </div>
+
+        <!-- Announcement Banner -->
+        <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--adm-border)">
+          <div class="section-label" style="font-size:11px;margin-bottom:10px">📢 ANNOUNCEMENT BANNER</div>
+          <small style="color:var(--adm-gray);display:block;margin-bottom:10px">Shows a dismissible banner at top of website</small>
+          <input type="text" id="mgAnnouncement" class="field-input" placeholder="e.g. 🎬 New episode out now! Watch our What If: Endgame analysis">
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+            <label class="field-label" style="margin:0">Active</label>
+            <input type="checkbox" id="mgAnnouncementActive" style="width:18px;height:18px;accent-color:#cc0000">
+          </div>
+          <button onclick="saveAnnouncement()" class="btn-save" style="margin-top:8px">Save Announcement →</button>
+          <div id="announcementMsg" style="margin-top:8px;font-size:13px"></div>
+        </div>
+
+        <!-- Clear Views/Likes Stats -->
+        <div>
+          <div class="section-label" style="font-size:11px;margin-bottom:10px">🗑️ DATA MANAGEMENT</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button onclick="exportAllData()" class="btn-save" style="background:#333">📥 Export All Episodes (JSON)</button>
+            <button onclick="clearViewsData()" class="btn-save" style="background:#8B0000">⚠️ Reset View Counts</button>
+          </div>
+          <div id="dataMsg" style="margin-top:8px;font-size:13px"></div>
+        </div>
       </div>
     </div>
 
@@ -1523,6 +1594,112 @@ const _prevSwitch = window.switchTab;
 window.switchTab = function(e, name) {
   _prevSwitch(e, name);
   if (name === 'requests') loadReviewRequests();
+};
+
+
+// Admin Theme
+function applyAdminTheme(t) {
+  document.documentElement.classList.toggle('light', t === 'light');
+  var btn = document.getElementById('adminThemeBtn');
+  if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
+}
+function toggleAdminTheme() {
+  var isLight = document.documentElement.classList.contains('light');
+  var next = isLight ? 'dark' : 'light';
+  localStorage.setItem('co_admin_theme', next);
+  applyAdminTheme(next);
+}
+// Apply on load
+(function(){ applyAdminTheme(localStorage.getItem('co_admin_theme') || 'dark'); })();
+
+
+// ════ MANAGE TAB FUNCTIONS ════
+async function loadManageTab() {
+  if (!firebaseReady) return;
+  try {
+    const doc = await db.collection('settings').doc('manage').get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    const fv = document.getElementById('mgFeaturedVideo');
+    const ft = document.getElementById('mgFeaturedTitle');
+    const cn = document.getElementById('mgCreatorName');
+    const cb = document.getElementById('mgCreatorBio');
+    const an = document.getElementById('mgAnnouncement');
+    const aa = document.getElementById('mgAnnouncementActive');
+    if (fv && d.featuredVideo) fv.value = d.featuredVideo;
+    if (ft && d.featuredTitle) ft.value = d.featuredTitle;
+    if (cn && d.creatorName) cn.value = d.creatorName;
+    if (cb && d.creatorBio) cb.value = d.creatorBio;
+    if (an && d.announcement) an.value = d.announcement;
+    if (aa) aa.checked = !!d.announcementActive;
+  } catch(e) {}
+}
+
+async function saveFeaturedVideo() {
+  const v = document.getElementById('mgFeaturedVideo').value.trim();
+  const t = document.getElementById('mgFeaturedTitle').value.trim();
+  const msg = document.getElementById('featuredVideoMsg');
+  try {
+    await db.collection('settings').doc('manage').set({ featuredVideo: v, featuredTitle: t }, { merge: true });
+    msg.innerHTML = '<span style="color:#44ff88">✅ Saved! Homepage updated.</span>';
+  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+}
+
+async function saveCreatorBio() {
+  const name = document.getElementById('mgCreatorName').value.trim();
+  const bio = document.getElementById('mgCreatorBio').value.trim();
+  const msg = document.getElementById('creatorBioMsg');
+  try {
+    await db.collection('settings').doc('manage').set({ creatorName: name, creatorBio: bio }, { merge: true });
+    msg.innerHTML = '<span style="color:#44ff88">✅ Bio saved!</span>';
+  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+}
+
+async function saveAnnouncement() {
+  const text = document.getElementById('mgAnnouncement').value.trim();
+  const active = document.getElementById('mgAnnouncementActive').checked;
+  const msg = document.getElementById('announcementMsg');
+  try {
+    await db.collection('settings').doc('manage').set({ announcement: text, announcementActive: active }, { merge: true });
+    msg.innerHTML = '<span style="color:#44ff88">✅ Announcement saved!</span>';
+  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+}
+
+async function clearViewsData() {
+  if (!confirm('Reset all view counts? This cannot be undone!')) return;
+  const msg = document.getElementById('dataMsg');
+  try {
+    const snap = await db.collection('views').get();
+    const batch = db.batch();
+    snap.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    msg.innerHTML = '<span style="color:#44ff88">✅ View counts reset!</span>';
+  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+}
+
+async function exportAllData() {
+  const msg = document.getElementById('dataMsg');
+  try {
+    const pls = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
+    const allData = {};
+    for (const pl of pls) {
+      const snap = await db.collection('episodes').doc(pl).collection('items').get();
+      allData[pl] = snap.docs.map(d => ({...d.data(), id: d.id}));
+    }
+    const blob = new Blob([JSON.stringify(allData, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'cineopsy-backup-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    msg.innerHTML = '<span style="color:#44ff88">✅ Exported!</span>';
+  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+}
+
+// Hook manage tab
+const _mgPrev = window.switchTab;
+window.switchTab = function(e, name) {
+  _mgPrev(e, name);
+  if (name === 'manage') loadManageTab();
 };
 
 </script>

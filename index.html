@@ -77,6 +77,37 @@
 :root.light .hero-news-title{color:#111!important;}
 @media(max-width:768px){.about-grid{grid-template-columns:1fr;}}
 </style>
+<style>
+/* ── Film Reel Animation ── */
+.filmstrip { animation:none; }
+.fhole { animation:flicker 4s infinite; animation-delay:calc(var(--i, 0) * 0.1s); }
+@keyframes flicker {
+  0%,95%,100% { opacity:1; }
+  97% { opacity:0.3; }
+}
+/* Hero text subtle pulse */
+.hero-title .opsy {
+  animation:glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%,100% { text-shadow:0 0 50px rgba(204,0,0,0.4); }
+  50% { text-shadow:0 0 80px rgba(204,0,0,0.7), 0 0 20px rgba(204,0,0,0.3); }
+}
+/* Social proof */
+.social-proof { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin:28px 0; }
+.sp-item { text-align:center; }
+.sp-num { font-family:'Cinzel',serif; font-size:24px; font-weight:700; color:#cc0000; line-height:1; }
+.sp-lbl { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--gray); margin-top:4px; }
+/* Featured video section */
+.featured-video-wrap { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; background:#0a0a0a; border:1px solid rgba(255,255,255,0.06); margin:20px 0; }
+.featured-video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+.featured-video-ph { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--gray); cursor:pointer; }
+.featured-video-ph:hover { background:rgba(204,0,0,0.05); }
+.featured-play { width:60px; height:60px; background:#cc0000; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; transition:transform 0.2s; }
+.featured-video-ph:hover .featured-play { transform:scale(1.1); }
+:root.light .featured-video-wrap { background:#e0e0db !important; border-color:rgba(0,0,0,0.08) !important; }
+:root.light .sp-lbl { color:rgba(20,20,20,0.5) !important; }
+</style>
 </head>
 <body>
 <div id="readingProgress"></div>
@@ -87,10 +118,12 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="weekly.html">Weekly</a></li>
     <li><a href="verdict.html">Verdict</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
     <li><a href="whatif.html">What If</a></li>
     <li><a href="casefiles.html">Case Files</a></li>
     <li><a href="beyondborders.html">Beyond Borders</a></li>
     <li><a href="specials.html">Specials</a></li>
+    <li><a href="about.html">About</a></li>
     <li><a href="review-request.html">Request Review</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
@@ -150,6 +183,39 @@
   <div class="section-label">This Week</div>
   <h2 class="section-title">Weekly <span>Poll</span></h2>
   <div id="weeklyPoll" style="max-width:520px;margin-top:20px"><p style="color:var(--gray);font-style:italic">Loading poll...</p></div>
+</section>
+
+<div class="red-divider"></div>
+<section class="page-wrap" style="text-align:center">
+  <div class="section-label" style="justify-content:center">Social Proof</div>
+  <h2 class="section-title">Join the <span>Community</span></h2>
+  <div class="social-proof">
+    <div class="sp-item"><div class="sp-num" id="ytSubs">—</div><div class="sp-lbl">YouTube Subscribers</div></div>
+    <div class="sp-item"><div class="sp-num">6</div><div class="sp-lbl">Active Series</div></div>
+    <div class="sp-item"><div class="sp-num">Weekly</div><div class="sp-lbl">New Episodes</div></div>
+    <div class="sp-item"><div class="sp-num">100%</div><div class="sp-lbl">Ad-Free</div></div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+    <a href="https://youtube.com/@Cineopsy" target="_blank" class="btn-primary">▶ Subscribe on YouTube</a>
+    <a href="https://instagram.com/cineopsy" target="_blank" class="btn-outline">📸 Instagram</a>
+    <a href="about.html" class="btn-outline">About Us</a>
+  </div>
+</section>
+
+<div class="red-divider"></div>
+<section class="page-wrap">
+  <div class="section-label">Featured</div>
+  <h2 class="section-title">Latest <span>Special</span></h2>
+  <p class="section-sub" id="featuredTitle">The Quiet White Coat — World Lab Technician Day Special</p>
+  <div class="featured-video-wrap" id="featuredVideoWrap">
+    <div class="featured-video-ph" onclick="loadFeaturedVideo()">
+      <div class="featured-play">▶</div>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase">Click to Play</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:12px">
+    <a href="specials.html" class="btn-outline">View All Specials →</a>
+  </div>
 </section>
 <div class="red-divider"></div>
 <section class="page-wrap">
@@ -247,5 +313,35 @@ function handlePollVote(pollId,idx){
 document.addEventListener('DOMContentLoaded',function(){
   setTimeout(function(){loadHeroNews();loadWeeklyPoll();},400);
 });
+
+function loadFeaturedVideo(){
+  var wrap = document.getElementById('featuredVideoWrap');
+  if(!wrap) return;
+  // Load latest special from Firebase, fallback to The Quiet White Coat
+  if(window.db){
+    window.db.collection('episodes').doc('specials').collection('items')
+      .orderBy('createdAt','desc').limit(1).get()
+      .then(function(snap){
+        if(!snap.empty){
+          var ep = snap.docs[0].data();
+          if(ep.youtube){
+            var vid = ep.youtube;
+            if(vid.includes('watch?v=')) vid = vid.split('watch?v=')[1].split('&')[0];
+            else if(vid.includes('youtu.be/')) vid = vid.split('youtu.be/')[1].split('?')[0];
+            wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/'+vid+'?autoplay=1" allowfullscreen loading="lazy"></iframe>';
+            var t = document.getElementById('featuredTitle');
+            if(t) t.textContent = ep.title;
+            return;
+          }
+        }
+        // Fallback
+        wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/F5Ck7d9PMG0?autoplay=1" allowfullscreen loading="lazy"></iframe>';
+      }).catch(function(){
+        wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/F5Ck7d9PMG0?autoplay=1" allowfullscreen loading="lazy"></iframe>';
+      });
+  } else {
+    wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/F5Ck7d9PMG0?autoplay=1" allowfullscreen loading="lazy"></iframe>';
+  }
+}
 </script>
 </body></html>

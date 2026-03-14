@@ -341,4 +341,57 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSearch();
   setupLightbox();
   loadSiteSettings();
+  loadAnnouncement();
+  loadManageSettings();
 });
+
+// ── Announcement Banner ──
+async function loadAnnouncement() {
+  if (!db) return;
+  try {
+    const doc = await db.collection('settings').doc('manage').get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    if (!d.announcementActive || !d.announcement) return;
+    
+    // Check if dismissed
+    const dismissed = localStorage.getItem('co_ann_' + d.announcement.substring(0,20));
+    if (dismissed) return;
+    
+    const banner = document.createElement('div');
+    banner.id = 'annBanner';
+    banner.style.cssText = 'background:#cc0000;color:#fff;text-align:center;padding:10px 50px;font-family:"Barlow Condensed",sans-serif;font-size:12px;letter-spacing:1px;position:relative;z-index:1000;';
+    banner.innerHTML = d.announcement + '<button onclick="dismissAnnouncement('' + d.announcement.substring(0,20) + '')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;cursor:pointer;font-size:18px;line-height:1;">✕</button>';
+    document.body.insertBefore(banner, document.body.firstChild);
+    
+    // Push nav + content down
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.top = banner.offsetHeight + 'px';
+  } catch(e) {}
+}
+
+function dismissAnnouncement(key) {
+  localStorage.setItem('co_ann_' + key, '1');
+  const b = document.getElementById('annBanner');
+  if (b) {
+    b.remove();
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.top = '0';
+  }
+}
+
+// ── Load manage settings (featured video, creator bio) ──
+async function loadManageSettings() {
+  if (!db) return;
+  try {
+    const doc = await db.collection('settings').doc('manage').get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    
+    // Update creator name/bio on about page
+    const cn = document.getElementById('creatorName');
+    const cb = document.getElementById('creatorBio');
+    if (cn && d.creatorName) cn.textContent = d.creatorName;
+    if (cb && d.creatorBio) cb.textContent = d.creatorBio;
+  } catch(e) {}
+}
