@@ -1152,21 +1152,21 @@ function initFirebase() {
 const DEFAULT_PW = 'Cineopsy420@';
 function getPw() { return localStorage.getItem('co_pw') || DEFAULT_PW; }
 
-function login() {
-  const pw = document.getElementById('pwInput').value;
-  if (pw === getPw()) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    document.getElementById('addDate').valueAsDate = new Date();
-    initFirebase();
-    updateInfoFields();
-    loadStats();
-    loadSiteText();
-    loadSocialLinks();
-    loadTheme();
-    loadFirebaseConfig();
-    loadEpisodeList();
-  } else {
+
+const ADMIN_PASSWORD = "Cineopsy420@";
+
+function login(){
+  const input = document.getElementById('pwInput');
+  if(!input){ alert("Password input not found"); return; }
+  const pw = input.value.trim();
+  if(pw === ADMIN_PASSWORD){
+    localStorage.setItem("cineopsy_admin","true");
+    location.reload();
+  }else{
+    alert("Wrong password");
+  }
+}
+ else {
     document.getElementById('loginErr').style.display = 'block';
     document.getElementById('pwInput').value = '';
   }
