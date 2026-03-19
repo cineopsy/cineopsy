@@ -12,6 +12,7 @@
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 
 <style>
 :root{
@@ -149,7 +150,7 @@ label, .field-label, .lbl { color:var(--adm-gray) !important; }
   <div class="login-box">
     <div class="login-title">CINE<span class="o">OPSY</span></div>
     <div class="login-sub">Admin Panel</div>
-    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()" onkeydown="if(event.key==='Enter')login()">
     <div class="login-err" id="loginErr">❌ Wrong password. Try again.</div>
     <button class="btn btn-red" onclick="login()" style="width:100%">Login →</button>
   </div>
@@ -1153,22 +1154,28 @@ const DEFAULT_PW = 'Cineopsy420@';
 function getPw() { return localStorage.getItem('co_pw') || DEFAULT_PW; }
 
 function login() {
-  const pw = document.getElementById('pwInput').value;
+  var pw = document.getElementById('pwInput').value;
+  var errEl = document.getElementById('loginErr');
   if (pw === getPw()) {
+    // Show panel IMMEDIATELY
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
-    document.getElementById('addDate').valueAsDate = new Date();
-    initFirebase();
-    updateInfoFields();
-    loadStats();
-    loadSiteText();
-    loadSocialLinks();
-    loadTheme();
-    loadFirebaseConfig();
-    loadEpisodeList();
+    // Load everything with try-catch so one failure doesn't break all
+    try { var d = document.getElementById('addDate'); if(d) d.valueAsDate = new Date(); } catch(e){}
+    try { initFirebase(); } catch(e){ console.warn('Firebase:', e); }
+    setTimeout(function() {
+      try { updateInfoFields(); } catch(e){}
+      try { loadStats(); } catch(e){}
+      try { loadSiteText(); } catch(e){}
+      try { loadSocialLinks(); } catch(e){}
+      try { loadTheme(); } catch(e){}
+      try { loadFirebaseConfig(); } catch(e){}
+      try { loadEpisodeList(); } catch(e){}
+    }, 300);
   } else {
-    document.getElementById('loginErr').style.display = 'block';
+    if(errEl) { errEl.style.display = 'block'; errEl.textContent = '❌ Wrong password. Try again.'; }
     document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
   }
 }
 
