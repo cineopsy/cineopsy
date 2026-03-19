@@ -1152,21 +1152,21 @@ function initFirebase() {
 const DEFAULT_PW = 'Cineopsy420@';
 function getPw() { return localStorage.getItem('co_pw') || DEFAULT_PW; }
 
-
-const ADMIN_PASSWORD = "Cineopsy420@";
-
-function login(){
-  const input = document.getElementById('pwInput');
-  if(!input){ alert("Password input not found"); return; }
-  const pw = input.value.trim();
-  if(pw === ADMIN_PASSWORD){
-    localStorage.setItem("cineopsy_admin","true");
-    location.reload();
-  }else{
-    alert("Wrong password");
-  }
-}
- else {
+function login() {
+  const pw = document.getElementById('pwInput').value;
+  if (pw === getPw()) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('addDate').valueAsDate = new Date();
+    initFirebase();
+    updateInfoFields();
+    loadStats();
+    loadSiteText();
+    loadSocialLinks();
+    loadTheme();
+    loadFirebaseConfig();
+    loadEpisodeList();
+  } else {
     document.getElementById('loginErr').style.display = 'block';
     document.getElementById('pwInput').value = '';
   }
@@ -1195,11 +1195,26 @@ function changePassword() {
 // TABS
 // ════════════════════════════════
 function switchTab(e, id) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  e.target.classList.add('active');
-  document.getElementById('tab-' + id).classList.add('active');
-  if (id === 'episodes') loadEpisodeList();
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  if (e && e.target) e.target.classList.add('active');
+  var pane = document.getElementById('tab-' + id);
+  if (pane) pane.classList.add('active');
+  // Load tab-specific data
+  var tabLoaders = {
+    episodes: function() { loadEpisodeList(); },
+    news: function() { if(typeof loadNewsList==='function') loadNewsList(); },
+    comments: function() { if(typeof loadAllComments==='function') loadAllComments(); },
+    polls: function() { if(typeof loadPollsList==='function') loadPollsList(); },
+    newsletter: function() { if(typeof loadNewsletterList==='function') loadNewsletterList(); },
+    pinned: function() { if(typeof loadPinnedList==='function'){ loadPinnedList(); loadPinEpisodes(); } },
+    push: function() { if(typeof loadPushHistory==='function') loadPushHistory(); },
+    requests: function() { if(typeof loadReviewRequests==='function') loadReviewRequests(); },
+    manage: function() { if(typeof loadManageTab==='function') loadManageTab(); },
+    about: function() { if(typeof loadAboutAdmin==='function') loadAboutAdmin(); },
+    content: function() { if(typeof loadContentTab==='function') loadContentTab(); },
+  };
+  if (tabLoaders[id]) tabLoaders[id]();
 }
 
 // ════════════════════════════════
@@ -1910,15 +1925,6 @@ async function deletePushNotif(id) {
 }
 
 // ═══ Hook switchTab for new tabs ═══
-const _origSwitch = window.switchTab;
-window.switchTab = function(e, name) {
-  _origSwitch(e, name);
-  if (name === 'comments') loadAllComments();
-  if (name === 'polls') { loadPollsList(); }
-  if (name === 'newsletter') loadNewsletterList();
-  if (name === 'pinned') { loadPinnedList(); loadPinEpisodes(); }
-  if (name === 'push') { loadPushHistory(); }
-};
 
 
 // ════════════════════════════════
@@ -1983,11 +1989,6 @@ async function deleteReviewRequest(id) {
 }
 
 // Hook requests tab
-const _prevSwitch = window.switchTab;
-window.switchTab = function(e, name) {
-  _prevSwitch(e, name);
-  if (name === 'requests') loadReviewRequests();
-};
 
 
 // Admin Theme
@@ -2088,12 +2089,6 @@ async function exportAllData() {
   } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
 }
 
-// Hook manage tab
-const _mgPrev = window.switchTab;
-window.switchTab = function(e, name) {
-  _mgPrev(e, name);
-  if (name === 'manage') loadManageTab();
-};
 
 
 // ════ ABOUT PAGE ADMIN ════
@@ -2199,12 +2194,6 @@ async function saveAboutPage() {
   if (btn) { btn.textContent = '💾 SAVE ALL ABOUT PAGE CHANGES →'; btn.disabled = false; }
 }
 
-// Hook about tab
-const _abPrev = window.switchTab;
-window.switchTab = function(e, name) {
-  _abPrev(e, name);
-  if (name === 'about') loadAboutAdmin();
-};
 
 
 // ════ CONTENT TAB ════
@@ -2272,12 +2261,6 @@ async function saveAllContent() {
   }
 }
 
-// Hook content tab
-const _ctPrev = window.switchTab;
-window.switchTab = function(e, name) {
-  _ctPrev(e, name);
-  if (name === 'content') loadContentTab();
-};
 
 </script>
 </body>
