@@ -34,7 +34,7 @@ body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;
 .login-err{color:#ff4444;font-size:13px;margin-bottom:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;display:none;}
 
 /* ADMIN */
-#adminPanel{display:none;}
+#adminPanel{display:none;}#adminPanel.visible{display:block !important;}
 .admin-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,0.97);border-bottom:1px solid rgba(204,0,0,0.15);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
 .admin-brand{font-family:'Cinzel',serif;font-size:18px;font-weight:700;letter-spacing:3px;}
 .admin-brand .o{color:var(--red);}
@@ -1134,16 +1134,25 @@ let firebaseReady = false;
 
 function initFirebase() {
   try {
-    const cfg = JSON.parse(localStorage.getItem('co_firebase_config') || 'null');
-    if (!cfg || !cfg.apiKey || cfg.apiKey === 'YOUR_API_KEY') throw new Error('No config');
+    // Try saved config first, then fall back to firebase-config.js
+    var savedCfg = JSON.parse(localStorage.getItem('co_firebase_config') || 'null');
+    var cfg = (savedCfg && savedCfg.apiKey && savedCfg.apiKey !== 'YOUR_API_KEY') 
+              ? savedCfg 
+              : (typeof FIREBASE_CONFIG !== 'undefined' ? FIREBASE_CONFIG : null);
+    if (!cfg || !cfg.apiKey) throw new Error('No Firebase config found');
     if (!firebase.apps.length) firebase.initializeApp(cfg);
     db = firebase.firestore();
+    window.db = db;
     firebaseReady = true;
     console.log('✅ Firebase connected!');
+    // Hide banner if showing
+    var banner = document.getElementById('firebaseBanner');
+    if (banner) banner.style.display = 'none';
   } catch(e) {
     firebaseReady = false;
-    document.getElementById('firebaseBanner').style.display = 'block';
-    console.warn('Firebase not ready:', e.message);
+    var banner = document.getElementById('firebaseBanner');
+    if (banner) banner.style.display = 'block';
+    console.warn('Firebase:', e.message);
   }
 }
 
@@ -1157,9 +1166,11 @@ function login() {
   var pw = document.getElementById('pwInput').value;
   var errEl = document.getElementById('loginErr');
   if (pw === getPw()) {
-    // Show panel IMMEDIATELY
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
+    // Show panel IMMEDIATELY - multiple approaches to ensure it works
+    var ls = document.getElementById('loginScreen');
+    var ap = document.getElementById('adminPanel');
+    if (ls) { ls.style.display = 'none'; ls.style.visibility = 'hidden'; ls.setAttribute('hidden', ''); }
+    if (ap) { ap.style.display = 'block'; ap.style.visibility = 'visible'; ap.removeAttribute('hidden'); ap.classList.add('visible'); }
     // Load everything with try-catch so one failure doesn't break all
     try { var d = document.getElementById('addDate'); if(d) d.valueAsDate = new Date(); } catch(e){}
     try { initFirebase(); } catch(e){ console.warn('Firebase:', e); }
