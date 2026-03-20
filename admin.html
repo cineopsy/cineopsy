@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js" defer></script>
+<script src="firebase-config.js" defer></script>
 
 <style>
 :root{
@@ -150,8 +150,8 @@ label, .field-label, .lbl { color:var(--adm-gray) !important; }
   <div class="login-box">
     <div class="login-title">CINE<span class="o">OPSY</span></div>
     <div class="login-sub">Admin Panel</div>
-    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()" onkeydown="if(event.key==='Enter')login()">
-    <div class="login-err" id="loginErr">❌ Wrong password. Try again.</div>
+    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <div class="login-err" id="loginErr" style="display:none">❌ Wrong password. Try again.</div>
     <button class="btn btn-red" onclick="login()" style="width:100%">Login →</button>
   </div>
 </div>
@@ -1163,30 +1163,61 @@ const DEFAULT_PW = 'Cineopsy420@';
 function getPw() { return localStorage.getItem('co_pw') || DEFAULT_PW; }
 
 function login() {
-  var pw = document.getElementById('pwInput').value;
-  var errEl = document.getElementById('loginErr');
-  if (pw === getPw()) {
-    // Show panel IMMEDIATELY - multiple approaches to ensure it works
-    var ls = document.getElementById('loginScreen');
-    var ap = document.getElementById('adminPanel');
-    if (ls) { ls.style.display = 'none'; ls.style.visibility = 'hidden'; ls.setAttribute('hidden', ''); }
-    if (ap) { ap.style.display = 'block'; ap.style.visibility = 'visible'; ap.removeAttribute('hidden'); ap.classList.add('visible'); }
-    // Load everything with try-catch so one failure doesn't break all
-    try { var d = document.getElementById('addDate'); if(d) d.valueAsDate = new Date(); } catch(e){}
-    try { initFirebase(); } catch(e){ console.warn('Firebase:', e); }
-    setTimeout(function() {
-      try { updateInfoFields(); } catch(e){}
-      try { loadStats(); } catch(e){}
-      try { loadSiteText(); } catch(e){}
-      try { loadSocialLinks(); } catch(e){}
-      try { loadTheme(); } catch(e){}
-      try { loadFirebaseConfig(); } catch(e){}
-      try { loadEpisodeList(); } catch(e){}
-    }, 300);
-  } else {
-    if(errEl) { errEl.style.display = 'block'; errEl.textContent = '❌ Wrong password. Try again.'; }
-    document.getElementById('pwInput').value = '';
-    document.getElementById('pwInput').focus();
+  try {
+    var pwEl = document.getElementById('pwInput');
+    var errEl = document.getElementById('loginErr');
+    var loginSc = document.getElementById('loginScreen');
+    var adminPn = document.getElementById('adminPanel');
+    
+    if (!pwEl) { alert('Login form error! Please refresh.'); return; }
+    
+    var pw = pwEl.value;
+    var correctPw = 'Cineopsy420@';
+    
+    // Check if password was changed via localStorage
+    var savedPw = localStorage.getItem('co_pw');
+    if (savedPw && savedPw.length > 0) correctPw = savedPw;
+    
+    if (pw === correctPw) {
+      // ✅ CORRECT PASSWORD
+      if (errEl) errEl.style.display = 'none';
+      
+      // Hide login, show admin
+      if (loginSc) {
+        loginSc.style.display = 'none';
+        loginSc.style.visibility = 'hidden';
+      }
+      if (adminPn) {
+        adminPn.style.cssText = 'display:block !important; visibility:visible !important;';
+      }
+      
+      // Load admin data after short delay (Firebase may not be ready yet)
+      setTimeout(function() {
+        try { 
+          if (typeof firebase !== 'undefined') initFirebase(); 
+        } catch(e) {}
+        try { updateInfoFields(); } catch(e) {}
+        try { loadStats(); } catch(e) {}
+        try { loadSiteText(); } catch(e) {}
+        try { loadSocialLinks(); } catch(e) {}
+        try { loadTheme(); } catch(e) {}
+        try { loadEpisodeList(); } catch(e) {}
+      }, 500);
+      
+    } else {
+      // ❌ WRONG PASSWORD  
+      if (errEl) {
+        errEl.style.display = 'block';
+        errEl.textContent = '❌ Wrong password!';
+      }
+      pwEl.value = '';
+      pwEl.focus();
+      // Flash red border
+      pwEl.style.borderColor = '#ff0000';
+      setTimeout(function() { pwEl.style.borderColor = ''; }, 2000);
+    }
+  } catch(e) {
+    alert('Login error: ' + e.message + ' — Please refresh the page.');
   }
 }
 
