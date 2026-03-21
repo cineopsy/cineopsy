@@ -113,17 +113,10 @@ async function doSearch(q) {
   return results;
 }
 
-// ── Site Settings from Firebase ──
+// ── Site Settings (theme + social links only) ──
 async function loadSiteSettings() {
   if (!db) return;
   try {
-    var ct = await db.collection('settings').doc('content').get();
-    if (ct.exists) {
-      var d = ct.data();
-      if (d.footerCopy) { var el=document.getElementById('footerCopy'); if(el) el.textContent=d.footerCopy; }
-      if (d.footerTagline) { var el2=document.getElementById('footerTagline'); if(el2) el2.textContent=d.footerTagline; }
-      if (d.tagline || d.homeHeroTagline) { var el3=document.getElementById('heroTagline'); if(el3) el3.textContent=d.homeHeroTagline||d.tagline; }
-    }
     var th = await db.collection('settings').doc('theme').get();
     if (th.exists) {
       var td = th.data(), r = document.documentElement;

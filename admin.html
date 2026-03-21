@@ -340,6 +340,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
           <div class="frow">
             <div class="f"><label>Site Tagline</label><input type="text" class="fi" id="ct-tagline"></div>
             <div class="f"><label>Footer Copyright</label><input type="text" class="fi" id="ct-footerCopy"></div>
+            <div class="f"><label>Footer Tagline</label><input type="text" class="fi" id="ct-footerTagline"></div>
           </div>
         </div>
         <div class="csec">
@@ -367,8 +368,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
             <div class="f"><label>Stat 4 Label</label><input type="text" class="fi" id="ct-homeStat4Label"></div>
           </div>
           <div class="frow">
-            <div class="f"><label>Newsletter Title</label><input type="text" class="fi" id="ct-nlTitle"></div>
-            <div class="f"><label>Newsletter Subtitle</label><input type="text" class="fi" id="ct-nlSub"></div>
+            <div class="f"><label>Newsletter Title</label><input type="text" class="fi" id="ct-homeNewsletterBoxTitle"></div>
+            <div class="f"><label>Newsletter Subtitle</label><input type="text" class="fi" id="ct-homeNewsletterBoxSub"></div>
           </div>
         </div>
         <div class="csec">
@@ -379,14 +380,15 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
           <div class="csec-label">📰 News Page</div>
           <div class="frow">
             <div class="f"><label>Title</label><input type="text" class="fi" id="ct-newsTitle"></div>
-            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ct-newsSub"></div>
+            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ct-newsHeroSub"></div>
+            <div class="f"><label>News Ticker Text</label><input type="text" class="fi" id="ct-newsTickerDefault"></div>
           </div>
         </div>
         <div class="csec">
           <div class="csec-label">✉️ Contact Page</div>
           <div class="frow">
             <div class="f"><label>Title</label><input type="text" class="fi" id="ct-contactTitle"></div>
-            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ct-contactSub"></div>
+            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ct-contactHeroSub"></div>
           </div>
         </div>
         <button class="btn btn-r" onclick="saveContent()" style="width:100%;padding:13px;margin-top:8px;">💾 SAVE ALL CONTENT →</button>
@@ -848,26 +850,37 @@ async function setReq(id,status){try{await db.collection('review_requests').doc(
 async function delReq(id){if(!confirm('Delete?'))return;try{await db.collection('review_requests').doc(id).delete();loadReqs();}catch(e){alert(e.message);}}
 
 // ── CONTENT ──
-const CT_DEF={tagline:'Where Cinema Meets Biopsy',footerCopy:'© 2026 CinéOpsy. All rights reserved.',
-  homeHeroTagline:'Where Cinema Meets Biopsy',homeHeroBtn1:'Watch on YouTube',
-  homeSeriesTitle:'Six Ways to Dissect Cinema',homeSeriesSub:'Click any series to explore all episodes.',
+const CT_DEF={
+  footerCopy:'© 2026 CinéOpsy. All rights reserved.',
+  footerTagline:'Where Cinema Meets Biopsy',
+  homeHeroTagline:'Where Cinema Meets Biopsy',
+  homeSeriesTitle:'Six Ways to Dissect Cinema',
+  homeSeriesSub:'Click any series to explore all episodes.',
   homeAboutP1:'From <strong>Bollywood to Hollywood</strong>, South Cinema to World Cinema — honest reviews, hidden gems, and cinema beyond the surface.',
   homeAboutP2:'<strong>No fluff. No hype. Just cinema — seen clearly.</strong>',
-  homeStat1Num:'6',homeStat1Label:'Unique Series',homeStat2Num:'3–4',homeStat2Label:'Videos / Week',
-  homeStat3Num:'100%',homeStat3Label:'Honest Reviews',homeStat4Num:'∞',homeStat4Label:'Cinema Love',
-  nlTitle:'Subscribe to CinéOpsy',nlSub:'Get notified when new reviews & episodes drop.',
-  newsTitle:'Cinema News',newsSub:'Latest from Bollywood, Hollywood, OTT & World Cinema',
-  contactTitle:'Get in Touch',contactSub:'Feel free to reach out for feedback, suggestions or collaborations.',
-  weeklyName:'CinéOpsy Weekly',weeklyDay:'Every Thursday',weeklyDesc:'Box office reports, industry news and upcoming releases — every Thursday.',
-  verdictName:'Verdict',verdictDay:'Every Friday',verdictDesc:'Deep, honest reviews of new releases. Watch it or Skip it.',
-  whatifName:'What If',whatifDay:'Alternate Sundays',whatifDesc:'Exploring alternate cinema universes.',
-  casefilesName:'Case Files',casefilesDay:'Alternate Sundays',casefilesDesc:'Medical diagnosis of movies. Every film is a patient.',
-  beyondbordersName:'Beyond Borders',beyondbordersDay:'Every 2 Tuesdays',beyondbordersDesc:'World cinema that never reached India — explained in English.',
-  specialsName:'CinéOpsy Specials',specialsDay:'Special Releases',specialsDesc:'Special videos, unique content & exclusive CinéOpsy productions.'};
+  homeStat1Num:'6',homeStat1Label:'Unique Series',
+  homeStat2Num:'3–4',homeStat2Label:'Videos / Week',
+  homeStat3Num:'100%',homeStat3Label:'Honest Reviews',
+  homeStat4Num:'∞',homeStat4Label:'Cinema Love',
+  homeNewsletterBoxTitle:'Subscribe to CinéOpsy',
+  homeNewsletterBoxSub:'Get notified when new reviews & episodes drop.',
+  homeNewsletterBtn:'Subscribe →',
+  newsHeroSub:'Latest from Bollywood, Hollywood, OTT & World Cinema',
+  newsTickerDefault:'🎬 CinéOpsy News — Latest from the world of cinema · Bollywood · Hollywood · OTT · World Cinema',
+  contactHeroSub:'Feel free to reach out for feedback, suggestions or collaborations.',
+  reviewsHeroSub:'Every film examined. Every verdict delivered.',
+  rrHeroSub:'Want us to cover a specific movie? Tell us!',
+  weeklyName:'CinéOpsy Weekly',weeklyDay:'Every Thursday',weeklyLabel:'Weekly News',weeklyDesc:'Box office reports, industry news and upcoming releases — every Thursday.',
+  verdictName:'Verdict',verdictDay:'Every Friday',verdictLabel:'Movie Reviews',verdictDesc:'Deep, honest reviews of new releases. Watch it or Skip it.',
+  whatifName:'What If',whatifDay:'Alternate Sundays',whatifLabel:'Alternate Timelines',whatifDesc:'Exploring alternate cinema universes — what if the story went differently?',
+  casefilesName:'Case Files',casefilesDay:'Alternate Sundays',casefilesLabel:'Medical Diagnosis',casefilesDesc:'Medical diagnosis of movies. Every film is a patient on our table.',
+  beyondbordersName:'Beyond Borders',beyondbordersDay:'Every 2 Tuesdays',beyondbordersLabel:'World Cinema',beyondbordersDesc:'World cinema that never reached India — explained in English.',
+  specialsName:'CinéOpsy Specials',specialsDay:'Special Releases',specialsLabel:'Special Content',specialsDesc:'Special videos, unique content & exclusive CinéOpsy productions.'
+};
 
 function buildCtFields(){
   const wrap=document.getElementById('plCtFields');if(!wrap)return;
-  wrap.innerHTML=PLS.map(pl=>'<div style="margin-bottom:12px;"><div style="font-size:9px;color:var(--gray);margin-bottom:6px;text-transform:uppercase;letter-spacing:2px;">'+PLN[pl]+'</div><div class="frow"><div class="f"><label>Name</label><input type="text" class="fi" id="ct-'+pl+'Name"></div><div class="f"><label>Day/Schedule</label><input type="text" class="fi" id="ct-'+pl+'Day"></div></div><div class="f"><label>Description</label><input type="text" class="fi" id="ct-'+pl+'Desc"></div></div>').join('');
+  wrap.innerHTML=PLS.map(pl=>'<div style="margin-bottom:12px;"><div style="font-size:9px;color:var(--gray);margin-bottom:6px;text-transform:uppercase;letter-spacing:2px;">'+PLN[pl]+'</div><div class="frow"><div class="f"><label>Name</label><input type="text" class="fi" id="ct-'+pl+'Name"></div><div class="f"><label>Day/Schedule</label><input type="text" class="fi" id="ct-'+pl+'Day"></div></div><div class="frow"><div class="f"><label>Label (e.g. Movie Reviews)</label><input type="text" class="fi" id="ct-'+pl+'Label"></div><div class="f"><label>Description</label><input type="text" class="fi" id="ct-'+pl+'Desc"></div></div></div>').join('');
 }
 async function loadContent(){
   Object.entries(CT_DEF).forEach(([k,v])=>{const e=document.getElementById('ct-'+k);if(e)e.value=v;});
