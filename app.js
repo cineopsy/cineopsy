@@ -7,11 +7,22 @@
 let db = null, firebaseReady = false;
 function initFirebase() {
   try {
+    if (typeof firebase === 'undefined') {
+      console.error('CinéOpsy: Firebase SDK not loaded!');
+      return;
+    }
+    if (typeof FIREBASE_CONFIG === 'undefined') {
+      console.error('CinéOpsy: FIREBASE_CONFIG not found!');
+      return;
+    }
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
     window.db = db;
     firebaseReady = true;
-  } catch(e) { console.warn('Firebase init error:', e.message); }
+    console.log('CinéOpsy: Firebase connected ✅');
+  } catch(e) { 
+    console.error('CinéOpsy: Firebase init error:', e.message);
+  }
 }
 
 // ── waitForDb — polls until window.db is ready, then resolves ──
