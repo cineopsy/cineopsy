@@ -1,542 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin Panel — CinéOpsy</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js" defer></script>
-<script src="firebase-config.js" defer></script>
-
+<title>CinéOpsy Admin</title>
+<meta name="robots" content="noindex,nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBLTSGGPYB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CBLTSGGPYB');</script>
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --red:#cc0000;--red-bright:#ff2222;
-  --black:#080808;--black2:#0f0f0f;--black3:#161616;--black4:#1e1e1e;
-  --white:#f0ece4;--gray:#888;
+  --bg:#0a0a0a;--bg2:#111;--bg3:#181818;--bg4:#222;
+  --text:#f0ece4;--gray:#888;--border:rgba(255,255,255,0.08);
+  --red:#cc0000;--green:#22c55e;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black);color:var(--white);font-family:'Crimson Pro',serif;min-height:100vh;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;}
 
 /* LOGIN */
-#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 50%,rgba(150,0,0,0.1) 0%,transparent 60%);}
-.login-box{background:var(--black3);border:1px solid rgba(204,0,0,0.25);padding:52px 44px;width:min(400px,92vw);text-align:center;}
-.login-title{font-family:'Cinzel',serif;font-size:30px;font-weight:900;letter-spacing:4px;margin-bottom:4px;}
-.login-title .o{color:var(--red);}
-.login-sub{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:36px;}
-.login-box input{width:100%;background:var(--black);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:14px 16px;font-family:'Crimson Pro',serif;font-size:16px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
-.login-box input:focus{border-color:var(--red);}
-.login-err{color:#ff4444;font-size:13px;margin-bottom:10px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;display:none;}
+#loginWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(204,0,0,0.08)0%,transparent 65%);}
+.lcard{width:min(400px,94vw);background:var(--bg2);border:1px solid rgba(204,0,0,0.25);padding:48px 40px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.llogo{font-family:Georgia,serif;font-size:28px;font-weight:700;letter-spacing:4px;margin-bottom:4px;}
+.llogo span{color:var(--red);}
+.lsub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:28px;}
+.linput{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:13px 16px;font-size:15px;outline:none;margin-bottom:10px;border-radius:4px;transition:border-color .2s;}
+.linput:focus{border-color:var(--red);}
+.lbtn{width:100%;background:var(--red);color:#fff;border:none;padding:14px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:4px;margin-top:4px;transition:opacity .2s;}
+.lbtn:hover{opacity:.88;}
+.lbtn:disabled{opacity:.5;cursor:not-allowed;}
+.lerr{color:#ff6b6b;font-size:13px;padding:10px 14px;background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.25);border-radius:4px;margin-bottom:12px;display:none;text-align:left;}
+.lsec{margin-top:14px;font-size:10px;color:#444;line-height:1.7;}
+
+/* LOCKOUT */
+#lockOverlay{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;}
+#lockOverlay.show{display:flex;}
+.lock-icon{font-size:56px;}
+.lock-title{color:#ff4444;font-size:20px;font-weight:700;}
+.lock-timer{color:var(--gray);font-size:14px;}
 
 /* ADMIN */
-#adminPanel{display:none;}#adminPanel.visible{display:block !important;}
-.admin-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,0.97);border-bottom:1px solid rgba(204,0,0,0.15);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
-.admin-brand{font-family:'Cinzel',serif;font-size:18px;font-weight:700;letter-spacing:3px;}
-.admin-brand .o{color:var(--red);}
-.admin-nav-right{display:flex;gap:10px;}
-.admin-wrap{max-width:1000px;margin:0 auto;padding:90px 24px 60px;}
+#adminWrap{display:none;}
+.topbar{position:sticky;top:0;z-index:99;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:12px 20px;flex-wrap:wrap;}
+.tlogo{font-family:Georgia,serif;font-size:17px;font-weight:700;letter-spacing:3px;}
+.tlogo span{color:var(--red);}
+.tbadge{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);background:var(--bg3);padding:3px 8px;border-radius:2px;}
+.tuser{font-size:11px;color:var(--green);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);padding:3px 10px;border-radius:20px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topbar-btns{margin-left:auto;display:flex;gap:8px;align-items:center;}
+.tbtn{padding:7px 14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:4px;cursor:pointer;border:none;transition:opacity .2s;}
+.tbtn:hover{opacity:.8;}
+.tbtn-o{background:transparent;border:1px solid var(--border);color:var(--gray);}
+.tbtn-r{background:var(--red);color:#fff;}
+.ttheme{background:none;border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:20px;cursor:pointer;font-size:15px;}
+.fbstat{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;}
+.fbstat.ok{background:rgba(34,197,94,.1);color:var(--green);}
+.fbstat.err{background:rgba(255,68,68,.1);color:#ff6b6b;}
+.fbdot{width:6px;height:6px;border-radius:50%;background:currentColor;}
 
 /* TABS */
-.tabs-wrap{display:flex;gap:0;flex-wrap:wrap;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.06);}
-.tab{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 18px;background:transparent;border:none;color:var(--gray);cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-1px;}
-.tab:hover{color:var(--white);}
-.tab.active{color:var(--white);border-bottom-color:var(--red);}
-.tab-pane{display:none;}.tab-pane.active{display:block;}
+.tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;background:var(--bg2);padding:0 20px;}
+.tabs::-webkit-scrollbar{height:3px;}
+.tabs::-webkit-scrollbar-track{background:var(--bg2);}
+.tabs::-webkit-scrollbar-thumb{background:var(--red);}
+.tab{padding:12px 16px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--red);border-bottom-color:var(--red);}
+
+/* CONTENT */
+.ac{padding:20px;max-width:1100px;margin:0 auto;}
+.pane{display:none;}
+.pane.active{display:block;}
 
 /* CARDS */
-.card{background:var(--black3);border:1px solid rgba(255,255,255,0.06);padding:28px;margin-bottom:20px;}
-.card-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(204,0,0,0.2);}
+.card{background:var(--bg2);border:1px solid var(--border);padding:22px;margin-bottom:18px;border-radius:6px;}
+.ctitle{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
 
 /* FORM */
-.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.fg label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);}
-.fg input,.fg textarea,.fg select{width:100%;background:var(--black);border:1px solid rgba(255,255,255,0.08);color:var(--white);padding:12px 14px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;resize:vertical;transition:border-color 0.2s;}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);}
-.fg textarea{min-height:100px;}
-.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.f{margin-bottom:12px;}
+.f label{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 12px;font-size:14px;outline:none;border-radius:4px;transition:border-color .2s;}
+.fi:focus{border-color:var(--red);}
+.fta{min-height:85px;resize:vertical;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:580px){.frow{grid-template-columns:1fr;}}
 
 /* BUTTONS */
-.btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-red{background:var(--red);color:#fff;}.btn-red:hover{background:var(--red-bright);}
-.btn-dark{background:var(--black4);color:var(--white);border:1px solid rgba(255,255,255,0.1);}.btn-dark:hover{border-color:var(--red);color:var(--red);}
-.btn-del{background:transparent;color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:7px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
-.btn-del:hover{background:#ff4444;color:#fff;}
-.btn-edit{background:transparent;color:var(--gray);border:1px solid rgba(255,255,255,0.1);padding:7px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
-.btn-edit:hover{border-color:var(--red);color:var(--red);}
+.btn{padding:9px 18px;font-size:10px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;border-radius:4px;transition:opacity .2s;}
+.btn:hover{opacity:.85;}
+.btn-r{background:var(--red);color:#fff;}
+.btn-g{background:var(--bg4);color:var(--gray);border:1px solid var(--border);}
 
 /* ALERTS */
-.alert{padding:12px 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:none;}
-.alert-success{background:rgba(0,120,0,0.15);border:1px solid rgba(0,200,0,0.25);color:#4eff4e;}
-.alert-error{background:rgba(200,0,0,0.15);border:1px solid rgba(255,68,68,0.3);color:#ff4444;}
-
-/* EPISODE LIST */
-.ep-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
-.ep-item{background:var(--black);border:1px solid rgba(255,255,255,0.06);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-.ep-item-title{font-family:'Cinzel',serif;font-size:14px;color:var(--white);margin-bottom:4px;}
-.ep-item-meta{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;color:var(--gray);}
-.ep-item-btns{display:flex;gap:8px;flex-shrink:0;}
+.al{padding:10px 14px;border-radius:4px;font-size:13px;margin-top:10px;display:none;}
+.al.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);}
+.al.err{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.25);color:#ff6b6b;}
 
 /* STATS */
-.stats-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:2px;margin-bottom:28px;}
-.stat-card{background:var(--black3);border:1px solid rgba(255,255,255,0.05);padding:20px;text-align:center;}
-.stat-card .num{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:var(--red);}
-.stat-card .lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:4px;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:18px;}
+.sbox{background:var(--bg3);border:1px solid var(--border);padding:16px;border-radius:6px;text-align:center;}
+.snum{font-size:26px;font-weight:700;color:var(--red);}
+.slbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:3px;}
 
-/* COLOR */
-.color-row{display:flex;align-items:center;gap:12px;}
-.color-preview{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;}
-.fg input[type="color"]{width:50px;height:38px;border:1px solid rgba(255,255,255,0.1);background:var(--black);cursor:pointer;padding:2px;}
+/* LIST ITEMS */
+.li{background:var(--bg3);border:1px solid var(--border);padding:12px 14px;border-radius:4px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.li-title{flex:1;font-size:14px;}
+.li-meta{font-size:11px;color:var(--gray);}
 
-/* SOCIAL GRID */
-.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* CONTENT SECTIONS */
+.csec{background:rgba(204,0,0,.04);border:1px solid rgba(204,0,0,.1);padding:15px;margin-bottom:12px;border-radius:4px;}
+.csec-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
 
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.modal-bg.open{display:flex;}
-.modal{background:var(--black3);border:1px solid rgba(204,0,0,0.2);width:min(700px,95vw);max-height:90vh;overflow-y:auto;padding:32px;}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
-.modal-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;}
-.modal-close{background:none;border:none;color:var(--gray);font-size:24px;cursor:pointer;line-height:1;}
-.modal-close:hover{color:var(--red);}
-
-/* FIREBASE SETUP BOX */
-.setup-box{background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.2);padding:24px;margin-bottom:20px;}
-.setup-box h3{font-family:'Cinzel',serif;font-size:15px;color:var(--white);margin-bottom:14px;}
-.setup-box ol{padding-left:20px;display:flex;flex-direction:column;gap:10px;font-size:15px;color:rgba(240,236,228,0.7);line-height:1.7;}
-.setup-box a{color:var(--red);text-decoration:none;}
-.setup-box strong{color:var(--white);}
-
-@media(max-width:600px){
-  .fg-row,.social-grid{grid-template-columns:1fr;}
-  .ep-item{flex-direction:column;align-items:flex-start;}
-  .admin-nav{padding:12px 16px;}
-  .admin-wrap{padding:80px 14px 40px;}
-}
-
-.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:3px;text-decoration:none;}
-.nav-logo .cine{color:#f0ece4;}.nav-logo .opsy{color:#cc0000;}
-
-
-/* Admin Dark/Light Mode */
-:root { --adm-bg:#0d0d0d; --adm-card:#161616; --adm-border:rgba(255,255,255,0.08); --adm-text:#f0ece4; --adm-gray:rgba(240,236,228,0.5); }
-:root.light { --adm-bg:#f0f0eb; --adm-card:#e8e8e4; --adm-border:rgba(0,0,0,0.1); --adm-text:#111111; --adm-gray:rgba(20,20,20,0.5); }
-body { background:var(--adm-bg) !important; color:var(--adm-text) !important; }
-.admin-wrap, .card { background:var(--adm-card) !important; border-color:var(--adm-border) !important; }
-.field-input, input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="date"], textarea, select { background:var(--adm-bg) !important; border-color:var(--adm-border) !important; color:var(--adm-text) !important; }
-label, .field-label, .lbl { color:var(--adm-gray) !important; }
-.stat-card { background:var(--adm-card) !important; border-color:var(--adm-border) !important; }
-.tab { color:var(--adm-gray) !important; border-bottom-color:var(--adm-border) !important; }
-.tab.active, .tab:hover { color:var(--adm-text) !important; }
-.ep-item { background:var(--adm-card) !important; border-color:var(--adm-border) !important; }
-.ep-title-text, .ep-date-text { color:var(--adm-text) !important; }
-.login-box { background:var(--adm-card) !important; }
-.login-box input { background:var(--adm-bg) !important; color:var(--adm-text) !important; }
-.tabs-wrap { border-bottom-color:var(--adm-border) !important; background:var(--adm-card) !important; }
-:root.light .admin-header { background:rgba(240,240,235,0.97) !important; border-bottom:1px solid rgba(0,0,0,0.08) !important; }
-:root.light .num { color:#cc0000 !important; }
-:root.light small { color:rgba(20,20,20,0.45) !important; }
-
+/* LIGHT MODE */
+:root.light{--bg:#f5f5f0;--bg2:#ebebeb;--bg3:#e0e0db;--bg4:#d5d5d0;--text:#111111;--gray:rgba(20,20,20,.5);--border:rgba(0,0,0,.1);}
+:root.light .tabs,:root.light .topbar{background:var(--bg2);}
+:root.light .fi{background:var(--bg);color:#111;}
+:root.light select.fi{background:var(--bg);}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
-  <div class="login-box">
-    <div class="login-title">CINE<span class="o">OPSY</span></div>
-    <div class="login-sub">Admin Panel</div>
-    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
-    <div class="login-err" id="loginErr" style="display:none">❌ Wrong password. Try again.</div>
-    <button class="btn btn-red" onclick="login()" style="width:100%">Login →</button>
+<div id="loginWrap">
+  <div class="lcard">
+    <div class="llogo">CINE<span>OPSY</span></div>
+    <div class="lsub">Admin Panel</div>
+    <div class="lerr" id="lerr"></div>
+    <input type="email" class="linput" id="lemail" placeholder="Admin email" autocomplete="email">
+    <input type="password" class="linput" id="lpw" placeholder="Password" autocomplete="current-password">
+    <button class="lbtn" id="lbtn" onclick="doLogin()">LOGIN →</button>
+    <div class="lsec">
+      🔒 Secured by Firebase Authentication<br>
+      5 attempts max &nbsp;·&nbsp; 15 min lockout &nbsp;·&nbsp; 8 hr session
+    </div>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel">
+<div id="lockOverlay">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-title">Too many failed attempts!</div>
+  <div class="lock-timer" id="lockTimer">Please wait...</div>
+  <div style="color:#444;font-size:12px;">Account protection active</div>
+</div>
 
-  <div class="admin-nav">
-    <div class="admin-brand">CINE<span class="o">OPSY</span> <span style="font-size:11px;color:var(--gray);letter-spacing:2px;font-family:'Barlow Condensed',sans-serif;">ADMIN</span></div>
-    <div class="admin-nav-right">
-      <a href="index.html" target="_blank" class="btn btn-dark">View Site ↗</a>
-      <button class="btn btn-dark" onclick="logout()">Logout</button>
+<div id="adminWrap">
+  <div class="topbar">
+    <div class="tlogo">CINE<span>OPSY</span></div>
+    <div class="tbadge">Admin</div>
+    <span id="fbstat" class="fbstat err"><span class="fbdot"></span>Connecting...</span>
+    <span id="userEmail" class="tuser"></span>
+    <div class="topbar-btns">
+      <button class="ttheme" id="themeBtn" onclick="toggleTheme()">🌙</button>
+      <a href="index.html" target="_blank" class="tbtn tbtn-o">View Site ↗</a>
+      <button class="tbtn tbtn-r" onclick="doLogout()">Logout</button>
     </div>
   </div>
 
-  <div class="admin-wrap">
+  <div class="tabs" id="tabsBar">
+    <button class="tab active" data-tab="dash">📊 Dashboard</button>
+    <button class="tab" data-tab="episodes">🎬 Episodes</button>
+    <button class="tab" data-tab="news">📰 News</button>
+    <button class="tab" data-tab="polls">🗳️ Polls</button>
+    <button class="tab" data-tab="comments">💬 Comments</button>
+    <button class="tab" data-tab="newsletter">📧 Newsletter</button>
+    <button class="tab" data-tab="requests">🎯 Requests</button>
+    <button class="tab" data-tab="content">📝 Content</button>
+    <button class="tab" data-tab="about">ℹ️ About</button>
+    <button class="tab" data-tab="settings">⚙️ Settings</button>
+  </div>
 
-    <!-- Firebase status banner -->
-    <div id="firebaseBanner" style="display:none;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.3);padding:14px 18px;margin-bottom:20px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffaa00;">
-      ⚠️ Firebase not connected — using local storage. Go to Settings tab to configure Firebase.
-    </div>
+  <div class="ac">
 
-    <!-- Stats -->
-    <div class="stats-overview">
-      <div class="stat-card"><div class="num" id="s0">0</div><div class="lbl">Weekly</div></div>
-      <div class="stat-card"><div class="num" id="s1">0</div><div class="lbl">Verdict</div></div>
-      <div class="stat-card"><div class="num" id="s2">0</div><div class="lbl">What If</div></div>
-      <div class="stat-card"><div class="num" id="s3">0</div><div class="lbl">Case Files</div></div>
-      <div class="stat-card"><div class="num" id="s4">0</div><div class="lbl">Beyond Borders</div></div>
-      <div class="stat-card"><div class="num" id="s5">0</div><div class="lbl">Specials</div></div>
-    </div>
-
-    <!-- TABS -->
-    <div class="tabs-wrap">
-      <button class="tab active" onclick="switchTab(event,'episodes')">🎬 Episodes</button>
-      <button class="tab" onclick="switchTab(event,'sitetext')">✏️ Site Text</button>
-      <button class="tab" onclick="switchTab(event,'social')">📱 Social</button>
-      <button class="tab" onclick="switchTab(event,'theme')">🎨 Theme</button>
-      <button class="tab" onclick="switchTab(event,'settings')">⚙️ Settings</button>
-      <button class="tab" onclick="switchTab(event,'news')">📰 News</button>
-      <button class="tab" onclick="switchTab(event,'comments')">💬 Comments</button>
-      <button class="tab" onclick="switchTab(event,'polls')">🗳️ Polls</button>
-      <button class="tab" onclick="switchTab(event,'newsletter')">📧 Newsletter</button>
-      <button class="tab" onclick="switchTab(event,'pinned')">📌 Pinned</button>
-      <button class="tab" onclick="switchTab(event,'push')">🔔 Push</button>
-      <button class="tab" onclick="switchTab(event,'manage')">⚙️ Manage</button>
-      <button class="tab" onclick="switchTab(event,'about')">ℹ️ About</button>
-      <button class="tab" onclick="switchTab(event,'content')">📝 Content</button>
-      <button class="tab" onclick="switchTab(event,'requests')">🎬 Requests</button>
-    </div>
-
-    <!-- ═══════════════════════ -->
-    <!-- EPISODES TAB           -->
-    <!-- ═══════════════════════ -->
-    <div class="tab-pane active" id="tab-episodes">
-
+    <!-- DASHBOARD -->
+    <div class="pane active" id="pane-dash">
+      <div class="sgrid">
+        <div class="sbox"><div class="snum" id="st-ep">–</div><div class="slbl">Episodes</div></div>
+        <div class="sbox"><div class="snum" id="st-news">–</div><div class="slbl">News</div></div>
+        <div class="sbox"><div class="snum" id="st-com">–</div><div class="slbl">Comments</div></div>
+        <div class="sbox"><div class="snum" id="st-nl">–</div><div class="slbl">Subscribers</div></div>
+        <div class="sbox"><div class="snum" id="st-req">–</div><div class="slbl">Requests</div></div>
+        <div class="sbox"><div class="snum" id="st-poll">–</div><div class="slbl">Polls</div></div>
+      </div>
       <div class="card">
-        <div class="card-title">➕ Add New Episode</div>
-        <div class="alert alert-success" id="epSuccess">✓ Episode added successfully!</div>
-        <div class="alert alert-error" id="epError">❌ Error. Please try again.</div>
-
-        <div class="fg">
-          <label>Playlist *</label>
-          <select id="addPlaylist" onchange="updateInfoFields()">
-            <option value="weekly">📰 CinéOpsy Weekly</option>
-            <option value="verdict">🔬 Verdict</option>
-            <option value="whatif">🤔 What If</option>
-            <option value="casefiles">🩺 Case Files</option>
-            <option value="beyondborders">🌍 Beyond Borders</option>
-            <option value="specials">🎞️ CinéOpsy Specials</option>
-          </select>
-        </div>
-
-        <div class="fg-row">
-          <div class="fg"><label>Title *</label><input type="text" id="addTitle" placeholder="Episode title"></div>
-          <div class="fg"><label>Date</label><input type="date" id="addDate"></div>
-        </div>
-
-        <div class="fg">
-          <label>YouTube Link (optional — add later)</label>
-          <input type="text" id="addYoutube" placeholder="https://youtube.com/watch?v=...">
-        </div>
-
-        <div class="fg">
-          <label>Short Description</label>
-          <textarea id="addExcerpt" placeholder="Brief description shown in news list..." style="min-height:70px"></textarea>
-        </div>
-
-        <div id="infoFieldsWrap" style="margin-bottom:14px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px">Playlist-Specific Fields</div>
-          <div class="fg-row" id="infoFields"></div>
-        </div>
-
-        <div class="fg">
-          <label>Full Content / Analysis</label>
-          <div id="biopsyScoreField" style="display:none;margin-bottom:14px">
-            <label style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;display:block;margin-bottom:6px">BIOPSY SCORE (1-10) — Verdict Only</label>
-            <input type="number" id="addBiopsyScore" min="1" max="10" step="0.1" placeholder="e.g. 7.5" style="width:100%;background:#1a1a1a;border:1px solid #333;color:#f0ece4;padding:10px;font-size:15px;border-radius:4px;">
-          </div>
-          <div style="margin-bottom:14px">
-            <label style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;display:block;margin-bottom:6px">STREAMING PLATFORMS (comma separated)</label>
-            <input type="text" id="addStreaming" placeholder="Netflix, Prime Video, Theatres, YouTube" style="width:100%;background:#1a1a1a;border:1px solid #333;color:#f0ece4;padding:10px;font-size:15px;border-radius:4px;">
-          </div>
-          <textarea id="addContent" placeholder="Full description, news, analysis...&#10;&#10;New line = new paragraph." style="min-height:180px"></textarea>
-        </div>
-
-        <button class="btn btn-red" onclick="addEpisode()">Add Episode →</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📋 Manage Episodes</div>
-        <div class="fg">
-          <label>Select Playlist</label>
-          <select id="managePlaylist" onchange="loadEpisodeList()">
-            <option value="weekly">📰 CinéOpsy Weekly</option>
-            <option value="verdict">🔬 Verdict</option>
-            <option value="whatif">🤔 What If</option>
-            <option value="casefiles">🩺 Case Files</option>
-            <option value="beyondborders">🌍 Beyond Borders</option>
-            <option value="specials">🎞️ CinéOpsy Specials</option>
-          </select>
-        </div>
-        <div class="ep-list" id="episodeList">
-          <p style="color:var(--gray);font-style:italic;font-size:15px">Loading...</p>
+        <div class="ctitle">Quick Actions</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-r" onclick="showTab('episodes')">+ Add Episode</button>
+          <button class="btn btn-r" onclick="showTab('news')">+ Add News</button>
+          <button class="btn btn-r" onclick="showTab('polls')">+ Create Poll</button>
+          <button class="btn btn-g" onclick="loadDash()">↻ Refresh</button>
         </div>
       </div>
     </div>
 
-    <!-- ═══════════════════════ -->
-    <!-- SITE TEXT TAB          -->
-    <!-- ═══════════════════════ -->
-    <div class="tab-pane" id="tab-sitetext">
+    <!-- EPISODES -->
+    <div class="pane" id="pane-episodes">
       <div class="card">
-        <div class="card-title">🏠 Homepage Text</div>
-        <div class="alert alert-success" id="siteTextSuccess">✓ Saved!</div>
-        <div class="fg"><label>Hero Tagline</label><input type="text" id="st_tagline" placeholder="Where Cinema Meets Biopsy"></div>
-        <div class="fg"><label>About Heading</label><input type="text" id="st_aboutHeading" placeholder="We Don't Just Watch Films."></div>
-        <div class="fg"><label>About Paragraph 1</label><textarea id="st_aboutP1"></textarea></div>
-        <div class="fg"><label>About Paragraph 2</label><textarea id="st_aboutP2"></textarea></div>
-
-        <div style="margin:20px 0 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);">Homepage Stats</div>
-        <div class="fg-row">
-          <div class="fg"><label>Stat 1 Number</label><input type="text" id="st_s1n" placeholder="5"></div>
-          <div class="fg"><label>Stat 1 Label</label><input type="text" id="st_s1l" placeholder="Unique Series"></div>
-        </div>
-        <div class="fg-row">
-          <div class="fg"><label>Stat 2 Number</label><input type="text" id="st_s2n" placeholder="3–4"></div>
-          <div class="fg"><label>Stat 2 Label</label><input type="text" id="st_s2l" placeholder="Videos / Week"></div>
-        </div>
-        <div class="fg-row">
-          <div class="fg"><label>Stat 3 Number</label><input type="text" id="st_s3n" placeholder="100%"></div>
-          <div class="fg"><label>Stat 3 Label</label><input type="text" id="st_s3l" placeholder="Honest Reviews"></div>
-        </div>
-        <div class="fg-row">
-          <div class="fg"><label>Stat 4 Number</label><input type="text" id="st_s4n" placeholder="∞"></div>
-          <div class="fg"><label>Stat 4 Label</label><input type="text" id="st_s4l" placeholder="Cinema Love"></div>
-        </div>
-
-        <div style="margin:20px 0 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);">Footer & Other</div>
-        <div class="fg"><label>Footer Copyright</label><input type="text" id="st_footer" placeholder="© 2026 CinéOpsy. All rights reserved."></div>
-        <button class="btn btn-red" onclick="saveSiteText()">Save All Text →</button>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════ -->
-    <!-- SOCIAL TAB             -->
-    <!-- ═══════════════════════ -->
-    <div class="tab-pane" id="tab-social">
-      <div class="card">
-        <div class="card-title">📱 Social Media Links</div>
-        <div class="alert alert-success" id="socialSuccess">✓ Links saved!</div>
-        <div class="social-grid">
-          <div class="fg"><label>▶️ YouTube</label><input type="text" id="sl_youtube" placeholder="https://youtube.com/@Cineopsy"></div>
-          <div class="fg"><label>📸 Instagram</label><input type="text" id="sl_instagram" placeholder="https://instagram.com/cineopsy"></div>
-          <div class="fg"><label>🐦 X / Twitter</label><input type="text" id="sl_twitter" placeholder="https://x.com/cineopsy"></div>
-          <div class="fg"><label>🧵 Threads</label><input type="text" id="sl_threads" placeholder="https://threads.net/@cineopsy"></div>
-          <div class="fg"><label>👾 Reddit</label><input type="text" id="sl_reddit" placeholder="https://reddit.com/u/cineopsy"></div>
-          <div class="fg"><label>✈️ Telegram</label><input type="text" id="sl_telegram" placeholder="https://t.me/cineopsy"></div>
-          <div class="fg"><label>💬 WhatsApp Channel</label><input type="text" id="sl_whatsapp" placeholder="https://whatsapp.com/channel/..."></div>
-        </div>
-        <button class="btn btn-red" onclick="saveSocialLinks()">Save Links →</button>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════ -->
-    <!-- THEME TAB              -->
-    <!-- ═══════════════════════ -->
-    <div class="tab-pane" id="tab-theme">
-      <div class="card">
-        <div class="card-title">🎨 Color Theme</div>
-        <div class="alert alert-success" id="themeSuccess">✓ Theme saved!</div>
-        <div class="fg-row">
-          <div class="fg">
-            <label>Primary Red</label>
-            <div class="color-row">
-              <input type="color" id="th_red" value="#cc0000" oninput="syncColor('th_red')">
-              <div class="color-preview" id="prev_red" style="background:#cc0000"></div>
-              <input type="text" id="th_red_hex" value="#cc0000" style="flex:1" oninput="syncHex('th_red')">
-            </div>
-          </div>
-          <div class="fg">
-            <label>Background</label>
-            <div class="color-row">
-              <input type="color" id="th_bg" value="#080808" oninput="syncColor('th_bg')">
-              <div class="color-preview" id="prev_bg" style="background:#080808"></div>
-              <input type="text" id="th_bg_hex" value="#080808" style="flex:1" oninput="syncHex('th_bg')">
-            </div>
-          </div>
-        </div>
-        <div class="fg-row">
-          <div class="fg">
-            <label>Text Color</label>
-            <div class="color-row">
-              <input type="color" id="th_text" value="#f0ece4" oninput="syncColor('th_text')">
-              <div class="color-preview" id="prev_text" style="background:#f0ece4"></div>
-              <input type="text" id="th_text_hex" value="#f0ece4" style="flex:1" oninput="syncHex('th_text')">
-            </div>
-          </div>
-          <div class="fg">
-            <label>Card Background</label>
-            <div class="color-row">
-              <input type="color" id="th_card" value="#161616" oninput="syncColor('th_card')">
-              <div class="color-preview" id="prev_card" style="background:#161616"></div>
-              <input type="text" id="th_card_hex" value="#161616" style="flex:1" oninput="syncHex('th_card')">
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;margin-top:8px">
-          <button class="btn btn-red" onclick="saveTheme()">Save Theme →</button>
-          <button class="btn btn-dark" onclick="resetTheme()">Reset Default</button>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ═══════════════════════ -->
-    <!-- NEWS TAB               -->
-    <!-- ═══════════════════════ -->
-    <div class="tab-pane" id="tab-news">
-      <div class="card">
-        <h3 class="card-title">📰 Publish News Article</h3>
-        <div class="form-row">
-          <div class="form-col">
-            <label class="field-label">HEADLINE *</label>
-            <input type="text" id="newsTitle" placeholder="News headline..." class="field-input">
-          </div>
-          <div class="form-col">
-            <label class="field-label">CATEGORY *</label>
-            <select id="newsCat" class="field-input">
-              <option value="Bollywood">Bollywood</option>
-              <option value="Hollywood">Hollywood</option>
-              <option value="OTT">OTT</option>
-              <option value="South Cinema">South Cinema</option>
-              <option value="World Cinema">World Cinema</option>
-              <option value="Box Office">Box Office</option>
-              <option value="Cinema">Cinema (General)</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-col">
-            <label class="field-label">DATE</label>
-            <input type="date" id="newsDate" class="field-input">
-          </div>
-          <div class="form-col">
-            <label class="field-label">AUTHOR</label>
-            <input type="text" id="newsAuthor" placeholder="By CinéOpsy" class="field-input">
-          </div>
-        </div>
-        <label class="field-label">COVER IMAGE URL</label>
-        <input type="text" id="newsCover" placeholder="https://i.ibb.co/xxxx/photo.jpg" class="field-input">
-        <small style="color:#555;font-size:11px;display:block;margin-top:4px;margin-bottom:12px">Free image upload: imgbb.com ya postimages.org</small>
-
-        <label class="field-label">SHORT DESCRIPTION (list mein dikhegi)</label>
-        <textarea id="newsExcerpt" placeholder="1-2 line summary..." rows="2" class="field-input" style="resize:vertical"></textarea>
-
-        <label class="field-label" style="margin-top:12px">FULL NEWS CONTENT *</label>
-        <small style="color:#555;font-size:11px;display:block;margin-bottom:6px">To add photos in between content, type [IMG0] [IMG1] etc. where you want the image</small>
-        <textarea id="newsContent" placeholder="Write full news content here...&#10;&#10;[IMG0]&#10;&#10;Continue writing..." rows="10" class="field-input" style="font-family:monospace;resize:vertical"></textarea>
-
-        <label class="field-label" style="margin-top:12px">INLINE IMAGES</label>
-        <small style="color:#555;font-size:11px;display:block;margin-bottom:8px">Add image URLs below for [IMG0], [IMG1], [IMG2] placeholders in content</small>
-        <div style="display:flex;gap:8px;margin-bottom:8px">
-          <input type="text" id="img0url" placeholder="[IMG0] Image URL" class="field-input" style="flex:2">
-          <input type="text" id="img0cap" placeholder="Caption" class="field-input" style="flex:1">
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:8px">
-          <input type="text" id="img1url" placeholder="[IMG1] Image URL" class="field-input" style="flex:2">
-          <input type="text" id="img1cap" placeholder="Caption" class="field-input" style="flex:1">
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:12px">
-          <input type="text" id="img2url" placeholder="[IMG2] Image URL" class="field-input" style="flex:2">
-          <input type="text" id="img2cap" placeholder="Caption" class="field-input" style="flex:1">
-        </div>
-
-        <label class="field-label">TAGS (comma separated)</label>
-        <input type="text" id="newsTags" placeholder="Bollywood, SRK, Netflix, OTT" class="field-input">
-
-        <button onclick="addNews()" class="btn-save" style="margin-top:16px;width:100%">📰 PUBLISH NEWS →</button>
-        <div id="newsMsg" style="margin-top:10px;font-size:14px;text-align:center"></div>
-      </div>
-
-      <div class="card" style="margin-top:20px">
-        <h3 class="card-title">📋 Published News</h3>
-        <div id="newsList"><p style="color:#555;font-style:italic">Loading...</p></div>
-      </div>
-    </div>
-
-
-    <!-- ═══ COMMENTS TAB ═══ -->
-    <div class="tab-pane" id="tab-comments">
-      <div class="card">
-        <h3 class="card-title">💬 All Comments — Full Control</h3>
-        <div class="form-row" style="margin-bottom:16px">
-          <div class="form-col">
-            <label class="field-label">Filter by Type</label>
-            <select id="commentFilterType" class="field-input" onchange="loadAllComments()">
-              <option value="all">All Types</option>
-              <option value="episode">Episodes</option>
-              <option value="news">News</option>
-            </select>
-          </div>
-          <div class="form-col">
-            <label class="field-label">Filter by Playlist</label>
-            <select id="commentFilterPl" class="field-input" onchange="loadAllComments()">
-              <option value="all">All Playlists</option>
-              <option value="weekly">Weekly</option>
-              <option value="verdict">Verdict</option>
-              <option value="whatif">What If</option>
-              <option value="casefiles">Case Files</option>
-              <option value="beyondborders">Beyond Borders</option>
-              <option value="specials">Specials</option>
-            </select>
-          </div>
-        </div>
-        <div id="adminCommentsList"><p style="color:#555;font-style:italic">Loading comments...</p></div>
-      </div>
-    </div>
-
-    <!-- ═══ POLLS TAB ═══ -->
-    <div class="tab-pane" id="tab-polls">
-      <div class="card">
-        <h3 class="card-title">🗳️ Create New Poll</h3>
-        <label class="field-label">POLL QUESTION *</label>
-        <input type="text" id="pollQuestion" class="field-input" placeholder="What is the best Bollywood film of 2026?">
-        <label class="field-label" style="margin-top:12px">OPTIONS (one per line, min 2) *</label>
-        <textarea id="pollOptions" class="field-input" rows="5" placeholder="Pathaan&#10;Jawan&#10;Dunki&#10;Animal" style="resize:vertical"></textarea>
-        <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
-          <label class="field-label" style="margin:0">Active Poll</label>
-          <input type="checkbox" id="pollActive" checked style="width:20px;height:20px;accent-color:#cc0000">
-        </div>
-        <button onclick="createPoll()" class="btn-save" style="margin-top:16px;width:100%">🗳️ CREATE POLL →</button>
-        <div id="pollMsg" style="margin-top:10px;font-size:14px;text-align:center"></div>
-      </div>
-      <div class="card" style="margin-top:20px">
-        <h3 class="card-title">📊 Manage Polls</h3>
-        <div id="pollsList"><p style="color:#555;font-style:italic">Loading polls...</p></div>
-      </div>
-    </div>
-
-    <!-- ═══ NEWSLETTER TAB ═══ -->
-    <div class="tab-pane" id="tab-newsletter">
-      <div class="card">
-        <h3 class="card-title">📧 Newsletter Subscribers</h3>
-        <div id="newsletterStats" style="display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap">
-          <div class="stat-card"><div class="num" id="nlTotal">0</div><div class="lbl">Total Subscribers</div></div>
-          <div class="stat-card"><div class="num" id="nlActive">0</div><div class="lbl">Active</div></div>
-        </div>
-        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-          <button onclick="exportNewsletter()" class="btn-save" style="flex:1">📥 Export CSV</button>
-          <button onclick="loadNewsletterList()" class="btn-save" style="flex:1;background:#333">🔄 Refresh</button>
-        </div>
-        <div id="newsletterList"><p style="color:#555;font-style:italic">Loading subscribers...</p></div>
-      </div>
-    </div>
-
-    <!-- ═══ PINNED TAB ═══ -->
-    <div class="tab-pane" id="tab-pinned">
-      <div class="card">
-        <h3 class="card-title">📌 Pin Episode to Homepage</h3>
-        <p style="color:#888;font-size:13px;margin-bottom:16px">Pinned episodes appear as "Featured" on homepage.</p>
-        <div class="form-row">
-          <div class="form-col">
-            <label class="field-label">PLAYLIST</label>
-            <select id="pinPlaylist" class="field-input" onchange="loadPinEpisodes()">
+        <div class="ctitle">Add Episode</div>
+        <div class="frow">
+          <div class="f"><label>Playlist</label>
+            <select class="fi" id="epPl" onchange="onPlChange()">
               <option value="weekly">📰 Weekly</option>
               <option value="verdict">🔬 Verdict</option>
               <option value="whatif">🤔 What If</option>
@@ -545,1772 +203,783 @@ label, .field-label, .lbl { color:var(--adm-gray) !important; }
               <option value="specials">🎞️ Specials</option>
             </select>
           </div>
-          <div class="form-col">
-            <label class="field-label">EPISODE</label>
-            <select id="pinEpisode" class="field-input">
-              <option value="">Select playlist first...</option>
+          <div class="f"><label>Date</label><input type="date" class="fi" id="epDate"></div>
+        </div>
+        <div class="f"><label>Title *</label><input type="text" class="fi" id="epTitle" placeholder="Episode title..."></div>
+        <div class="f"><label>YouTube URL</label><input type="text" class="fi" id="epYT" placeholder="https://youtube.com/watch?v=..."></div>
+        <div class="f"><label>Short Excerpt</label><input type="text" class="fi" id="epExc" placeholder="Brief description..."></div>
+        <div class="f"><label>Full Description</label><textarea class="fi fta" id="epContent" placeholder="Full description..."></textarea></div>
+        <div id="verdictF" style="display:none;">
+          <div style="height:1px;background:var(--border);margin:14px 0;"></div>
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;">Verdict Fields</div>
+          <div class="frow">
+            <div class="f"><label>Biopsy Score (1-10)</label><input type="number" class="fi" id="epScore" min="1" max="10" step="0.1" placeholder="8.5"></div>
+            <div class="f"><label>Streaming</label>
+              <select class="fi" id="epStream">
+                <option value="">Select...</option>
+                <option>Theatres</option><option>Netflix</option><option>Prime</option>
+                <option>Hotstar</option><option>Zee5</option><option>SonyLiv</option><option>YouTube</option>
+              </select>
+            </div>
+          </div>
+          <div class="f"><label>Verdict</label>
+            <select class="fi" id="epVerdict">
+              <option value="">Select...</option>
+              <option>Must Watch</option><option>Watch It</option>
+              <option>Proceed with Caution</option><option>Skip It</option>
             </select>
           </div>
         </div>
-        <button onclick="pinEpisode()" class="btn-save" style="margin-top:12px;width:100%">📌 PIN TO HOMEPAGE →</button>
-        <div id="pinMsg" style="margin-top:10px;font-size:14px;text-align:center"></div>
-      </div>
-      <div class="card" style="margin-top:20px">
-        <h3 class="card-title">Currently Pinned</h3>
-        <div id="pinnedList"><p style="color:#555;font-style:italic">Loading...</p></div>
-      </div>
-    </div>
-
-    <!-- ═══ PUSH NOTIFICATIONS TAB ═══ -->
-    <div class="tab-pane" id="tab-push">
-      <div class="card">
-        <h3 class="card-title">🔔 Send Push Notification</h3>
-        <p style="color:#888;font-size:13px;margin-bottom:20px">Visitors who have allowed notifications will receive this.</p>
-        <label class="field-label">NOTIFICATION TITLE *</label>
-        <input type="text" id="pushTitle" class="field-input" placeholder="New Video: What If Thanos Won?">
-        <label class="field-label" style="margin-top:12px">MESSAGE BODY *</label>
-        <textarea id="pushBody" class="field-input" rows="3" placeholder="Watch our latest analysis..." style="resize:vertical"></textarea>
-        <label class="field-label" style="margin-top:12px">LINK URL</label>
-        <input type="text" id="pushUrl" class="field-input" placeholder="https://cineopsy.netlify.app/whatif_ep.html?id=...">
-        <button onclick="sendPushNotification()" class="btn-save" style="margin-top:16px;width:100%">🔔 SEND NOTIFICATION →</button>
-        <div id="pushMsg" style="margin-top:10px;font-size:14px;text-align:center"></div>
-        <div style="margin-top:24px;padding:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
-          <p style="font-size:13px;color:#888;line-height:1.6">
-            Note: Push notifications work for visitors who have clicked "Allow" when prompted. 
-            Notifications are saved in Firebase and displayed when users visit the site.
-          </p>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <button class="btn btn-r" onclick="addEp()">Save Episode →</button>
+          <button class="btn btn-g" onclick="clearEpForm()">Clear</button>
         </div>
+        <div class="al ok" id="epOk">✅ Episode saved!</div>
+        <div class="al err" id="epErr"></div>
       </div>
-      <div class="card" style="margin-top:20px">
-        <h3 class="card-title">Notification History</h3>
-        <div id="pushHistory"><p style="color:#555;font-style:italic">Loading...</p></div>
-      </div>
-    </div>
-
-
-    <!-- ═══ REVIEW REQUESTS TAB ═══ -->
-    <div class="tab-pane" id="tab-requests">
       <div class="card">
-        <h3 class="card-title">🎬 Movie Review Requests</h3>
-        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-          <select id="reqStatusFilter" class="field-input" style="max-width:180px" onchange="loadReviewRequests()">
-            <option value="all">All Requests</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="done">Reviewed</option>
-            <option value="rejected">Rejected</option>
+        <div class="ctitle">Manage Episodes</div>
+        <div class="f"><label>Playlist</label>
+          <select class="fi" id="mgPl" onchange="loadEpList()" style="max-width:220px;">
+            <option value="weekly">Weekly</option><option value="verdict">Verdict</option>
+            <option value="whatif">What If</option><option value="casefiles">Case Files</option>
+            <option value="beyondborders">Beyond Borders</option><option value="specials">Specials</option>
           </select>
-          <button onclick="loadReviewRequests()" class="btn-save" style="background:#333">🔄 Refresh</button>
         </div>
-        <div id="reqStats" style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap"></div>
-        <div id="reviewRequestsList"><p style="color:#555;font-style:italic">Loading requests...</p></div>
+        <div id="epList"><p style="color:var(--gray);">Select playlist above...</p></div>
       </div>
     </div>
 
-
-    <!-- MANAGE TAB -->
-    <div class="tab-pane" id="tab-manage">
+    <!-- NEWS -->
+    <div class="pane" id="pane-news">
       <div class="card">
-        <h3 class="card-title">⚙️ Site Management</h3>
-
-        <!-- Homepage Featured Video -->
-        <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--adm-border)">
-          <div class="section-label" style="font-size:11px;margin-bottom:10px">🎬 HOMEPAGE FEATURED VIDEO</div>
-          <small style="color:var(--adm-gray);display:block;margin-bottom:10px">YouTube video ID or full URL shown as featured content on homepage</small>
-          <input type="text" id="mgFeaturedVideo" class="field-input" placeholder="YouTube video ID or URL (e.g. F5Ck7d9PMG0)">
-          <input type="text" id="mgFeaturedTitle" class="field-input" placeholder="Video title shown on homepage" style="margin-top:8px">
-          <button onclick="saveFeaturedVideo()" class="btn-save" style="margin-top:8px">Save Featured Video →</button>
-          <div id="featuredVideoMsg" style="margin-top:8px;font-size:13px"></div>
-        </div>
-
-        <!-- About Page Content -->
-        <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--adm-border)">
-          <div class="section-label" style="font-size:11px;margin-bottom:10px">👤 CREATOR BIO (About Page)</div>
-          <input type="text" id="mgCreatorName" class="field-input" placeholder="Creator name">
-          <textarea id="mgCreatorBio" class="field-input" rows="4" placeholder="Creator bio text..." style="margin-top:8px;resize:vertical"></textarea>
-          <button onclick="saveCreatorBio()" class="btn-save" style="margin-top:8px">Save Bio →</button>
-          <div id="creatorBioMsg" style="margin-top:8px;font-size:13px"></div>
-        </div>
-
-        <!-- Announcement Banner -->
-        <div style="margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--adm-border)">
-          <div class="section-label" style="font-size:11px;margin-bottom:10px">📢 ANNOUNCEMENT BANNER</div>
-          <small style="color:var(--adm-gray);display:block;margin-bottom:10px">Shows a dismissible banner at top of website</small>
-          <input type="text" id="mgAnnouncement" class="field-input" placeholder="e.g. 🎬 New episode out now! Watch our What If: Endgame analysis">
-          <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
-            <label class="field-label" style="margin:0">Active</label>
-            <input type="checkbox" id="mgAnnouncementActive" style="width:18px;height:18px;accent-color:#cc0000">
+        <div class="ctitle">Add News Article</div>
+        <div class="frow">
+          <div class="f"><label>Category</label>
+            <select class="fi" id="nCat">
+              <option>Bollywood</option><option>Hollywood</option><option>OTT</option>
+              <option>South Cinema</option><option>World Cinema</option><option>Box Office</option>
+            </select>
           </div>
-          <button onclick="saveAnnouncement()" class="btn-save" style="margin-top:8px">Save Announcement →</button>
-          <div id="announcementMsg" style="margin-top:8px;font-size:13px"></div>
+          <div class="f"><label>Date</label><input type="date" class="fi" id="nDate"></div>
         </div>
-
-        <!-- Clear Views/Likes Stats -->
-        <div>
-          <div class="section-label" style="font-size:11px;margin-bottom:10px">🗑️ DATA MANAGEMENT</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <button onclick="exportAllData()" class="btn-save" style="background:#333">📥 Export All Episodes (JSON)</button>
-            <button onclick="clearViewsData()" class="btn-save" style="background:#8B0000">⚠️ Reset View Counts</button>
-          </div>
-          <div id="dataMsg" style="margin-top:8px;font-size:13px"></div>
-        </div>
+        <div class="f"><label>Headline *</label><input type="text" class="fi" id="nTitle" placeholder="News headline..."></div>
+        <div class="f"><label>Cover Image URL</label><input type="text" class="fi" id="nCover" placeholder="https://..."></div>
+        <div class="f"><label>Excerpt</label><input type="text" class="fi" id="nExc" placeholder="Short summary..."></div>
+        <div class="f"><label>Full Article</label><textarea class="fi fta" id="nContent" style="min-height:110px;" placeholder="Full article text..."></textarea></div>
+        <div class="f"><label>Tags (comma separated)</label><input type="text" class="fi" id="nTags" placeholder="bollywood, review, 2026"></div>
+        <button class="btn btn-r" onclick="addNews()">Publish Article →</button>
+        <div class="al ok" id="nOk">✅ Article published!</div>
+        <div class="al err" id="nErr"></div>
+      </div>
+      <div class="card">
+        <div class="ctitle">All Articles</div>
+        <div id="newsList"><p style="color:var(--gray);">Loading...</p></div>
       </div>
     </div>
 
-
-    <!-- ABOUT PAGE TAB -->
-    <div class="tab-pane" id="tab-about">
+    <!-- POLLS -->
+    <div class="pane" id="pane-polls">
       <div class="card">
-        <h3 class="card-title">ℹ️ About Page — Full Edit Control</h3>
-        <p style="color:var(--adm-gray,#888);font-size:13px;margin-bottom:20px">Every single word on the About page can be edited here.</p>
+        <div class="ctitle">Create Poll</div>
+        <div class="f"><label>Question *</label><input type="text" class="fi" id="pQ" placeholder="Which was the best film of 2025?"></div>
+        <div class="f"><label>Option 1 *</label><input type="text" class="fi" id="p0" placeholder="Option 1"></div>
+        <div class="f"><label>Option 2 *</label><input type="text" class="fi" id="p1" placeholder="Option 2"></div>
+        <div class="f"><label>Option 3</label><input type="text" class="fi" id="p2" placeholder="Optional"></div>
+        <div class="f"><label>Option 4</label><input type="text" class="fi" id="p3" placeholder="Optional"></div>
+        <button class="btn btn-r" onclick="createPoll()">Create Poll →</button>
+        <div class="al ok" id="pOk">✅ Poll created!</div>
+        <div class="al err" id="pErr"></div>
+      </div>
+      <div class="card">
+        <div class="ctitle">All Polls</div>
+        <div id="pollList"><p style="color:var(--gray);">Loading...</p></div>
+      </div>
+    </div>
 
-        <!-- HERO SECTION -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 HERO SECTION</div>
-          <label class="field-label">Hero Title</label>
-          <input type="text" id="ab_heroTitle" class="field-input" placeholder="Where Cinema Meets Biopsy">
-          <label class="field-label">Hero Subtitle</label>
-          <input type="text" id="ab_heroSub" class="field-input" placeholder="We don't just watch films. We dissect them.">
+    <!-- COMMENTS -->
+    <div class="pane" id="pane-comments">
+      <div class="card">
+        <div class="ctitle">Comments</div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+          <button class="btn btn-g" onclick="loadComs('all')">All</button>
+          <button class="btn btn-g" onclick="loadComs('episode')">Episodes</button>
+          <button class="btn btn-g" onclick="loadComs('news')">News</button>
         </div>
+        <div id="comList"><p style="color:var(--gray);">Loading...</p></div>
+      </div>
+    </div>
 
-        <!-- MISSION SECTION -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">💬 MISSION STATEMENT</div>
-          <label class="field-label">Mission Quote</label>
-          <textarea id="ab_missionQuote" class="field-input" rows="3" style="resize:vertical" placeholder='"Cinema is not just entertainment..."'></textarea>
-          <label class="field-label">Mission Attribution</label>
-          <input type="text" id="ab_missionSub" class="field-input" placeholder="— CinéOpsy">
+    <!-- NEWSLETTER -->
+    <div class="pane" id="pane-newsletter">
+      <div class="card">
+        <div class="ctitle">Subscribers</div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <button class="btn btn-g" onclick="loadSubs()">↻ Refresh</button>
+          <button class="btn btn-g" onclick="exportSubs()">📥 Export CSV</button>
         </div>
+        <div id="subList"><p style="color:var(--gray);">Loading...</p></div>
+      </div>
+    </div>
 
-        <!-- STORY SECTION 1 -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📖 OUR STORY (Left Block)</div>
-          <label class="field-label">Section Label</label>
-          <input type="text" id="ab_story1Label" class="field-input" placeholder="Our Story">
-          <label class="field-label">Block Title</label>
-          <input type="text" id="ab_story1Title" class="field-input" placeholder="Born from Two Worlds">
-          <label class="field-label">Paragraph 1</label>
-          <textarea id="ab_story1P1" class="field-input" rows="3" style="resize:vertical" placeholder="First paragraph..."></textarea>
-          <label class="field-label">Paragraph 2</label>
-          <textarea id="ab_story1P2" class="field-input" rows="3" style="resize:vertical" placeholder="Second paragraph..."></textarea>
-        </div>
+    <!-- REQUESTS -->
+    <div class="pane" id="pane-requests">
+      <div class="card">
+        <div class="ctitle">Review Requests</div>
+        <div id="reqList"><p style="color:var(--gray);">Loading...</p></div>
+      </div>
+    </div>
 
-        <!-- STORY SECTION 2 -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📖 OUR APPROACH (Right Block)</div>
-          <label class="field-label">Section Label</label>
-          <input type="text" id="ab_story2Label" class="field-input" placeholder="Our Approach">
-          <label class="field-label">Block Title</label>
-          <input type="text" id="ab_story2Title" class="field-input" placeholder="Diagnosis Over Opinion">
-          <label class="field-label">Paragraph 1</label>
-          <textarea id="ab_story2P1" class="field-input" rows="3" style="resize:vertical" placeholder="First paragraph..."></textarea>
-          <label class="field-label">Paragraph 2</label>
-          <textarea id="ab_story2P2" class="field-input" rows="3" style="resize:vertical" placeholder="Second paragraph..."></textarea>
-        </div>
-
-        <!-- PILLARS -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎯 SIX PILLARS / SPECIALTIES</div>
-          <label class="field-label">Section Title</label>
-          <input type="text" id="ab_pillarsTitle" class="field-input" placeholder="Our Six Specialties">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-              <label class="field-label" style="font-size:8px">PILLAR 1 TITLE</label>
-              <input type="text" id="ab_pillarTitle0" class="field-input" style="margin-bottom:6px" placeholder="Title 1">
-              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
-              <input type="text" id="ab_pillarDesc0" class="field-input" placeholder="Description 1">
-            </div>
-            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-              <label class="field-label" style="font-size:8px">PILLAR 2 TITLE</label>
-              <input type="text" id="ab_pillarTitle1" class="field-input" style="margin-bottom:6px" placeholder="Title 2">
-              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
-              <input type="text" id="ab_pillarDesc1" class="field-input" placeholder="Description 2">
-            </div>
-            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-              <label class="field-label" style="font-size:8px">PILLAR 3 TITLE</label>
-              <input type="text" id="ab_pillarTitle2" class="field-input" style="margin-bottom:6px" placeholder="Title 3">
-              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
-              <input type="text" id="ab_pillarDesc2" class="field-input" placeholder="Description 3">
-            </div>
-            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-              <label class="field-label" style="font-size:8px">PILLAR 4 TITLE</label>
-              <input type="text" id="ab_pillarTitle3" class="field-input" style="margin-bottom:6px" placeholder="Title 4">
-              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
-              <input type="text" id="ab_pillarDesc3" class="field-input" placeholder="Description 4">
-            </div>
-            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-              <label class="field-label" style="font-size:8px">PILLAR 5 TITLE</label>
-              <input type="text" id="ab_pillarTitle4" class="field-input" style="margin-bottom:6px" placeholder="Title 5">
-              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
-              <input type="text" id="ab_pillarDesc4" class="field-input" placeholder="Description 5">
-            </div>
-            <div style="padding:12px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.05)">
-              <label class="field-label" style="font-size:8px">PILLAR 6 TITLE</label>
-              <input type="text" id="ab_pillarTitle5" class="field-input" style="margin-bottom:6px" placeholder="Title 6">
-              <label class="field-label" style="font-size:8px">DESCRIPTION</label>
-              <input type="text" id="ab_pillarDesc5" class="field-input" placeholder="Description 6">
-            </div>
+    <!-- CONTENT -->
+    <div class="pane" id="pane-content">
+      <div class="card">
+        <div class="ctitle">📝 Website Content — Every Word Editable</div>
+        <p style="color:var(--gray);font-size:12px;margin-bottom:18px;">Edit any text. Save → refresh website to see changes.</p>
+        <div class="csec">
+          <div class="csec-label">🌐 Global</div>
+          <div class="frow">
+            <div class="f"><label>Site Tagline</label><input type="text" class="fi" id="ct-tagline"></div>
+            <div class="f"><label>Footer Copyright</label><input type="text" class="fi" id="ct-footerCopy"></div>
           </div>
         </div>
-
-        <!-- CREATOR BIO -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">👤 CREATOR / TEAM SECTION</div>
-          <label class="field-label">Section Label</label>
-          <input type="text" id="ab_creatorLabel" class="field-input" placeholder="Behind CinéOpsy">
-          <label class="field-label">Section Title</label>
-          <input type="text" id="ab_creatorTitle" class="field-input" placeholder="The Creator">
-          <label class="field-label">Creator Name</label>
-          <input type="text" id="ab_creatorName" class="field-input" placeholder="Rajkamal Yadav">
-          <label class="field-label">Creator Role/Title</label>
-          <input type="text" id="ab_creatorRole" class="field-input" placeholder="Founder · Writer · Editor">
-          <label class="field-label">Creator Bio</label>
-          <textarea id="ab_creatorBio" class="field-input" rows="5" style="resize:vertical" placeholder="Full bio text..."></textarea>
+        <div class="csec">
+          <div class="csec-label">🏠 Homepage</div>
+          <div class="frow">
+            <div class="f"><label>Hero Tagline</label><input type="text" class="fi" id="ct-homeHeroTagline"></div>
+            <div class="f"><label>YT Button Text</label><input type="text" class="fi" id="ct-homeHeroBtn1"></div>
+          </div>
+          <div class="frow">
+            <div class="f"><label>Series Title</label><input type="text" class="fi" id="ct-homeSeriesTitle"></div>
+            <div class="f"><label>Series Subtitle</label><input type="text" class="fi" id="ct-homeSeriesSub"></div>
+          </div>
+          <div class="frow">
+            <div class="f"><label>About Para 1</label><textarea class="fi fta" id="ct-homeAboutP1" style="min-height:55px;"></textarea></div>
+            <div class="f"><label>About Para 2</label><textarea class="fi fta" id="ct-homeAboutP2" style="min-height:55px;"></textarea></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+            <div class="f"><label>Stat 1 #</label><input type="text" class="fi" id="ct-homeStat1Num"></div>
+            <div class="f"><label>Stat 1 Label</label><input type="text" class="fi" id="ct-homeStat1Label"></div>
+            <div class="f"><label>Stat 2 #</label><input type="text" class="fi" id="ct-homeStat2Num"></div>
+            <div class="f"><label>Stat 2 Label</label><input type="text" class="fi" id="ct-homeStat2Label"></div>
+            <div class="f"><label>Stat 3 #</label><input type="text" class="fi" id="ct-homeStat3Num"></div>
+            <div class="f"><label>Stat 3 Label</label><input type="text" class="fi" id="ct-homeStat3Label"></div>
+            <div class="f"><label>Stat 4 #</label><input type="text" class="fi" id="ct-homeStat4Num"></div>
+            <div class="f"><label>Stat 4 Label</label><input type="text" class="fi" id="ct-homeStat4Label"></div>
+          </div>
+          <div class="frow">
+            <div class="f"><label>Newsletter Title</label><input type="text" class="fi" id="ct-nlTitle"></div>
+            <div class="f"><label>Newsletter Subtitle</label><input type="text" class="fi" id="ct-nlSub"></div>
+          </div>
         </div>
-
-        <!-- CTA SECTION -->
-        <div style="background:rgba(204,0,0,0.06);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:20px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔗 CALL TO ACTION (Bottom)</div>
-          <label class="field-label">CTA Title</label>
-          <input type="text" id="ab_ctaTitle" class="field-input" placeholder="Ready to Dive In?">
-          <label class="field-label">CTA Subtitle</label>
-          <input type="text" id="ab_ctaSub" class="field-input" placeholder="Explore our series or subscribe...">
+        <div class="csec">
+          <div class="csec-label">📺 Playlists</div>
+          <div id="plCtFields"></div>
         </div>
-
-        <button onclick="saveAboutPage()" class="btn-save" style="width:100%;padding:16px;font-size:12px">💾 SAVE ALL ABOUT PAGE CHANGES →</button>
-        <div id="aboutSaveMsg" style="margin-top:12px;text-align:center;font-size:14px"></div>
+        <div class="csec">
+          <div class="csec-label">📰 News Page</div>
+          <div class="frow">
+            <div class="f"><label>Title</label><input type="text" class="fi" id="ct-newsTitle"></div>
+            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ct-newsSub"></div>
+          </div>
+        </div>
+        <div class="csec">
+          <div class="csec-label">✉️ Contact Page</div>
+          <div class="frow">
+            <div class="f"><label>Title</label><input type="text" class="fi" id="ct-contactTitle"></div>
+            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ct-contactSub"></div>
+          </div>
+        </div>
+        <button class="btn btn-r" onclick="saveContent()" style="width:100%;padding:13px;margin-top:8px;">💾 SAVE ALL CONTENT →</button>
+        <div class="al ok" id="ctOk">✅ Saved! Refresh website to see changes.</div>
+        <div class="al err" id="ctErr"></div>
       </div>
     </div>
 
-
-    <!-- CONTENT TAB -->
-    <div class="tab-pane" id="tab-content">
+    <!-- ABOUT -->
+    <div class="pane" id="pane-about">
       <div class="card">
-        <h3 class="card-title">📝 Website Content — Every Word Editable</h3>
-        <p style="color:var(--adm-gray,#888);font-size:13px;margin-bottom:8px">Edit any text on the website. Changes reflect immediately after saving.</p>
-        <button onclick="saveAllContent()" class="btn-save" style="width:100%;margin-bottom:20px;padding:14px">💾 SAVE ALL CONTENT CHANGES →</button>
-        <div id="contentSaveMsg" style="margin-bottom:16px;text-align:center;font-size:14px"></div>
-
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🌐 GLOBAL (All Pages)</div>
-          <label class="field-label">Site Name</label>
-          <input type="text" id="ct_siteName" class="field-input" style="margin-bottom:8px" placeholder="Site Name">
-          <label class="field-label">Site Tagline</label>
-          <input type="text" id="ct_tagline" class="field-input" style="margin-bottom:8px" placeholder="Site Tagline">
-          <label class="field-label">Footer Tagline</label>
-          <input type="text" id="ct_footerTagline" class="field-input" style="margin-bottom:8px" placeholder="Footer Tagline">
-          <label class="field-label">Footer Copyright Text</label>
-          <input type="text" id="ct_footerCopy" class="field-input" style="margin-bottom:8px" placeholder="Footer Copyright Text">
-          <label class="field-label">YouTube Channel URL</label>
-          <input type="text" id="ct_ytUrl" class="field-input" style="margin-bottom:8px" placeholder="YouTube Channel URL">
+        <div class="ctitle">ℹ️ About Page — Full Edit</div>
+        <div class="csec">
+          <div class="csec-label">🎬 Hero</div>
+          <div class="frow">
+            <div class="f"><label>Hero Title</label><input type="text" class="fi" id="ab-heroTitle"></div>
+            <div class="f"><label>Hero Subtitle</label><input type="text" class="fi" id="ab-heroSub"></div>
+          </div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🏠 HOMEPAGE — Hero</div>
-          <label class="field-label">Hero Tagline (below CINEOPSY)</label>
-          <input type="text" id="ct_homeHeroTagline" class="field-input" style="margin-bottom:8px" placeholder="Hero Tagline (below CINEOPSY)">
-          <label class="field-label">Button 1 Text (Watch on YouTube)</label>
-          <input type="text" id="ct_homeHeroBtn1" class="field-input" style="margin-bottom:8px" placeholder="Button 1 Text (Watch on YouTube)">
-          <label class="field-label">Button 2 Text (Explore Series)</label>
-          <input type="text" id="ct_homeHeroBtn2" class="field-input" style="margin-bottom:8px" placeholder="Button 2 Text (Explore Series)">
-          <label class="field-label">Latest News Link Text</label>
-          <input type="text" id="ct_homeLatestNewsLink" class="field-input" style="margin-bottom:8px" placeholder="Latest News Link Text">
+        <div class="csec">
+          <div class="csec-label">💬 Mission</div>
+          <div class="f"><label>Mission Quote</label><textarea class="fi fta" id="ab-missionQuote"></textarea></div>
+          <div class="f"><label>Attribution</label><input type="text" class="fi" id="ab-missionSub"></div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📺 HOMEPAGE — Series Section</div>
-          <label class="field-label">Section Label</label>
-          <input type="text" id="ct_homeSeriesLabel" class="field-input" style="margin-bottom:8px" placeholder="Section Label">
-          <label class="field-label">Section Title</label>
-          <input type="text" id="ct_homeSeriesTitle" class="field-input" style="margin-bottom:8px" placeholder="Section Title">
-          <label class="field-label">Section Subtitle</label>
-          <input type="text" id="ct_homeSeriesSub" class="field-input" style="margin-bottom:8px" placeholder="Section Subtitle">
+        <div class="csec">
+          <div class="csec-label">📖 Our Story (Left)</div>
+          <div class="frow">
+            <div class="f"><label>Label</label><input type="text" class="fi" id="ab-story1Label"></div>
+            <div class="f"><label>Title</label><input type="text" class="fi" id="ab-story1Title"></div>
+          </div>
+          <div class="f"><label>Paragraph 1</label><textarea class="fi fta" id="ab-story1P1"></textarea></div>
+          <div class="f"><label>Paragraph 2</label><textarea class="fi fta" id="ab-story1P2"></textarea></div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">ℹ️ HOMEPAGE — About Section</div>
-          <label class="field-label">About Label</label>
-          <input type="text" id="ct_homeAboutLabel" class="field-input" style="margin-bottom:8px" placeholder="About Label">
-          <label class="field-label">About Title</label>
-          <input type="text" id="ct_homeAboutTitle" class="field-input" style="margin-bottom:8px" placeholder="About Title">
-          <label class="field-label">About Paragraph 1</label>
-          <textarea id="ct_homeAboutP1" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="About Paragraph 1"></textarea>
-          <label class="field-label">About Paragraph 2</label>
-          <textarea id="ct_homeAboutP2" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="About Paragraph 2"></textarea>
-          <label class="field-label">About Button Text</label>
-          <input type="text" id="ct_homeAboutBtn" class="field-input" style="margin-bottom:8px" placeholder="About Button Text">
-          <label class="field-label">Stat 1 Number</label>
-          <input type="text" id="ct_homeStat1Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 1 Number">
-          <label class="field-label">Stat 1 Label</label>
-          <input type="text" id="ct_homeStat1Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 1 Label">
-          <label class="field-label">Stat 2 Number</label>
-          <input type="text" id="ct_homeStat2Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 2 Number">
-          <label class="field-label">Stat 2 Label</label>
-          <input type="text" id="ct_homeStat2Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 2 Label">
-          <label class="field-label">Stat 3 Number</label>
-          <input type="text" id="ct_homeStat3Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 3 Number">
-          <label class="field-label">Stat 3 Label</label>
-          <input type="text" id="ct_homeStat3Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 3 Label">
-          <label class="field-label">Stat 4 Number</label>
-          <input type="text" id="ct_homeStat4Num" class="field-input" style="margin-bottom:8px" placeholder="Stat 4 Number">
-          <label class="field-label">Stat 4 Label</label>
-          <input type="text" id="ct_homeStat4Label" class="field-input" style="margin-bottom:8px" placeholder="Stat 4 Label">
+        <div class="csec">
+          <div class="csec-label">📖 Our Approach (Right)</div>
+          <div class="frow">
+            <div class="f"><label>Label</label><input type="text" class="fi" id="ab-story2Label"></div>
+            <div class="f"><label>Title</label><input type="text" class="fi" id="ab-story2Title"></div>
+          </div>
+          <div class="f"><label>Paragraph 1</label><textarea class="fi fta" id="ab-story2P1"></textarea></div>
+          <div class="f"><label>Paragraph 2</label><textarea class="fi fta" id="ab-story2P2"></textarea></div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📧 HOMEPAGE — Newsletter</div>
-          <label class="field-label">Section Title</label>
-          <input type="text" id="ct_homeNewsletterTitle" class="field-input" style="margin-bottom:8px" placeholder="Section Title">
-          <label class="field-label">Newsletter Box Title</label>
-          <input type="text" id="ct_homeNewsletterBoxTitle" class="field-input" style="margin-bottom:8px" placeholder="Newsletter Box Title">
-          <label class="field-label">Newsletter Box Subtitle</label>
-          <input type="text" id="ct_homeNewsletterBoxSub" class="field-input" style="margin-bottom:8px" placeholder="Newsletter Box Subtitle">
-          <label class="field-label">Subscribe Button Text</label>
-          <input type="text" id="ct_homeNewsletterBtn" class="field-input" style="margin-bottom:8px" placeholder="Subscribe Button Text">
-          <label class="field-label">Email Input Placeholder</label>
-          <input type="text" id="ct_homeNewsletterPlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Email Input Placeholder">
+        <div class="csec">
+          <div class="csec-label">🎯 Six Pillars</div>
+          <div id="pillarF"></div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 HOMEPAGE — Featured & Social</div>
-          <label class="field-label">Featured Label</label>
-          <input type="text" id="ct_homeFeaturedLabel" class="field-input" style="margin-bottom:8px" placeholder="Featured Label">
-          <label class="field-label">Featured Title</label>
-          <input type="text" id="ct_homeFeaturedTitle" class="field-input" style="margin-bottom:8px" placeholder="Featured Title">
-          <label class="field-label">Featured Subtitle / Video Title</label>
-          <input type="text" id="ct_homeFeaturedSub" class="field-input" style="margin-bottom:8px" placeholder="Featured Subtitle / Video Title">
-          <label class="field-label">Social Section Title</label>
-          <input type="text" id="ct_homeSocialTitle" class="field-input" style="margin-bottom:8px" placeholder="Social Section Title">
+        <div class="csec">
+          <div class="csec-label">👤 Creator</div>
+          <div class="frow">
+            <div class="f"><label>Name</label><input type="text" class="fi" id="ab-creatorName" value="Rajkamal Yadav"></div>
+            <div class="f"><label>Role</label><input type="text" class="fi" id="ab-creatorRole" value="Founder · Writer · Editor"></div>
+          </div>
+          <div class="f"><label>Bio</label><textarea class="fi fta" id="ab-creatorBio"></textarea></div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📰 WEEKLY PLAYLIST PAGE</div>
-          <label class="field-label">Category Label (top badge)</label>
-          <input type="text" id="ct_weeklyLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
-          <label class="field-label">Playlist Name / Title</label>
-          <input type="text" id="ct_weeklyName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
-          <label class="field-label">Publish Day/Schedule</label>
-          <input type="text" id="ct_weeklyDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
-          <label class="field-label">Playlist Description</label>
-          <textarea id="ct_weeklyDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
-          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
-          <input type="text" id="ct_weeklyEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
+        <div class="csec">
+          <div class="csec-label">🔗 CTA</div>
+          <div class="frow">
+            <div class="f"><label>Title</label><input type="text" class="fi" id="ab-ctaTitle"></div>
+            <div class="f"><label>Subtitle</label><input type="text" class="fi" id="ab-ctaSub"></div>
+          </div>
         </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔬 VERDICT PLAYLIST PAGE</div>
-          <label class="field-label">Category Label (top badge)</label>
-          <input type="text" id="ct_verdictLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
-          <label class="field-label">Playlist Name / Title</label>
-          <input type="text" id="ct_verdictName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
-          <label class="field-label">Publish Day/Schedule</label>
-          <input type="text" id="ct_verdictDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
-          <label class="field-label">Playlist Description</label>
-          <textarea id="ct_verdictDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
-          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
-          <input type="text" id="ct_verdictEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🤔 WHATIF PLAYLIST PAGE</div>
-          <label class="field-label">Category Label (top badge)</label>
-          <input type="text" id="ct_whatifLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
-          <label class="field-label">Playlist Name / Title</label>
-          <input type="text" id="ct_whatifName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
-          <label class="field-label">Publish Day/Schedule</label>
-          <input type="text" id="ct_whatifDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
-          <label class="field-label">Playlist Description</label>
-          <textarea id="ct_whatifDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
-          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
-          <input type="text" id="ct_whatifEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🩺 CASEFILES PLAYLIST PAGE</div>
-          <label class="field-label">Category Label (top badge)</label>
-          <input type="text" id="ct_casefilesLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
-          <label class="field-label">Playlist Name / Title</label>
-          <input type="text" id="ct_casefilesName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
-          <label class="field-label">Publish Day/Schedule</label>
-          <input type="text" id="ct_casefilesDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
-          <label class="field-label">Playlist Description</label>
-          <textarea id="ct_casefilesDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
-          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
-          <input type="text" id="ct_casefilesEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🌍 BEYONDBORDERS PLAYLIST PAGE</div>
-          <label class="field-label">Category Label (top badge)</label>
-          <input type="text" id="ct_beyondbordersLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
-          <label class="field-label">Playlist Name / Title</label>
-          <input type="text" id="ct_beyondbordersName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
-          <label class="field-label">Publish Day/Schedule</label>
-          <input type="text" id="ct_beyondbordersDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
-          <label class="field-label">Playlist Description</label>
-          <textarea id="ct_beyondbordersDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
-          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
-          <input type="text" id="ct_beyondbordersEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎞️ SPECIALS PLAYLIST PAGE</div>
-          <label class="field-label">Category Label (top badge)</label>
-          <input type="text" id="ct_specialsLabel" class="field-input" style="margin-bottom:8px" placeholder="Category Label (top badge)">
-          <label class="field-label">Playlist Name / Title</label>
-          <input type="text" id="ct_specialsName" class="field-input" style="margin-bottom:8px" placeholder="Playlist Name / Title">
-          <label class="field-label">Publish Day/Schedule</label>
-          <input type="text" id="ct_specialsDay" class="field-input" style="margin-bottom:8px" placeholder="Publish Day/Schedule">
-          <label class="field-label">Playlist Description</label>
-          <textarea id="ct_specialsDesc" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Playlist Description"></textarea>
-          <label class="field-label">Episode Label (Episode/Review/Case etc.)</label>
-          <input type="text" id="ct_specialsEpLabel" class="field-input" style="margin-bottom:8px" placeholder="Episode Label (Episode/Review/Case etc.)">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">📰 NEWS PAGE</div>
-          <label class="field-label">Breaking Label</label>
-          <input type="text" id="ct_newsBreakingLabel" class="field-input" style="margin-bottom:8px" placeholder="Breaking Label">
-          <label class="field-label">Page Title</label>
-          <input type="text" id="ct_newsHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
-          <label class="field-label">Page Subtitle</label>
-          <input type="text" id="ct_newsHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
-          <label class="field-label">Default Ticker Text (before news loads)</label>
-          <textarea id="ct_newsTickerDefault" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Default Ticker Text (before news loads)"></textarea>
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">✉️ CONTACT PAGE</div>
-          <label class="field-label">Hero Label</label>
-          <input type="text" id="ct_contactHeroLabel" class="field-input" style="margin-bottom:8px" placeholder="Hero Label">
-          <label class="field-label">Hero Title</label>
-          <input type="text" id="ct_contactHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Hero Title">
-          <label class="field-label">Hero Subtitle</label>
-          <input type="text" id="ct_contactHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Hero Subtitle">
-          <label class="field-label">Social Section Label</label>
-          <input type="text" id="ct_contactSocialLabel" class="field-input" style="margin-bottom:8px" placeholder="Social Section Label">
-          <label class="field-label">Social Section Title</label>
-          <input type="text" id="ct_contactSocialTitle" class="field-input" style="margin-bottom:8px" placeholder="Social Section Title">
-          <label class="field-label">Name Field Placeholder</label>
-          <input type="text" id="ct_contactFormNamePlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Name Field Placeholder">
-          <label class="field-label">Email Field Placeholder</label>
-          <input type="text" id="ct_contactFormEmailPlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Email Field Placeholder">
-          <label class="field-label">Message Field Placeholder</label>
-          <input type="text" id="ct_contactFormMsgPlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Message Field Placeholder">
-          <label class="field-label">Submit Button Text</label>
-          <input type="text" id="ct_contactFormBtn" class="field-input" style="margin-bottom:8px" placeholder="Submit Button Text">
-          <label class="field-label">Success Title</label>
-          <input type="text" id="ct_contactSuccessTitle" class="field-input" style="margin-bottom:8px" placeholder="Success Title">
-          <label class="field-label">Success Subtitle</label>
-          <input type="text" id="ct_contactSuccessSub" class="field-input" style="margin-bottom:8px" placeholder="Success Subtitle">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔬 REVIEWS GALLERY PAGE</div>
-          <label class="field-label">Hero Label</label>
-          <input type="text" id="ct_reviewsHeroLabel" class="field-input" style="margin-bottom:8px" placeholder="Hero Label">
-          <label class="field-label">Page Title</label>
-          <input type="text" id="ct_reviewsHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
-          <label class="field-label">Page Subtitle</label>
-          <input type="text" id="ct_reviewsHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 REVIEW REQUEST PAGE</div>
-          <label class="field-label">Hero Label</label>
-          <input type="text" id="ct_rrHeroLabel" class="field-input" style="margin-bottom:8px" placeholder="Hero Label">
-          <label class="field-label">Page Title</label>
-          <input type="text" id="ct_rrHeroTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
-          <label class="field-label">Page Subtitle</label>
-          <input type="text" id="ct_rrHeroSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
-          <label class="field-label">Movie Title Placeholder</label>
-          <input type="text" id="ct_rrMoviePlaceholder" class="field-input" style="margin-bottom:8px" placeholder="Movie Title Placeholder">
-          <label class="field-label">Reason Placeholder</label>
-          <textarea id="ct_rrReasonPlaceholder" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Reason Placeholder"></textarea>
-          <label class="field-label">Submit Button Text</label>
-          <input type="text" id="ct_rrBtn" class="field-input" style="margin-bottom:8px" placeholder="Submit Button Text">
-          <label class="field-label">Success Title</label>
-          <input type="text" id="ct_rrSuccessTitle" class="field-input" style="margin-bottom:8px" placeholder="Success Title">
-          <label class="field-label">Success Subtitle</label>
-          <textarea id="ct_rrSuccessSub" class="field-input" rows="2" style="resize:vertical;margin-bottom:8px" placeholder="Success Subtitle"></textarea>
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🔖 WATCHLIST PAGE</div>
-          <label class="field-label">Page Title</label>
-          <input type="text" id="ct_watchlistTitle" class="field-input" style="margin-bottom:8px" placeholder="Page Title">
-          <label class="field-label">Page Subtitle</label>
-          <input type="text" id="ct_watchlistSub" class="field-input" style="margin-bottom:8px" placeholder="Page Subtitle">
-          <label class="field-label">Empty State Title</label>
-          <input type="text" id="ct_watchlistEmptyTitle" class="field-input" style="margin-bottom:8px" placeholder="Empty State Title">
-          <label class="field-label">Empty State Subtitle</label>
-          <input type="text" id="ct_watchlistEmptySub" class="field-input" style="margin-bottom:8px" placeholder="Empty State Subtitle">
-          <label class="field-label">Empty State Button</label>
-          <input type="text" id="ct_watchlistEmptyBtn" class="field-input" style="margin-bottom:8px" placeholder="Empty State Button">
-        </div>
-        <div class="content-section" style="background:rgba(204,0,0,0.05);border:1px solid rgba(204,0,0,0.15);padding:18px;margin-bottom:18px;border-radius:2px">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#cc0000;margin-bottom:14px">🎬 404 ERROR PAGE</div>
-          <label class="field-label">Error Title</label>
-          <input type="text" id="ct_e404Title" class="field-input" style="margin-bottom:8px" placeholder="Error Title">
-          <label class="field-label">Error Subtitle</label>
-          <input type="text" id="ct_e404Sub" class="field-input" style="margin-bottom:8px" placeholder="Error Subtitle">
-          <label class="field-label">Button 1 Text</label>
-          <input type="text" id="ct_e404Btn1" class="field-input" style="margin-bottom:8px" placeholder="Button 1 Text">
-          <label class="field-label">Button 2 Text</label>
-          <input type="text" id="ct_e404Btn2" class="field-input" style="margin-bottom:8px" placeholder="Button 2 Text">
-        </div>
-        <button onclick="saveAllContent()" class="btn-save" style="width:100%;margin-top:8px;padding:14px">💾 SAVE ALL CONTENT CHANGES →</button>
-        <div id="contentSaveMsg2" style="margin-top:12px;text-align:center;font-size:14px"></div>
+        <button class="btn btn-r" onclick="saveAbout()" style="width:100%;padding:13px;margin-top:8px;">💾 SAVE ABOUT PAGE →</button>
+        <div class="al ok" id="abOk">✅ About page saved!</div>
+        <div class="al err" id="abErr"></div>
       </div>
     </div>
 
-    <!-- ═══════════════════════ -->
-    <!-- SETTINGS TAB           -->
-    <!-- ═══════════════════════ -->
-    <div class="tab-pane" id="tab-settings">
-
+    <!-- SETTINGS -->
+    <div class="pane" id="pane-settings">
       <div class="card">
-        <div class="card-title">🔥 Firebase Setup</div>
-        <div class="setup-box">
-          <h3>One-time setup — done forever! 🎯</h3>
-          <ol>
-            <li>Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a></li>
-            <li>Create a new project — name: <strong>cineopsy</strong></li>
-            <li>In your project: click <strong>Add app → Web (&lt;/&gt;)</strong></li>
-            <li>Register the app — copy your <strong>firebaseConfig</strong></li>
-            <li>In left menu: <strong>Firestore Database → Create database → Test mode → Enable</strong></li>
-            <li>Paste your config values in the form below</li>
-            <li>Save — then re-upload the site to Netlify</li>
-            <li style="color:#4eff4e"><strong>Done! ✅ Changes will now reflect everywhere!</strong></li>
-          </ol>
+        <div class="ctitle">🔴 Social Links</div>
+        <div class="frow">
+          <div class="f"><label>YouTube</label><input type="text" class="fi" id="set-youtube" placeholder="https://youtube.com/@Cineopsy"></div>
+          <div class="f"><label>Instagram</label><input type="text" class="fi" id="set-instagram" placeholder="https://instagram.com/cineopsy"></div>
         </div>
-
-        <div class="alert alert-success" id="fbSuccess">✓ Firebase config saved! Reupload site to Netlify.</div>
-        <div class="alert alert-error" id="fbError">❌ Error saving config.</div>
-
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:14px">Paste Your Firebase Config</div>
-        <div class="fg"><label>API Key</label><input type="text" id="fb_apiKey" placeholder="AIzaSy..."></div>
-        <div class="fg-row">
-          <div class="fg"><label>Auth Domain</label><input type="text" id="fb_authDomain" placeholder="cineopsy.firebaseapp.com"></div>
-          <div class="fg"><label>Project ID</label><input type="text" id="fb_projectId" placeholder="cineopsy-xxxxx"></div>
+        <div class="frow">
+          <div class="f"><label>Twitter/X</label><input type="text" class="fi" id="set-twitter"></div>
+          <div class="f"><label>Threads</label><input type="text" class="fi" id="set-threads"></div>
         </div>
-        <div class="fg-row">
-          <div class="fg"><label>Storage Bucket</label><input type="text" id="fb_storageBucket" placeholder="cineopsy.appspot.com"></div>
-          <div class="fg"><label>Messaging Sender ID</label><input type="text" id="fb_messagingSenderId" placeholder="123456789"></div>
+        <div class="frow">
+          <div class="f"><label>Telegram</label><input type="text" class="fi" id="set-telegram"></div>
+          <div class="f"><label>WhatsApp Channel</label><input type="text" class="fi" id="set-whatsapp"></div>
         </div>
-        <div class="fg"><label>App ID</label><input type="text" id="fb_appId" placeholder="1:123:web:abc..."></div>
-        <button class="btn btn-red" onclick="saveFirebaseConfig()">Save Config & Download firebase-config.js →</button>
+        <button class="btn btn-r" onclick="saveSocial()">Save Social Links →</button>
+        <div class="al ok" id="socOk">✅ Saved!</div>
       </div>
-
       <div class="card">
-        <div class="card-title">🔐 Change Password</div>
-        <div class="alert alert-success" id="pwSuccess">✓ Password changed!</div>
-        <div class="alert alert-error" id="pwError">❌ Check fields and try again.</div>
-        <div class="fg"><label>Current Password</label><input type="password" id="pwCurrent" placeholder="Current password"></div>
-        <div class="fg"><label>New Password</label><input type="password" id="pwNew" placeholder="New password (min 6 chars)"></div>
-        <div class="fg"><label>Confirm New Password</label><input type="password" id="pwConfirm" placeholder="Confirm new password"></div>
-        <button class="btn btn-red" onclick="changePassword()">Change Password →</button>
+        <div class="ctitle">🎨 Theme Colors</div>
+        <div class="frow">
+          <div class="f"><label>Accent Red</label><input type="color" class="fi" id="set-red" value="#cc0000" style="height:42px;cursor:pointer;"></div>
+          <div class="f"><label>Background</label><input type="color" class="fi" id="set-bg" value="#080808" style="height:42px;cursor:pointer;"></div>
+        </div>
+        <button class="btn btn-r" onclick="saveColors()">Save Colors →</button>
+        <div class="al ok" id="colOk">✅ Saved!</div>
       </div>
-
-    </div><!-- end settings -->
-
-  </div><!-- end admin-wrap -->
-</div><!-- end adminPanel -->
-
-<!-- EDIT MODAL -->
-<div class="modal-bg" id="editModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">✏️ Edit Episode</div>
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="card">
+        <div class="ctitle">📢 Announcement Banner</div>
+        <div class="f"><label>Banner Text</label><input type="text" class="fi" id="set-ann" placeholder="🎬 New episode out now!"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin:8px 0 12px;">
+          <input type="checkbox" id="set-annActive" style="width:16px;height:16px;accent-color:var(--red);">
+          <label style="color:var(--gray);font-size:12px;">Active (show on website)</label>
+        </div>
+        <button class="btn btn-r" onclick="saveAnn()">Save Announcement →</button>
+        <div class="al ok" id="annOk">✅ Saved!</div>
+      </div>
+      <div class="card">
+        <div class="ctitle">🔐 Change Password</div>
+        <p style="color:var(--gray);font-size:12px;margin-bottom:14px;">Changes your Firebase account password.</p>
+        <div class="f"><label>New Password (min 8 chars)</label><input type="password" class="fi" id="pwNew" placeholder="New password"></div>
+        <div class="f"><label>Confirm New Password</label><input type="password" class="fi" id="pwConf" placeholder="Confirm password"></div>
+        <button class="btn btn-r" onclick="changePw()">Change Password →</button>
+        <div class="al ok" id="pwOk">✅ Password changed!</div>
+        <div class="al err" id="pwErr"></div>
+      </div>
+      <div class="card">
+        <div class="ctitle">🗃️ Data Management</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-g" onclick="exportData()">📥 Export Episodes (JSON)</button>
+          <button class="btn btn-g" onclick="resetViews()" style="color:var(--red);">⚠️ Reset Views</button>
+        </div>
+        <div class="al ok" id="dataOk"></div>
+        <div class="al err" id="dataErr"></div>
+      </div>
     </div>
-    <div class="alert alert-success" id="editSuccess">✓ Updated!</div>
-    <div class="fg"><label>Title</label><input type="text" id="editTitle"></div>
-    <div class="fg-row">
-      <div class="fg"><label>Date</label><input type="date" id="editDate"></div>
-      <div class="fg"><label>YouTube Link</label><input type="text" id="editYoutube"></div>
-    </div>
-    <div class="fg"><label>Short Description</label><textarea id="editExcerpt" style="min-height:70px"></textarea></div>
-    <div class="fg"><label>Full Content</label><textarea id="editContent" style="min-height:180px"></textarea></div>
-    <input type="hidden" id="editId">
-    <input type="hidden" id="editPlaylist">
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="btn btn-red" onclick="saveEdit()">Save Changes →</button>
-      <button class="btn btn-dark" onclick="closeModal()">Cancel</button>
-    </div>
+
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" defer></script>
+<script src="firebase-config.js" defer></script>
 <script>
-// ════════════════════════════════
-// FIREBASE
-// ════════════════════════════════
-let db = null;
-let firebaseReady = false;
+// ═══════════════════════════════════════════════════════
+// CINEOPSY ADMIN — SECURE VERSION
+// Firebase Authentication + Rate Limiting + Session Mgmt
+// ═══════════════════════════════════════════════════════
 
-function initFirebase() {
-  try {
-    // Try saved config first, then fall back to firebase-config.js
-    var savedCfg = JSON.parse(localStorage.getItem('co_firebase_config') || 'null');
-    var cfg = (savedCfg && savedCfg.apiKey && savedCfg.apiKey !== 'YOUR_API_KEY') 
-              ? savedCfg 
-              : (typeof FIREBASE_CONFIG !== 'undefined' ? FIREBASE_CONFIG : null);
-    if (!cfg || !cfg.apiKey) throw new Error('No Firebase config found');
-    if (!firebase.apps.length) firebase.initializeApp(cfg);
-    db = firebase.firestore();
-    window.db = db;
-    firebaseReady = true;
-    console.log('✅ Firebase connected!');
-    // Hide banner if showing
-    var banner = document.getElementById('firebaseBanner');
-    if (banner) banner.style.display = 'none';
-  } catch(e) {
-    firebaseReady = false;
-    var banner = document.getElementById('firebaseBanner');
-    if (banner) banner.style.display = 'block';
-    console.warn('Firebase:', e.message);
-  }
+const MAX_ATT = 5, LOCK_MINS = 15, SES_HRS = 8;
+const PLS = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
+const PLN = {weekly:'Weekly',verdict:'Verdict',whatif:'What If',casefiles:'Case Files',beyondborders:'Beyond Borders',specials:'Specials'};
+
+let db=null, auth=null, fbReady=false, curUser=null;
+
+// ── THEME ──
+function applyTheme(t){
+  document.documentElement.classList.toggle('light',t==='light');
+  const b=document.getElementById('themeBtn');
+  if(b)b.textContent=t==='light'?'☀️':'🌙';
 }
-
-// ════════════════════════════════
-// LOGIN / LOGOUT
-// ════════════════════════════════
-const DEFAULT_PW = 'Cineopsy420@';
-function getPw() { return localStorage.getItem('co_pw') || DEFAULT_PW; }
-
-function login() {
-  try {
-    var pwEl = document.getElementById('pwInput');
-    var errEl = document.getElementById('loginErr');
-    var loginSc = document.getElementById('loginScreen');
-    var adminPn = document.getElementById('adminPanel');
-    
-    if (!pwEl) { alert('Login form error! Please refresh.'); return; }
-    
-    var pw = pwEl.value;
-    var correctPw = 'Cineopsy420@';
-    
-    // Check if password was changed via localStorage
-    var savedPw = localStorage.getItem('co_pw');
-    if (savedPw && savedPw.length > 0) correctPw = savedPw;
-    
-    if (pw === correctPw) {
-      // ✅ CORRECT PASSWORD
-      if (errEl) errEl.style.display = 'none';
-      
-      // Hide login, show admin
-      if (loginSc) {
-        loginSc.style.display = 'none';
-        loginSc.style.visibility = 'hidden';
-      }
-      if (adminPn) {
-        adminPn.style.cssText = 'display:block !important; visibility:visible !important;';
-      }
-      
-      // Load admin data after short delay (Firebase may not be ready yet)
-      setTimeout(function() {
-        try { 
-          if (typeof firebase !== 'undefined') initFirebase(); 
-        } catch(e) {}
-        try { updateInfoFields(); } catch(e) {}
-        try { loadStats(); } catch(e) {}
-        try { loadSiteText(); } catch(e) {}
-        try { loadSocialLinks(); } catch(e) {}
-        try { loadTheme(); } catch(e) {}
-        try { loadEpisodeList(); } catch(e) {}
-      }, 500);
-      
-    } else {
-      // ❌ WRONG PASSWORD  
-      if (errEl) {
-        errEl.style.display = 'block';
-        errEl.textContent = '❌ Wrong password!';
-      }
-      pwEl.value = '';
-      pwEl.focus();
-      // Flash red border
-      pwEl.style.borderColor = '#ff0000';
-      setTimeout(function() { pwEl.style.borderColor = ''; }, 2000);
-    }
-  } catch(e) {
-    alert('Login error: ' + e.message + ' — Please refresh the page.');
-  }
+function toggleTheme(){
+  const n=document.documentElement.classList.contains('light')?'dark':'light';
+  localStorage.setItem('co_admin_theme',n);applyTheme(n);
 }
+applyTheme(localStorage.getItem('co_admin_theme')||'dark');
 
-function logout() {
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('pwInput').value = '';
-  document.getElementById('loginErr').style.display = 'none';
+// ── RATE LIMITING ──
+function getAtt(){try{return JSON.parse(localStorage.getItem('co_att')||'{"c":0,"lu":0}');}catch(e){return{c:0,lu:0};}}
+function saveAtt(d){localStorage.setItem('co_att',JSON.stringify(d));}
+function isLocked(){const d=getAtt();return(d.lu&&Date.now()<d.lu)?d.lu:false;}
+function recordFail(){
+  const d=getAtt();d.c=(d.c||0)+1;
+  if(d.c>=MAX_ATT){d.lu=Date.now()+(LOCK_MINS*60000);d.c=0;showLock(d.lu);}
+  saveAtt(d);return MAX_ATT-d.c;
 }
-
-function changePassword() {
-  const cur = document.getElementById('pwCurrent').value;
-  const nw  = document.getElementById('pwNew').value;
-  const cf  = document.getElementById('pwConfirm').value;
-  if (cur !== getPw())  { showAlert('pwError', '❌ Current password is wrong.'); return; }
-  if (nw.length < 6)    { showAlert('pwError', '❌ Min 6 characters required.'); return; }
-  if (nw !== cf)        { showAlert('pwError', '❌ Passwords do not match.'); return; }
-  localStorage.setItem('co_pw', nw);
-  ['pwCurrent','pwNew','pwConfirm'].forEach(id => document.getElementById(id).value = '');
-  showAlert('pwSuccess', '✓ Password changed!');
+function clearAtt(){saveAtt({c:0,lu:0});}
+function showLock(until){
+  const o=document.getElementById('lockOverlay');
+  if(o)o.classList.add('show');
+  const tick=()=>{
+    const rem=until-Date.now();
+    if(rem<=0){if(o)o.classList.remove('show');clearAtt();return;}
+    const m=Math.floor(rem/60000),s=Math.ceil((rem%60000)/1000);
+    const t=document.getElementById('lockTimer');
+    if(t)t.textContent='Wait '+m+'m '+s+'s before trying again';
+    setTimeout(tick,1000);
+  };tick();
 }
+// Check on load
+(function(){const lu=isLocked();if(lu)setTimeout(()=>showLock(lu),500);})();
 
-// ════════════════════════════════
-// TABS
-// ════════════════════════════════
-function switchTab(e, id) {
-  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
-  if (e && e.target) e.target.classList.add('active');
-  var pane = document.getElementById('tab-' + id);
-  if (pane) pane.classList.add('active');
-  // Load tab-specific data
-  var tabLoaders = {
-    episodes: function() { loadEpisodeList(); },
-    news: function() { if(typeof loadNewsList==='function') loadNewsList(); },
-    comments: function() { if(typeof loadAllComments==='function') loadAllComments(); },
-    polls: function() { if(typeof loadPollsList==='function') loadPollsList(); },
-    newsletter: function() { if(typeof loadNewsletterList==='function') loadNewsletterList(); },
-    pinned: function() { if(typeof loadPinnedList==='function'){ loadPinnedList(); loadPinEpisodes(); } },
-    push: function() { if(typeof loadPushHistory==='function') loadPushHistory(); },
-    requests: function() { if(typeof loadReviewRequests==='function') loadReviewRequests(); },
-    manage: function() { if(typeof loadManageTab==='function') loadManageTab(); },
-    about: function() { if(typeof loadAboutAdmin==='function') loadAboutAdmin(); },
-    content: function() { if(typeof loadContentTab==='function') loadContentTab(); },
-  };
-  if (tabLoaders[id]) tabLoaders[id]();
-}
-
-// ════════════════════════════════
-// EPISODES
-// ════════════════════════════════
-const PL_FIELDS = {
-  weekly:        ['Box Office Report', 'New Releases', 'Upcoming Movies', 'Industry News'],
-  verdict:       ['Movie Name', 'Rating (out of 10)', 'Genre', 'Verdict: Watch / Skip'],
-  whatif:        ['Movie / Universe', 'The What If Question', 'Alternate Scenario', 'Key Point'],
-  casefiles:     ['Patient (Movie)', 'Symptoms', 'Diagnosis', 'Treatment / Verdict'],
-  beyondborders: ['Country / Industry', 'Film Name', 'Release Year', 'Why It Matters'],
-  specials:     ['Video Type', 'Main Topic', 'Special Feature', 'Notes'],
-};
-
-function updateInfoFields() {
-  const pl = document.getElementById('addPlaylist').value;
-  const fields = PL_FIELDS[pl] || [];
-  document.getElementById('infoFields').innerHTML = fields.map((f, i) =>
-    `<div class="fg"><label>${f}</label><input type="text" id="info_${i}" placeholder="${f}..."></div>`
-  ).join('');
-}
-
-async function addEpisode() {
-  const pl      = document.getElementById('addPlaylist').value;
-  const title   = document.getElementById('addTitle').value.trim();
-  const date    = document.getElementById('addDate').value;
-  const youtube = document.getElementById('addYoutube').value.trim();
-  const excerpt = document.getElementById('addExcerpt').value.trim();
-  const content = document.getElementById('addContent').value.trim();
-  if (!title) { showAlert('epError', '❌ Title is required!'); return; }
-
-  const info = (PL_FIELDS[pl] || []).map((f, i) => ({
-    label: f, val: document.getElementById('info_' + i)?.value.trim() || ''
-  }));
-
-  const ep = { title, date, youtube, excerpt, content, info, playlist: pl, createdAt: Date.now() };
-
-  try {
-    if (firebaseReady) {
-      await db.collection('episodes').doc(pl).collection('items').add(ep);
-    } else {
-      ep.id = Date.now();
-      const eps = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]');
-      eps.push(ep);
-      localStorage.setItem('co_ep_' + pl, JSON.stringify(eps));
-    }
-    showAlert('epSuccess', '✓ Episode added!');
-    // Reset form
-    ['addTitle','addYoutube','addExcerpt','addContent'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('addDate').valueAsDate = new Date();
-    updateInfoFields();
-    loadStats();
-    loadEpisodeList();
-  } catch(e) {
-    showAlert('epError', '❌ Error: ' + e.message);
-  }
-}
-
-async function loadEpisodeList() {
-  const pl   = document.getElementById('managePlaylist').value;
-  const list = document.getElementById('episodeList');
-  list.innerHTML = '<p style="color:var(--gray);font-style:italic">Loading...</p>';
-
-  let episodes = [];
-  try {
-    if (firebaseReady) {
-      const snap = await db.collection('episodes').doc(pl).collection('items').orderBy('createdAt','desc').get();
-      episodes = snap.docs.map(d => ({ ...d.data(), id: d.id }));
-    } else {
-      episodes = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]').slice().reverse();
-    }
-  } catch(e) {
-    list.innerHTML = `<p style="color:#ff4444">Error: ${e.message}</p>`;
-    return;
-  }
-
-  if (!episodes.length) {
-    list.innerHTML = '<p style="color:var(--gray);font-style:italic;font-size:15px">No episodes yet.</p>';
-    return;
-  }
-
-  list.innerHTML = episodes.map((ep, i) => `
-    <div class="ep-item">
-      <div>
-        <div class="ep-item-title">${episodes.length - i}. ${ep.title}</div>
-        <div class="ep-item-meta">${ep.date || 'No date'} &nbsp;·&nbsp; ${ep.youtube ? '🎬 Video linked' : '⏳ No video yet'}</div>
-      </div>
-      <div class="ep-item-btns">
-        <button class="btn-edit" onclick="openEdit('${pl}','${ep.id}')">Edit</button>
-        <button class="btn-del" onclick="deleteEp('${pl}','${ep.id}')">Delete</button>
-      </div>
-    </div>`).join('');
-}
-
-async function deleteEp(pl, id) {
-  if (!confirm('Delete this episode permanently?')) return;
-  if (firebaseReady) {
-    await db.collection('episodes').doc(pl).collection('items').doc(id).delete();
-  } else {
-    let eps = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]');
-    eps = eps.filter(e => String(e.id) !== String(id));
-    localStorage.setItem('co_ep_' + pl, JSON.stringify(eps));
-  }
-  loadEpisodeList();
-  loadStats();
-}
-
-async function openEdit(pl, id) {
-  let ep;
-  if (firebaseReady) {
-    const doc = await db.collection('episodes').doc(pl).collection('items').doc(id).get();
-    ep = { ...doc.data(), id };
-  } else {
-    ep = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]').find(e => String(e.id) === String(id));
-  }
-  if (!ep) return;
-  document.getElementById('editTitle').value   = ep.title   || '';
-  document.getElementById('editDate').value    = ep.date    || '';
-  document.getElementById('editYoutube').value = ep.youtube || '';
-  document.getElementById('editExcerpt').value = ep.excerpt || '';
-  document.getElementById('editContent').value = ep.content || '';
-  document.getElementById('editId').value      = id;
-  document.getElementById('editPlaylist').value= pl;
-  document.getElementById('editModal').classList.add('open');
-}
-
-async function saveEdit() {
-  const id = document.getElementById('editId').value;
-  const pl = document.getElementById('editPlaylist').value;
-  const data = {
-    title:   document.getElementById('editTitle').value.trim(),
-    date:    document.getElementById('editDate').value,
-    youtube: document.getElementById('editYoutube').value.trim(),
-    excerpt: document.getElementById('editExcerpt').value.trim(),
-    content: document.getElementById('editContent').value.trim(),
-  };
-  if (firebaseReady) {
-    await db.collection('episodes').doc(pl).collection('items').doc(id).update(data);
-  } else {
-    let eps = JSON.parse(localStorage.getItem('co_ep_' + pl) || '[]');
-    eps = eps.map(e => String(e.id) === String(id) ? { ...e, ...data } : e);
-    localStorage.setItem('co_ep_' + pl, JSON.stringify(eps));
-  }
-  showAlert('editSuccess', '✓ Updated!');
-  setTimeout(closeModal, 1500);
-  loadEpisodeList();
-}
-
-function closeModal() { document.getElementById('editModal').classList.remove('open'); }
-
-// ════════════════════════════════
-// STATS
-// ════════════════════════════════
-async function loadStats() {
-  const pls = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
-  for (let i = 0; i < pls.length; i++) {
-    let count = 0;
-    try {
-      if (firebaseReady) {
-        const snap = await db.collection('episodes').doc(pls[i]).collection('items').get();
-        count = snap.size;
-      } else {
-        count = JSON.parse(localStorage.getItem('co_ep_' + pls[i]) || '[]').length;
-      }
-    } catch(e) {}
-    document.getElementById('s' + i).textContent = count;
-  }
-}
-
-// ════════════════════════════════
-// SITE TEXT
-// ════════════════════════════════
-async function loadSiteText() {
-  let d = {};
-  try {
-    if (firebaseReady) {
-      const doc = await db.collection('settings').doc('sitetext').get();
-      if (doc.exists) d = doc.data();
-    } else {
-      d = JSON.parse(localStorage.getItem('co_sitetext') || '{}');
-    }
-  } catch(e) {}
-  const map = {
-    tagline:'tagline', aboutHeading:'aboutHeading', aboutP1:'aboutP1', aboutP2:'aboutP2',
-    s1n:'s1n', s1l:'s1l', s2n:'s2n', s2l:'s2l', s3n:'s3n', s3l:'s3l', s4n:'s4n', s4l:'s4l',
-    footer:'footer'
-  };
-  Object.keys(map).forEach(k => {
-    const el = document.getElementById('st_' + k);
-    if (el && d[k] !== undefined) el.value = d[k];
-  });
-}
-
-async function saveSiteText() {
-  const keys = ['tagline','aboutHeading','aboutP1','aboutP2','s1n','s1l','s2n','s2l','s3n','s3l','s4n','s4l','footer'];
-  const data = {};
-  keys.forEach(k => { const el = document.getElementById('st_' + k); if (el) data[k] = el.value; });
-  if (firebaseReady) await db.collection('settings').doc('sitetext').set(data);
-  else localStorage.setItem('co_sitetext', JSON.stringify(data));
-  showAlert('siteTextSuccess', '✓ Saved!');
-}
-
-// ════════════════════════════════
-// SOCIAL LINKS
-// ════════════════════════════════
-async function loadSocialLinks() {
-  let d = {};
-  try {
-    if (firebaseReady) { const doc = await db.collection('settings').doc('social').get(); if (doc.exists) d = doc.data(); }
-    else d = JSON.parse(localStorage.getItem('co_social') || '{}');
-  } catch(e) {}
-  ['youtube','instagram','twitter','threads','reddit','telegram','whatsapp'].forEach(k => {
-    const el = document.getElementById('sl_' + k);
-    if (el && d[k]) el.value = d[k];
-  });
-}
-
-async function saveSocialLinks() {
-  const data = {};
-  ['youtube','instagram','twitter','threads','reddit','telegram','whatsapp'].forEach(k => {
-    const el = document.getElementById('sl_' + k); if (el) data[k] = el.value;
-  });
-  if (firebaseReady) await db.collection('settings').doc('social').set(data);
-  else localStorage.setItem('co_social', JSON.stringify(data));
-  showAlert('socialSuccess', '✓ Links saved!');
-}
-
-// ════════════════════════════════
-// THEME
-// ════════════════════════════════
-const THEME_DEFAULTS = { red:'#cc0000', bg:'#080808', text:'#f0ece4', card:'#161616' };
-
-async function loadTheme() {
-  let d = {};
-  try {
-    if (firebaseReady) { const doc = await db.collection('settings').doc('theme').get(); if (doc.exists) d = doc.data(); }
-    else d = JSON.parse(localStorage.getItem('co_theme') || '{}');
-  } catch(e) {}
-  Object.keys(THEME_DEFAULTS).forEach(k => {
-    const val = d[k] || THEME_DEFAULTS[k];
-    document.getElementById('th_' + k).value     = val;
-    document.getElementById('th_' + k + '_hex').value = val;
-    document.getElementById('prev_' + k).style.background = val;
-  });
-}
-
-async function saveTheme() {
-  const data = {};
-  Object.keys(THEME_DEFAULTS).forEach(k => { data[k] = document.getElementById('th_' + k).value; });
-  if (firebaseReady) await db.collection('settings').doc('theme').set(data);
-  else localStorage.setItem('co_theme', JSON.stringify(data));
-  showAlert('themeSuccess', '✓ Theme saved!');
-}
-
-function resetTheme() {
-  Object.keys(THEME_DEFAULTS).forEach(k => {
-    document.getElementById('th_' + k).value = THEME_DEFAULTS[k];
-    document.getElementById('th_' + k + '_hex').value = THEME_DEFAULTS[k];
-    document.getElementById('prev_' + k).style.background = THEME_DEFAULTS[k];
-  });
-}
-
-function syncColor(id) {
-  const val = document.getElementById(id).value;
-  document.getElementById(id + '_hex').value = val;
-  document.getElementById('prev_' + id.replace('th_','')).style.background = val;
-}
-
-function syncHex(id) {
-  const val = document.getElementById(id + '_hex').value;
-  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-    document.getElementById(id).value = val;
-    document.getElementById('prev_' + id.replace('th_','')).style.background = val;
-  }
-}
-
-// ════════════════════════════════
-// FIREBASE CONFIG SAVER
-// ════════════════════════════════
-function loadFirebaseConfig() {
-  const cfg = JSON.parse(localStorage.getItem('co_firebase_config') || 'null');
-  if (!cfg) return;
-  ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'].forEach(k => {
-    const el = document.getElementById('fb_' + k); if (el && cfg[k]) el.value = cfg[k];
-  });
-}
-
-function saveFirebaseConfig() {
-  const keys = ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'];
-  const cfg = {};
-  keys.forEach(k => { cfg[k] = document.getElementById('fb_' + k).value.trim(); });
-  if (!cfg.apiKey) { showAlert('fbError','❌ API Key is required!'); return; }
-
-  localStorage.setItem('co_firebase_config', JSON.stringify(cfg));
-
-  // Generate and download firebase-config.js
-  const js = `// CinéOpsy Firebase Config — Generated from Admin Panel
-const FIREBASE_CONFIG = ${JSON.stringify(cfg, null, 2)};
-const ADMIN_PASSWORD = "${getPw()}";`;
-
-  const blob = new Blob([js], { type: 'application/javascript' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'firebase-config.js';
-  a.click();
-
-  showAlert('fbSuccess', '✓ Config saved! File downloaded. Replace old firebase-config.js and reupload to Netlify.');
-}
-
-// ════════════════════════════════
-// HELPERS
-// ════════════════════════════════
-function showAlert(id, msg) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (msg) el.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => el.style.display = 'none', 4000);
-}
-
-// Init
-document.getElementById('addDate').valueAsDate = new Date();
-updateInfoFields();
-
-// ── NEWS FUNCTIONS ──
-async function addNews() {
-  const title = document.getElementById('newsTitle').value.trim();
-  const content = document.getElementById('newsContent').value.trim();
-  if (!title || !content) { document.getElementById('newsMsg').innerHTML = '<span style="color:#ff4444">Headline and content are required!</span>'; return; }
-
-  const dateVal = document.getElementById('newsDate').value;
-  const images = [];
-  for (let i = 0; i < 3; i++) {
-    const url = document.getElementById('img' + i + 'url').value.trim();
-    const cap = document.getElementById('img' + i + 'cap').value.trim();
-    if (url) images.push({url, caption: cap});
-  }
-  const tagsRaw = document.getElementById('newsTags').value;
-  const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
-
-  const data = {
-    title,
-    category: document.getElementById('newsCat').value,
-    date: dateVal ? new Date(dateVal).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}) : new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),
-    author: document.getElementById('newsAuthor').value.trim() || 'CinéOpsy',
-    coverImage: document.getElementById('newsCover').value.trim(),
-    excerpt: document.getElementById('newsExcerpt').value.trim(),
-    content,
-    images,
-    tags,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  const btn = document.querySelector('[onclick="addNews()"]');
-  btn.textContent = 'Publishing...'; btn.disabled = true;
-  document.getElementById('newsMsg').innerHTML = '';
-
-  try {
-    if (firebaseReady) {
-      await db.collection('news').add(data);
-      document.getElementById('newsMsg').innerHTML = '<span style="color:#44ff88">✅ News published! Live on website!</span>';
-      // Clear fields
-      ['newsTitle','newsContent','newsExcerpt','newsCover','newsAuthor','newsTags','img0url','img0cap','img1url','img1cap','img2url','img2cap'].forEach(id => {
-        const el = document.getElementById(id); if(el) el.value = '';
-      });
-      loadNewsList();
-    } else {
-      document.getElementById('newsMsg').innerHTML = '<span style="color:#ff4444">Firebase not connected!</span>';
-    }
-  } catch(e) {
-    document.getElementById('newsMsg').innerHTML = '<span style="color:#ff4444">Error: ' + e.message + '</span>';
-  }
-  btn.textContent = '📰 PUBLISH NEWS →'; btn.disabled = false;
-}
-
-async function loadNewsList() {
-  const list = document.getElementById('newsList');
-  if (!list) return;
-  list.innerHTML = '<p style="color:#666;font-style:italic">Loading...</p>';
-  try {
-    if (!firebaseReady) { list.innerHTML = '<p style="color:#666">Firebase not connected.</p>'; return; }
-    const snap = await db.collection('news').orderBy('createdAt','desc').get();
-    const news = snap.docs.map(d => ({...d.data(), id: d.id}));
-    if (!news.length) { list.innerHTML = '<p style="color:#666;font-style:italic">No news yet.</p>'; return; }
-    list.innerHTML = news.map(n => `
-      <div class="ep-item">
-        <div class="ep-info">
-          <span class="ep-pl-badge">${n.category||'Cinema'}</span>
-          <span class="ep-title-text">${n.title}</span>
-          <span class="ep-date-text">${n.date||''}</span>
-        </div>
-        <div class="ep-actions">
-          <button onclick="deleteNews('${n.id}')" class="btn-del">Delete</button>
-        </div>
-      </div>`).join('');
-  } catch(e) { list.innerHTML = '<p style="color:#f44">Error loading news.</p>'; }
-}
-
-async function deleteNews(id) {
-  if (!confirm('Delete this news article?')) return;
-  try {
-    await db.collection('news').doc(id).delete();
-    loadNewsList();
-  } catch(e) { alert('Error: ' + e.message); }
-}
-
-// Load news list when tab is shown
-const origShowTab = window.showTab;
-window.showTab = function(tab, btn) {
-  origShowTab(tab, btn);
-  if (tab === 'news') loadNewsList();
-};
-
-
-// ════════════════════════════════
-// COMMENTS MANAGEMENT
-// ════════════════════════════════
-async function loadAllComments() {
-  const list = document.getElementById('adminCommentsList');
-  if (!list || !firebaseReady) { if(list) list.innerHTML='<p style="color:#555">Firebase not connected.</p>'; return; }
-  list.innerHTML = '<p style="color:#555;font-style:italic">Loading...</p>';
-  
-  try {
-    const playlists = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
-    const typeFilter = document.getElementById('commentFilterType')?.value || 'all';
-    const plFilter = document.getElementById('commentFilterPl')?.value || 'all';
-    let allComments = [];
-    
-    // Load episode comments
-    if (typeFilter === 'all' || typeFilter === 'episode') {
-      const pls = plFilter === 'all' ? playlists : [plFilter];
-      for (const pl of pls) {
-        const epSnap = await db.collection('episodes').doc(pl).collection('items').get();
-        for (const epDoc of epSnap.docs) {
-          const cmtSnap = await db.collection('comments').doc('episode_' + epDoc.id).collection('items').orderBy('createdAt','desc').get();
-          cmtSnap.docs.forEach(d => allComments.push({ ...d.data(), id: d.id, docId: 'episode_' + epDoc.id, epTitle: epDoc.data().title, playlist: pl }));
-        }
-      }
-    }
-    
-    // Load news comments
-    if (typeFilter === 'all' || typeFilter === 'news') {
-      const newsSnap = await db.collection('news').get();
-      for (const nDoc of newsSnap.docs) {
-        const cmtSnap = await db.collection('comments').doc('news_' + nDoc.id).collection('items').orderBy('createdAt','desc').get();
-        cmtSnap.docs.forEach(d => allComments.push({ ...d.data(), id: d.id, docId: 'news_' + nDoc.id, epTitle: nDoc.data().title, playlist: 'NEWS' }));
-      }
-    }
-    
-    if (!allComments.length) { list.innerHTML = '<p style="color:#555;font-style:italic">No comments yet.</p>'; return; }
-    
-    allComments.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-    
-    list.innerHTML = allComments.map(c => {
-      const date = c.createdAt?.toDate?.().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) || 'Unknown date';
-      return `<div class="ep-item" style="flex-direction:column;align-items:flex-start;gap:8px;padding:16px">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;flex-wrap:wrap;gap:8px">
-          <div>
-            <span class="ep-pl-badge">${c.playlist}</span>
-            <span style="font-size:12px;color:#888;margin-left:8px">${c.epTitle||''}</span>
-          </div>
-          <button onclick="deleteComment('${c.docId}','${c.id}')" class="btn-del" style="flex-shrink:0">Delete</button>
-        </div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:#cc0000">${c.name||'Anonymous'} · ${date}</div>
-        <div style="font-size:14px;color:#ccc;line-height:1.5">${c.text||''}</div>
-      </div>`;
-    }).join('');
-  } catch(e) { list.innerHTML = '<p style="color:#f44">Error: ' + e.message + '</p>'; }
-}
-
-async function deleteComment(docId, commentId) {
-  if (!confirm('Delete this comment permanently?')) return;
-  try {
-    await db.collection('comments').doc(docId).collection('items').doc(commentId).delete();
-    loadAllComments();
-    showAlert('episodeSuccess', 'Comment deleted!');
-  } catch(e) { alert('Error: ' + e.message); }
-}
-
-// ════════════════════════════════
-// POLLS MANAGEMENT
-// ════════════════════════════════
-async function createPoll() {
-  const question = document.getElementById('pollQuestion').value.trim();
-  const optionsRaw = document.getElementById('pollOptions').value.trim();
-  const active = document.getElementById('pollActive').checked;
-  const msg = document.getElementById('pollMsg');
-  
-  if (!question || !optionsRaw) { msg.innerHTML = '<span style="color:#f44">Question and options required!</span>'; return; }
-  const options = optionsRaw.split('\n').map(o=>o.trim()).filter(Boolean);
-  if (options.length < 2) { msg.innerHTML = '<span style="color:#f44">Minimum 2 options required!</span>'; return; }
-  
-  try {
-    // Deactivate other polls if this is active
-    if (active) {
-      const existing = await db.collection('polls').where('active','==',true).get();
-      await Promise.all(existing.docs.map(d => d.ref.update({ active: false })));
-    }
-    await db.collection('polls').add({
-      question, options, active,
-      votes: {}, totalVotes: 0,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+// ── FIREBASE ──
+function initFB(){
+  try{
+    if(typeof firebase==='undefined')throw new Error('Firebase SDK not loaded');
+    const cfg=typeof FIREBASE_CONFIG!=='undefined'?FIREBASE_CONFIG:null;
+    if(!cfg)throw new Error('Config missing');
+    if(!firebase.apps.length)firebase.initializeApp(cfg);
+    db=firebase.firestore();auth=firebase.auth();
+    window.db=db;fbReady=true;setFbStat(true);
+    auth.onAuthStateChanged(function(user){
+      if(user&&user.emailVerified){curUser=user;clearAtt();_onAuth(user);}
+      else if(!user){curUser=null;}
     });
-    msg.innerHTML = '<span style="color:#44ff88">✅ Poll created!</span>';
-    document.getElementById('pollQuestion').value = '';
-    document.getElementById('pollOptions').value = '';
-    loadPollsList();
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+  }catch(e){fbReady=false;setFbStat(false);console.warn('FB:',e.message);}
+}
+function setFbStat(ok){
+  const el=document.getElementById('fbstat');if(!el)return;
+  el.className='fbstat '+(ok?'ok':'err');
+  el.innerHTML='<span class="fbdot"></span>'+(ok?'Firebase OK':'Firebase Error');
 }
 
-async function loadPollsList() {
-  const list = document.getElementById('pollsList');
-  if (!list || !firebaseReady) return;
-  list.innerHTML = '<p style="color:#555;font-style:italic">Loading...</p>';
-  try {
-    const snap = await db.collection('polls').orderBy('createdAt','desc').get();
-    if (snap.empty) { list.innerHTML = '<p style="color:#555;font-style:italic">No polls yet.</p>'; return; }
-    list.innerHTML = snap.docs.map(d => {
-      const p = d.data();
-      return `<div class="ep-item">
-        <div class="ep-info">
-          <span class="ep-pl-badge">${p.active ? '🟢 Active' : '⚫ Inactive'}</span>
-          <span class="ep-title-text">${p.question}</span>
-          <span class="ep-date-text">${p.totalVotes||0} votes</span>
-        </div>
-        <div class="ep-actions">
-          <button onclick="togglePoll('${d.id}',${!p.active})" class="btn-edit">${p.active ? 'Deactivate' : 'Activate'}</button>
-          <button onclick="deletePoll('${d.id}')" class="btn-del">Delete</button>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) { list.innerHTML = '<p style="color:#f44">Error loading polls.</p>'; }
-}
+// ── LOGIN ──
+function showErr(msg){const e=document.getElementById('lerr');if(e){e.textContent=msg;e.style.display='block';}}
+function hideErr(){const e=document.getElementById('lerr');if(e)e.style.display='none';}
 
-async function togglePoll(id, active) {
-  if (active) {
-    const existing = await db.collection('polls').where('active','==',true).get();
-    await Promise.all(existing.docs.map(d => d.ref.update({ active: false })));
+async function doLogin(){
+  const lu=isLocked();if(lu){showLock(lu);return;}
+  const eEl=document.getElementById('lemail'),pEl=document.getElementById('lpw'),btn=document.getElementById('lbtn');
+  const email=eEl?eEl.value.trim():'',pw=pEl?pEl.value:'';
+  hideErr();
+  if(!email||!email.includes('@')){showErr('Enter a valid email address.');return;}
+  if(!pw||pw.length<6){showErr('Password must be at least 6 characters.');return;}
+  btn.textContent='Signing in...';btn.disabled=true;
+  // Init Firebase if not done
+  if(!auth){
+    initFB();
+    await new Promise(r=>setTimeout(r,1500));
   }
-  await db.collection('polls').doc(id).update({ active });
-  loadPollsList();
-}
-
-async function deletePoll(id) {
-  if (!confirm('Delete this poll?')) return;
-  await db.collection('polls').doc(id).delete();
-  loadPollsList();
-}
-
-// ════════════════════════════════
-// NEWSLETTER MANAGEMENT
-// ════════════════════════════════
-async function loadNewsletterList() {
-  const list = document.getElementById('newsletterList');
-  if (!list || !firebaseReady) return;
-  list.innerHTML = '<p style="color:#555;font-style:italic">Loading...</p>';
-  try {
-    const snap = await db.collection('newsletter').orderBy('subscribedAt','desc').get();
-    const total = snap.size;
-    const active = snap.docs.filter(d => d.data().active !== false).length;
-    const tEl = document.getElementById('nlTotal'); if(tEl) tEl.textContent = total;
-    const aEl = document.getElementById('nlActive'); if(aEl) aEl.textContent = active;
-    if (!total) { list.innerHTML = '<p style="color:#555;font-style:italic">No subscribers yet.</p>'; return; }
-    list.innerHTML = snap.docs.map(d => {
-      const s = d.data();
-      const date = s.subscribedAt?.toDate?.().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || '';
-      return `<div class="ep-item">
-        <div class="ep-info">
-          <span class="ep-pl-badge">${s.active !== false ? '🟢 Active' : '⚫ Unsubscribed'}</span>
-          <span class="ep-title-text">${s.email}</span>
-          <span class="ep-date-text">${date}</span>
-        </div>
-        <div class="ep-actions">
-          <button onclick="deleteSubscriber('${d.id}')" class="btn-del">Remove</button>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) { list.innerHTML = '<p style="color:#f44">Error: ' + e.message + '</p>'; }
-}
-
-async function deleteSubscriber(id) {
-  if (!confirm('Remove subscriber?')) return;
-  await db.collection('newsletter').doc(id).delete();
-  loadNewsletterList();
-}
-
-async function exportNewsletter() {
-  try {
-    const snap = await db.collection('newsletter').where('active','!=',false).get();
-    const emails = snap.docs.map(d => d.data().email).join('\n');
-    const blob = new Blob([emails], {type:'text/csv'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'cineopsy-newsletter-' + new Date().toISOString().split('T')[0] + '.csv';
-    a.click();
-  } catch(e) { alert('Export error: ' + e.message); }
-}
-
-// ════════════════════════════════
-// PINNED EPISODES
-// ════════════════════════════════
-async function loadPinEpisodes() {
-  const pl = document.getElementById('pinPlaylist').value;
-  const sel = document.getElementById('pinEpisode');
-  if (!pl || !firebaseReady) return;
-  sel.innerHTML = '<option>Loading...</option>';
-  try {
-    const snap = await db.collection('episodes').doc(pl).collection('items').orderBy('createdAt','desc').get();
-    if (snap.empty) { sel.innerHTML = '<option>No episodes found</option>'; return; }
-    sel.innerHTML = snap.docs.map(d => `<option value="${d.id}__${pl}">${d.data().title}</option>`).join('');
-  } catch(e) { sel.innerHTML = '<option>Error loading</option>'; }
-}
-
-async function pinEpisode() {
-  const val = document.getElementById('pinEpisode').value;
-  const msg = document.getElementById('pinMsg');
-  if (!val || val.includes('Loading') || val.includes('No episodes')) { msg.innerHTML = '<span style="color:#f44">Please select an episode!</span>'; return; }
-  const [epId, pl] = val.split('__');
-  try {
-    const epDoc = await db.collection('episodes').doc(pl).collection('items').doc(epId).get();
-    if (!epDoc.exists) { msg.innerHTML = '<span style="color:#f44">Episode not found!</span>'; return; }
-    await db.collection('pinned').add({
-      epId, playlist: pl,
-      title: epDoc.data().title,
-      excerpt: epDoc.data().excerpt || '',
-      pinnedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    msg.innerHTML = '<span style="color:#44ff88">✅ Episode pinned to homepage!</span>';
-    loadPinnedList();
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
-}
-
-async function loadPinnedList() {
-  const list = document.getElementById('pinnedList');
-  if (!list || !firebaseReady) return;
-  try {
-    const snap = await db.collection('pinned').orderBy('pinnedAt','desc').get();
-    if (snap.empty) { list.innerHTML = '<p style="color:#555;font-style:italic">No pinned episodes.</p>'; return; }
-    list.innerHTML = snap.docs.map(d => {
-      const p = d.data();
-      return `<div class="ep-item">
-        <div class="ep-info">
-          <span class="ep-pl-badge">${p.playlist}</span>
-          <span class="ep-title-text">${p.title}</span>
-        </div>
-        <div class="ep-actions">
-          <button onclick="unpinEpisode('${d.id}')" class="btn-del">Unpin</button>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) { list.innerHTML = '<p style="color:#f44">Error.</p>'; }
-}
-
-async function unpinEpisode(id) {
-  await db.collection('pinned').doc(id).delete();
-  loadPinnedList();
-}
-
-// ════════════════════════════════
-// PUSH NOTIFICATIONS
-// ════════════════════════════════
-async function sendPushNotification() {
-  const title = document.getElementById('pushTitle').value.trim();
-  const body = document.getElementById('pushBody').value.trim();
-  const url = document.getElementById('pushUrl').value.trim();
-  const msg = document.getElementById('pushMsg');
-  if (!title || !body) { msg.innerHTML = '<span style="color:#f44">Title and message required!</span>'; return; }
-  try {
-    await db.collection('notifications').add({
-      title, body, url: url || '/',
-      sentAt: firebase.firestore.FieldValue.serverTimestamp(),
-      sent: true
-    });
-    msg.innerHTML = '<span style="color:#44ff88">✅ Notification saved! Will show to visitors on next visit.</span>';
-    document.getElementById('pushTitle').value = '';
-    document.getElementById('pushBody').value = '';
-    document.getElementById('pushUrl').value = '';
-    loadPushHistory();
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
-}
-
-async function loadPushHistory() {
-  const list = document.getElementById('pushHistory');
-  if (!list || !firebaseReady) return;
-  try {
-    const snap = await db.collection('notifications').orderBy('sentAt','desc').limit(10).get();
-    if (snap.empty) { list.innerHTML = '<p style="color:#555;font-style:italic">No notifications sent yet.</p>'; return; }
-    list.innerHTML = snap.docs.map(d => {
-      const n = d.data();
-      const date = n.sentAt?.toDate?.().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || '';
-      return `<div class="ep-item">
-        <div class="ep-info">
-          <span class="ep-pl-badge">🔔 Sent</span>
-          <span class="ep-title-text">${n.title}</span>
-          <span class="ep-date-text">${date} · ${n.body?.substring(0,50)}</span>
-        </div>
-        <div class="ep-actions">
-          <button onclick="deletePushNotif('${d.id}')" class="btn-del">Delete</button>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) {}
-}
-
-async function deletePushNotif(id) {
-  await db.collection('notifications').doc(id).delete();
-  loadPushHistory();
-}
-
-// ═══ Hook switchTab for new tabs ═══
-
-
-// ════════════════════════════════
-// REVIEW REQUESTS
-// ════════════════════════════════
-async function loadReviewRequests() {
-  const list = document.getElementById('reviewRequestsList');
-  const stats = document.getElementById('reqStats');
-  if (!list || !firebaseReady) return;
-  list.innerHTML = '<p style="color:#555;font-style:italic">Loading...</p>';
-  try {
-    const filter = document.getElementById('reqStatusFilter')?.value || 'all';
-    let query = db.collection('review_requests').orderBy('submittedAt','desc');
-    const snap = await query.get();
-    let requests = snap.docs.map(d => ({...d.data(), id: d.id}));
-    
-    // Stats
-    const pending = requests.filter(r => r.status === 'pending').length;
-    const approved = requests.filter(r => r.status === 'approved').length;
-    const done = requests.filter(r => r.status === 'done').length;
-    if (stats) stats.innerHTML = 
-      `<div class="stat-card"><div class="num">${pending}</div><div class="lbl">Pending</div></div>` +
-      `<div class="stat-card"><div class="num">${approved}</div><div class="lbl">Approved</div></div>` +
-      `<div class="stat-card"><div class="num">${done}</div><div class="lbl">Reviewed</div></div>`;
-    
-    if (filter !== 'all') requests = requests.filter(r => r.status === filter);
-    if (!requests.length) { list.innerHTML = '<p style="color:#555;font-style:italic">No requests found.</p>'; return; }
-    
-    list.innerHTML = requests.map(r => {
-      const date = r.submittedAt?.toDate?.().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) || '';
-      const statusColors = {pending:'#f0a500',approved:'#44cc44',done:'#4488ff',rejected:'#f44'};
-      return `<div class="ep-item" style="flex-direction:column;align-items:flex-start;gap:10px;padding:16px">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:flex-start;flex-wrap:wrap;gap:8px">
-          <div>
-            <span class="ep-pl-badge">${r.industry||'Cinema'}</span>
-            <span style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--white);margin-left:10px">${r.movie}</span>
-          </div>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${statusColors[r.status]||'#888'};padding:3px 8px;border:1px solid ${statusColors[r.status]||'#888'}">${r.status||'pending'}</span>
-        </div>
-        ${r.reason ? `<div style="font-size:13px;color:#aaa;font-style:italic">"${r.reason.substring(0,150)}"</div>` : ''}
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;color:#666">${r.name||'Anonymous'} · ${date}</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button onclick="updateRequestStatus('${r.id}','approved')" class="btn-edit" style="font-size:10px;padding:4px 10px">Approve</button>
-          <button onclick="updateRequestStatus('${r.id}','done')" class="btn-edit" style="font-size:10px;padding:4px 10px;background:#4488ff">Reviewed</button>
-          <button onclick="updateRequestStatus('${r.id}','rejected')" class="btn-del" style="font-size:10px;padding:4px 10px">Reject</button>
-          <button onclick="deleteReviewRequest('${r.id}')" class="btn-del" style="font-size:10px;padding:4px 10px;background:#333">Delete</button>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) { list.innerHTML = `<p style="color:#f44">Error: ${e.message}</p>`; }
-}
-
-async function updateRequestStatus(id, status) {
-  try { await db.collection('review_requests').doc(id).update({ status }); loadReviewRequests(); } 
-  catch(e) { alert('Error: ' + e.message); }
-}
-
-async function deleteReviewRequest(id) {
-  if (!confirm('Delete this request?')) return;
-  try { await db.collection('review_requests').doc(id).delete(); loadReviewRequests(); }
-  catch(e) { alert('Error: ' + e.message); }
-}
-
-// Hook requests tab
-
-
-// Admin Theme
-function applyAdminTheme(t) {
-  document.documentElement.classList.toggle('light', t === 'light');
-  var btn = document.getElementById('adminThemeBtn');
-  if (btn) btn.textContent = t === 'light' ? '☀️' : '🌙';
-}
-function toggleAdminTheme() {
-  var isLight = document.documentElement.classList.contains('light');
-  var next = isLight ? 'dark' : 'light';
-  localStorage.setItem('co_admin_theme', next);
-  applyAdminTheme(next);
-}
-// Apply on load
-(function(){ applyAdminTheme(localStorage.getItem('co_admin_theme') || 'dark'); })();
-
-
-// ════ MANAGE TAB FUNCTIONS ════
-async function loadManageTab() {
-  if (!firebaseReady) return;
-  try {
-    const doc = await db.collection('settings').doc('manage').get();
-    if (!doc.exists) return;
-    const d = doc.data();
-    const fv = document.getElementById('mgFeaturedVideo');
-    const ft = document.getElementById('mgFeaturedTitle');
-    const cn = document.getElementById('mgCreatorName');
-    const cb = document.getElementById('mgCreatorBio');
-    const an = document.getElementById('mgAnnouncement');
-    const aa = document.getElementById('mgAnnouncementActive');
-    if (fv && d.featuredVideo) fv.value = d.featuredVideo;
-    if (ft && d.featuredTitle) ft.value = d.featuredTitle;
-    if (cn && d.creatorName) cn.value = d.creatorName;
-    if (cb && d.creatorBio) cb.value = d.creatorBio;
-    if (an && d.announcement) an.value = d.announcement;
-    if (aa) aa.checked = !!d.announcementActive;
-  } catch(e) {}
-}
-
-async function saveFeaturedVideo() {
-  const v = document.getElementById('mgFeaturedVideo').value.trim();
-  const t = document.getElementById('mgFeaturedTitle').value.trim();
-  const msg = document.getElementById('featuredVideoMsg');
-  try {
-    await db.collection('settings').doc('manage').set({ featuredVideo: v, featuredTitle: t }, { merge: true });
-    msg.innerHTML = '<span style="color:#44ff88">✅ Saved! Homepage updated.</span>';
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
-}
-
-async function saveCreatorBio() {
-  const name = document.getElementById('mgCreatorName').value.trim();
-  const bio = document.getElementById('mgCreatorBio').value.trim();
-  const msg = document.getElementById('creatorBioMsg');
-  try {
-    await db.collection('settings').doc('manage').set({ creatorName: name, creatorBio: bio }, { merge: true });
-    msg.innerHTML = '<span style="color:#44ff88">✅ Bio saved!</span>';
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
-}
-
-async function saveAnnouncement() {
-  const text = document.getElementById('mgAnnouncement').value.trim();
-  const active = document.getElementById('mgAnnouncementActive').checked;
-  const msg = document.getElementById('announcementMsg');
-  try {
-    await db.collection('settings').doc('manage').set({ announcement: text, announcementActive: active }, { merge: true });
-    msg.innerHTML = '<span style="color:#44ff88">✅ Announcement saved!</span>';
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
-}
-
-async function clearViewsData() {
-  if (!confirm('Reset all view counts? This cannot be undone!')) return;
-  const msg = document.getElementById('dataMsg');
-  try {
-    const snap = await db.collection('views').get();
-    const batch = db.batch();
-    snap.docs.forEach(d => batch.delete(d.ref));
-    await batch.commit();
-    msg.innerHTML = '<span style="color:#44ff88">✅ View counts reset!</span>';
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
-}
-
-async function exportAllData() {
-  const msg = document.getElementById('dataMsg');
-  try {
-    const pls = ['weekly','verdict','whatif','casefiles','beyondborders','specials'];
-    const allData = {};
-    for (const pl of pls) {
-      const snap = await db.collection('episodes').doc(pl).collection('items').get();
-      allData[pl] = snap.docs.map(d => ({...d.data(), id: d.id}));
+  if(!auth){showErr('Connection error. Check internet and try again.');btn.textContent='LOGIN →';btn.disabled=false;return;}
+  try{
+    const res=await auth.signInWithEmailAndPassword(email,pw);
+    if(!res.user.emailVerified){
+      await res.user.sendEmailVerification();
+      await auth.signOut();
+      showErr('Email not verified! Check inbox for verification link.');
+      btn.textContent='LOGIN →';btn.disabled=false;return;
     }
-    const blob = new Blob([JSON.stringify(allData, null, 2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'cineopsy-backup-' + new Date().toISOString().split('T')[0] + '.json';
-    a.click();
-    msg.innerHTML = '<span style="color:#44ff88">✅ Exported!</span>';
-  } catch(e) { msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>'; }
+    localStorage.setItem('co_ses',Date.now().toString());
+    clearAtt();
+    // onAuthStateChanged will handle showing panel
+  }catch(err){
+    const rem=recordFail();
+    let msg='Login failed. Please try again.';
+    if(err.code==='auth/user-not-found'||err.code==='auth/invalid-credential'||err.code==='auth/wrong-password')
+      msg='Invalid email or password.'+(rem>0?' ('+rem+' attempts left)':'');
+    else if(err.code==='auth/invalid-email')msg='Invalid email format.';
+    else if(err.code==='auth/too-many-requests')msg='Too many attempts! Temporarily locked by Firebase.';
+    else if(err.code==='auth/network-request-failed')msg='Network error. Check your connection.';
+    showErr(msg);if(pEl)pEl.value='';
+  }
+  btn.textContent='LOGIN →';btn.disabled=false;
 }
 
-
-
-// ════ ABOUT PAGE ADMIN ════
-const ABOUT_FIELDS = [
-  ['heroTitle','ab_heroTitle'],
-  ['heroSub','ab_heroSub'],
-  ['missionQuote','ab_missionQuote'],
-  ['missionSub','ab_missionSub'],
-  ['story1Label','ab_story1Label'],
-  ['story1Title','ab_story1Title'],
-  ['story1P1','ab_story1P1'],
-  ['story1P2','ab_story1P2'],
-  ['story2Label','ab_story2Label'],
-  ['story2Title','ab_story2Title'],
-  ['story2P1','ab_story2P1'],
-  ['story2P2','ab_story2P2'],
-  ['pillarsTitle','ab_pillarsTitle'],
-  ['pillarTitle0','ab_pillarTitle0'], ['pillarDesc0','ab_pillarDesc0'],
-  ['pillarTitle1','ab_pillarTitle1'], ['pillarDesc1','ab_pillarDesc1'],
-  ['pillarTitle2','ab_pillarTitle2'], ['pillarDesc2','ab_pillarDesc2'],
-  ['pillarTitle3','ab_pillarTitle3'], ['pillarDesc3','ab_pillarDesc3'],
-  ['pillarTitle4','ab_pillarTitle4'], ['pillarDesc4','ab_pillarDesc4'],
-  ['pillarTitle5','ab_pillarTitle5'], ['pillarDesc5','ab_pillarDesc5'],
-  ['creatorLabel','ab_creatorLabel'],
-  ['creatorTitle','ab_creatorTitle'],
-  ['creatorName','ab_creatorName'],
-  ['creatorRole','ab_creatorRole'],
-  ['creatorBio','ab_creatorBio'],
-  ['ctaTitle','ab_ctaTitle'],
-  ['ctaSub','ab_ctaSub'],
-];
-
-async function loadAboutAdmin() {
-  // Step 1: Fill with current defaults from the page
-  const aboutDefaults = {
-    heroTitle: 'Where Cinema<br>Meets Biopsy',
-    heroSub: "We don't just watch films. We dissect them.",
-    missionQuote: '"Cinema is not just entertainment — it's a mirror of society, and we intend to hold it up clearly."',
-    missionSub: '— CinéOpsy',
-    story1Label: 'Our Story',
-    story1Title: 'Born from Two Worlds',
-    story1P1: 'CinéOpsy was born from an unusual intersection — medical science and cinema.',
-    story1P2: 'We believe every film deserves the same precision.',
-    story2Label: 'Our Approach',
-    story2Title: 'Diagnosis Over Opinion',
-    story2P1: 'Where most review channels give you a thumbs up or down, we give you a full diagnosis.',
-    story2P2: 'From Bollywood blockbusters to hidden world cinema gems — no fluff, no hype.',
-    pillarsTitle: 'Our Six Specialties',
-    pillarTitle0: 'Weekly', pillarDesc0: 'Box office, industry news and upcoming releases — every Thursday.',
-    pillarTitle1: 'Verdict', pillarDesc1: 'Honest, deep reviews with our signature Biopsy Score.',
-    pillarTitle2: 'What If', pillarDesc2: 'Alternate timeline analysis — what if the story went differently?',
-    pillarTitle3: 'Case Files', pillarDesc3: 'Medical diagnosis of cinema. Every film is a patient.',
-    pillarTitle4: 'Beyond Borders', pillarDesc4: 'World cinema that never reached India — explained in English.',
-    pillarTitle5: 'CinéOpsy Specials', pillarDesc5: 'Exclusive content and special productions by CinéOpsy.',
-    creatorLabel: 'Behind CinéOpsy',
-    creatorTitle: 'The Creator',
-    creatorName: 'Rajkamal Yadav',
-    creatorRole: 'Founder · Writer · Editor',
-    creatorBio: 'Paramedical student with a passion for cinema and storytelling. CinéOpsy is built on the belief that the analytical lens of healthcare — precision, honesty, depth — can transform how we understand film.',
-    ctaTitle: 'Ready to Dive In?',
-    ctaSub: 'Explore our series or subscribe to never miss an episode.',
-  };
-
-  ABOUT_FIELDS.forEach(([key, elId]) => {
-    const el = document.getElementById(elId);
-    if (el && aboutDefaults[key]) el.value = aboutDefaults[key];
-  });
-
-  // Step 2: Override with Firebase saved values
-  if (!firebaseReady) return;
-  try {
-    const doc = await db.collection('settings').doc('about').get();
-    if (!doc.exists) return;
-    const d = doc.data();
-    ABOUT_FIELDS.forEach(([key, elId]) => {
-      const el = document.getElementById(elId);
-      if (el && d[key]) el.value = d[key];
-    });
-  } catch(e) {}
+function _onAuth(user){
+  const ses=parseInt(localStorage.getItem('co_ses')||'0');
+  if(ses&&(Date.now()-ses)/3600000>SES_HRS){doLogout();alert('Session expired.');return;}
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('adminWrap').style.display='block';
+  const uel=document.getElementById('userEmail');if(uel)uel.textContent=user.email;
+  if(!fbReady)initFB();
+  setTimeout(loadDash,400);setTimeout(buildCtFields,500);
+  setTimeout(loadContent,600);setTimeout(loadAbout,700);
+  setTimeout(loadSettings,800);setTimeout(loadEpList,900);
 }
 
-async function saveAboutPage() {
-  const msg = document.getElementById('aboutSaveMsg');
-  const btn = document.querySelector('[onclick="saveAboutPage()"]');
-  if (!firebaseReady) { msg.innerHTML = '<span style="color:#f44">Firebase not connected!</span>'; return; }
-  if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
-  
-  const data = {};
-  ABOUT_FIELDS.forEach(([key, elId]) => {
-    const el = document.getElementById(elId);
-    if (el) data[key] = el.value.trim();
-  });
-  
-  try {
-    // Save to 'about' collection
+async function doLogout(){
+  localStorage.removeItem('co_ses');
+  if(auth)await auth.signOut();
+  document.getElementById('adminWrap').style.display='none';
+  document.getElementById('loginWrap').style.display='flex';
+  const p=document.getElementById('lpw');if(p)p.value='';
+}
+
+// Enter key
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){
+    const lw=document.getElementById('loginWrap');
+    if(lw&&lw.style.display!=='none')doLogin();
+  }
+});
+
+// Session check every 10 min
+setInterval(function(){
+  if(!curUser)return;
+  const s=parseInt(localStorage.getItem('co_ses')||'0');
+  if(s&&(Date.now()-s)/3600000>SES_HRS){doLogout();alert('Session expired. Please login again.');}
+},600000);
+
+// ── TABS ──
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  const t=document.querySelector('.tab[data-tab="'+name+'"]');
+  const p=document.getElementById('pane-'+name);
+  if(t)t.classList.add('active');if(p)p.classList.add('active');
+  const loaders={episodes:loadEpList,news:loadNews,polls:loadPolls,
+    comments:()=>loadComs('all'),newsletter:loadSubs,requests:loadReqs};
+  if(loaders[name])loaders[name]();
+}
+document.getElementById('tabsBar').addEventListener('click',function(e){
+  const t=e.target.closest('.tab');if(t&&t.dataset.tab)showTab(t.dataset.tab);
+});
+
+// ── HELPERS ──
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function al(id,msg,err){const e=document.getElementById(id);if(!e)return;if(msg)e.textContent=msg;e.className='al '+(err?'err':'ok');e.style.display='block';setTimeout(()=>e.style.display='none',4000);}
+function needDb(){if(!fbReady||!db){alert('Firebase not connected. Check internet.');return false;}return true;}
+function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+
+// ── DASHBOARD ──
+async function loadDash(){
+  if(!fbReady)return;
+  try{
+    let ep=0;for(const pl of PLS){const s=await db.collection('episodes').doc(pl).collection('items').get();ep+=s.size;}
+    const ns=await db.collection('news').get();
+    const co=await db.collection('comments').get();
+    const nl=await db.collection('newsletter').get();
+    const rq=await db.collection('review_requests').get();
+    const po=await db.collection('polls').get();
+    setText('st-ep',ep);setText('st-news',ns.size);setText('st-com',co.size);
+    setText('st-nl',nl.size);setText('st-req',rq.size);setText('st-poll',po.size);
+  }catch(e){}
+}
+
+// ── EPISODES ──
+function onPlChange(){document.getElementById('verdictF').style.display=document.getElementById('epPl').value==='verdict'?'block':'none';}
+function clearEpForm(){['epTitle','epYT','epExc','epContent','epScore'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
+async function addEp(){
+  if(!needDb())return;
+  const pl=document.getElementById('epPl').value;
+  const title=document.getElementById('epTitle').value.trim();
+  if(!title){al('epErr','❌ Title required!',true);return;}
+  const ep={title,playlist:pl,youtube:document.getElementById('epYT').value.trim(),
+    excerpt:document.getElementById('epExc').value.trim(),content:document.getElementById('epContent').value.trim(),
+    date:document.getElementById('epDate').value,createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  if(pl==='verdict'){
+    ep.biopsyScore=document.getElementById('epScore').value;
+    ep.streaming=[document.getElementById('epStream').value].filter(Boolean);
+    ep.verdictText=document.getElementById('epVerdict').value;
+  }
+  try{await db.collection('episodes').doc(pl).collection('items').add(ep);al('epOk');clearEpForm();loadEpList();}
+  catch(e){al('epErr','❌ '+e.message,true);}
+}
+async function loadEpList(){
+  const pl=document.getElementById('mgPl')?.value||'weekly';
+  const list=document.getElementById('epList');if(!list)return;
+  if(!fbReady){list.innerHTML='<p style="color:var(--gray)">Firebase not connected</p>';return;}
+  list.innerHTML='<p style="color:var(--gray)">Loading...</p>';
+  try{
+    const snap=await db.collection('episodes').doc(pl).collection('items').orderBy('createdAt','desc').get();
+    if(snap.empty){list.innerHTML='<p style="color:var(--gray)">No episodes yet.</p>';return;}
+    list.innerHTML=snap.docs.map(d=>{const e=d.data();
+      return'<div class="li"><div class="li-title">'+esc(e.title)+'</div><div class="li-meta">'+esc(e.date||'')+'</div><button class="btn btn-g" style="padding:5px 10px;font-size:9px;" onclick="delEp(\''+pl+'\',\''+d.id+'\')">Delete</button></div>';
+    }).join('');
+  }catch(e){list.innerHTML='<p style="color:#ff6b6b">'+esc(e.message)+'</p>';}
+}
+async function delEp(pl,id){if(!confirm('Delete?'))return;try{await db.collection('episodes').doc(pl).collection('items').doc(id).delete();loadEpList();}catch(e){alert(e.message);}}
+
+// ── NEWS ──
+async function addNews(){
+  if(!needDb())return;
+  const title=document.getElementById('nTitle').value.trim();
+  if(!title){al('nErr','❌ Headline required!',true);return;}
+  const tags=document.getElementById('nTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  try{
+    await db.collection('news').add({title,category:document.getElementById('nCat').value,
+      date:document.getElementById('nDate').value,coverImage:document.getElementById('nCover').value.trim(),
+      excerpt:document.getElementById('nExc').value.trim(),content:document.getElementById('nContent').value.trim(),
+      tags,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    al('nOk');['nTitle','nCover','nExc','nContent','nTags'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    loadNews();
+  }catch(e){al('nErr','❌ '+e.message,true);}
+}
+async function loadNews(){
+  const list=document.getElementById('newsList');if(!list||!fbReady)return;
+  list.innerHTML='<p style="color:var(--gray)">Loading...</p>';
+  try{
+    const snap=await db.collection('news').orderBy('createdAt','desc').limit(20).get();
+    if(snap.empty){list.innerHTML='<p style="color:var(--gray)">No articles yet.</p>';return;}
+    list.innerHTML=snap.docs.map(d=>{const n=d.data();
+      return'<div class="li"><div><div class="li-title">'+esc(n.title)+'</div><div class="li-meta">'+esc(n.category||'')+'</div></div><button class="btn btn-g" style="padding:5px 10px;font-size:9px;" onclick="delNews(\''+d.id+'\')">Delete</button></div>';
+    }).join('');
+  }catch(e){list.innerHTML='<p style="color:#ff6b6b">'+esc(e.message)+'</p>';}
+}
+async function delNews(id){if(!confirm('Delete?'))return;try{await db.collection('news').doc(id).delete();loadNews();}catch(e){alert(e.message);}}
+
+// ── POLLS ──
+async function createPoll(){
+  if(!needDb())return;
+  const q=document.getElementById('pQ').value.trim();
+  if(!q){al('pErr','❌ Question required!',true);return;}
+  const opts=[0,1,2,3].map(i=>document.getElementById('p'+i).value.trim()).filter(Boolean);
+  if(opts.length<2){al('pErr','❌ At least 2 options needed!',true);return;}
+  try{
+    await db.collection('polls').add({question:q,options:opts,active:true,totalVotes:0,votes:{},createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    al('pOk');document.getElementById('pQ').value='';[0,1,2,3].forEach(i=>{const e=document.getElementById('p'+i);if(e)e.value='';});
+    loadPolls();
+  }catch(e){al('pErr','❌ '+e.message,true);}
+}
+async function loadPolls(){
+  const list=document.getElementById('pollList');if(!list||!fbReady)return;
+  try{
+    const snap=await db.collection('polls').orderBy('createdAt','desc').get();
+    if(snap.empty){list.innerHTML='<p style="color:var(--gray)">No polls yet.</p>';return;}
+    list.innerHTML=snap.docs.map(d=>{const p=d.data();
+      return'<div class="li" style="flex-direction:column;align-items:flex-start;gap:6px;"><div style="display:flex;width:100%;gap:8px;align-items:center;flex-wrap:wrap;"><span class="li-title">'+esc(p.question)+'</span><span style="font-size:9px;padding:2px 7px;border-radius:3px;background:'+(p.active?'rgba(34,197,94,.12)':'rgba(136,136,136,.12)')+';color:'+(p.active?'var(--green)':'var(--gray)')+';">'+(p.active?'Active':'Inactive')+'</span><div style="margin-left:auto;display:flex;gap:6px;"><button class="btn btn-g" style="padding:4px 9px;font-size:9px;" onclick="togglePoll(\''+d.id+'\','+(!p.active)+')">'+(p.active?'Deactivate':'Activate')+'</button><button class="btn btn-g" style="padding:4px 9px;font-size:9px;" onclick="delPoll(\''+d.id+'\')">Delete</button></div></div><div style="color:var(--gray);font-size:11px;">'+(p.options||[]).join(' · ')+' — '+(p.totalVotes||0)+' votes</div></div>';
+    }).join('');
+  }catch(e){list.innerHTML='<p style="color:#ff6b6b">'+esc(e.message)+'</p>';}
+}
+async function togglePoll(id,active){try{await db.collection('polls').doc(id).update({active});loadPolls();}catch(e){alert(e.message);}}
+async function delPoll(id){if(!confirm('Delete poll?'))return;try{await db.collection('polls').doc(id).delete();loadPolls();}catch(e){alert(e.message);}}
+
+// ── COMMENTS ──
+async function loadComs(filter){
+  const list=document.getElementById('comList');if(!list||!fbReady)return;
+  list.innerHTML='<p style="color:var(--gray)">Loading...</p>';
+  try{
+    const snap=await db.collection('comments').get();
+    if(snap.empty){list.innerHTML='<p style="color:var(--gray)">No comments yet.</p>';return;}
+    let items=[];
+    for(const doc of snap.docs){
+      const sub=await doc.ref.collection('items').orderBy('createdAt','desc').limit(20).get();
+      sub.docs.forEach(d=>items.push({...d.data(),pid:doc.id,cid:d.id}));
+    }
+    if(filter!=='all')items=items.filter(c=>c.type===filter);
+    if(!items.length){list.innerHTML='<p style="color:var(--gray)">No comments found.</p>';return;}
+    list.innerHTML=items.slice(0,50).map(c=>'<div class="li" style="flex-direction:column;align-items:flex-start;gap:4px;"><div style="display:flex;width:100%;gap:8px;"><strong style="font-size:12px;">'+esc(c.name||'Anonymous')+'</strong><span style="color:var(--gray);font-size:11px;">'+esc(c.type||'')+'</span><button class="btn btn-g" style="padding:3px 8px;font-size:9px;margin-left:auto;" onclick="delCom(\''+c.pid+'\',\''+c.cid+'\')">Delete</button></div><div style="color:var(--gray);font-size:12px;">'+esc((c.text||'').substring(0,100))+'</div></div>').join('');
+  }catch(e){list.innerHTML='<p style="color:#ff6b6b">'+esc(e.message)+'</p>';}
+}
+async function delCom(pid,cid){if(!confirm('Delete?'))return;try{await db.collection('comments').doc(pid).collection('items').doc(cid).delete();loadComs('all');}catch(e){alert(e.message);}}
+
+// ── NEWSLETTER ──
+async function loadSubs(){
+  const list=document.getElementById('subList');if(!list||!fbReady)return;
+  list.innerHTML='<p style="color:var(--gray)">Loading...</p>';
+  try{
+    const snap=await db.collection('newsletter').orderBy('subscribedAt','desc').get();
+    if(snap.empty){list.innerHTML='<p style="color:var(--gray)">No subscribers yet.</p>';return;}
+    list.innerHTML='<p style="color:var(--gray);margin-bottom:10px;">'+snap.size+' subscribers</p>'+
+      snap.docs.map(d=>{const s=d.data();return'<div class="li"><div class="li-title">'+esc(s.email)+'</div><div class="li-meta">'+(s.subscribedAt?.toDate?.().toLocaleDateString('en-IN')||'')+'</div><button class="btn btn-g" style="padding:4px 9px;font-size:9px;" onclick="delSub(\''+d.id+'\')">Remove</button></div>';}).join('');
+  }catch(e){list.innerHTML='<p style="color:#ff6b6b">'+esc(e.message)+'</p>';}
+}
+async function delSub(id){if(!confirm('Remove?'))return;try{await db.collection('newsletter').doc(id).delete();loadSubs();}catch(e){alert(e.message);}}
+async function exportSubs(){
+  if(!needDb())return;
+  try{
+    const snap=await db.collection('newsletter').get();
+    const csv='Email,Date\n'+snap.docs.map(d=>`${d.data().email},${d.data().subscribedAt?.toDate?.().toLocaleDateString('en-IN')||''}`).join('\n');
+    const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download='cineopsy-subscribers.csv';a.click();
+  }catch(e){alert(e.message);}
+}
+
+// ── REQUESTS ──
+async function loadReqs(){
+  const list=document.getElementById('reqList');if(!list||!fbReady)return;
+  list.innerHTML='<p style="color:var(--gray)">Loading...</p>';
+  try{
+    const snap=await db.collection('review_requests').orderBy('submittedAt','desc').get();
+    if(snap.empty){list.innerHTML='<p style="color:var(--gray)">No requests yet.</p>';return;}
+    list.innerHTML=snap.docs.map(d=>{const r=d.data();
+      const sc={pending:'var(--yellow,#f59e0b)',approved:'var(--green)',done:'var(--gray)'}[r.status]||'var(--gray)';
+      return'<div class="li" style="flex-direction:column;align-items:flex-start;gap:6px;"><div style="display:flex;width:100%;gap:8px;align-items:center;flex-wrap:wrap;"><strong>'+esc(r.movie)+'</strong><span style="color:var(--gray);font-size:11px;">'+esc(r.industry||'')+'</span><span style="color:'+sc+';font-size:9px;text-transform:uppercase;letter-spacing:1px;">'+esc(r.status||'pending')+'</span><div style="margin-left:auto;display:flex;gap:6px;"><button class="btn btn-g" style="padding:4px 8px;font-size:9px;" onclick="setReq(\''+d.id+'\',\'approved\')">Approve</button><button class="btn btn-g" style="padding:4px 8px;font-size:9px;" onclick="setReq(\''+d.id+'\',\'done\')">Done</button><button class="btn btn-g" style="padding:4px 8px;font-size:9px;" onclick="delReq(\''+d.id+'\')">Delete</button></div></div>'+(r.reason?'<div style="color:var(--gray);font-size:12px;">'+esc(r.reason.substring(0,100))+'</div>':'')+'</div>';
+    }).join('');
+  }catch(e){list.innerHTML='<p style="color:#ff6b6b">'+esc(e.message)+'</p>';}
+}
+async function setReq(id,status){try{await db.collection('review_requests').doc(id).update({status});loadReqs();}catch(e){alert(e.message);}}
+async function delReq(id){if(!confirm('Delete?'))return;try{await db.collection('review_requests').doc(id).delete();loadReqs();}catch(e){alert(e.message);}}
+
+// ── CONTENT ──
+const CT_DEF={tagline:'Where Cinema Meets Biopsy',footerCopy:'© 2026 CinéOpsy. All rights reserved.',
+  homeHeroTagline:'Where Cinema Meets Biopsy',homeHeroBtn1:'Watch on YouTube',
+  homeSeriesTitle:'Six Ways to Dissect Cinema',homeSeriesSub:'Click any series to explore all episodes.',
+  homeAboutP1:'From <strong>Bollywood to Hollywood</strong>, South Cinema to World Cinema — honest reviews, hidden gems, and cinema beyond the surface.',
+  homeAboutP2:'<strong>No fluff. No hype. Just cinema — seen clearly.</strong>',
+  homeStat1Num:'6',homeStat1Label:'Unique Series',homeStat2Num:'3–4',homeStat2Label:'Videos / Week',
+  homeStat3Num:'100%',homeStat3Label:'Honest Reviews',homeStat4Num:'∞',homeStat4Label:'Cinema Love',
+  nlTitle:'Subscribe to CinéOpsy',nlSub:'Get notified when new reviews & episodes drop.',
+  newsTitle:'Cinema News',newsSub:'Latest from Bollywood, Hollywood, OTT & World Cinema',
+  contactTitle:'Get in Touch',contactSub:'Feel free to reach out for feedback, suggestions or collaborations.',
+  weeklyName:'CinéOpsy Weekly',weeklyDay:'Every Thursday',weeklyDesc:'Box office reports, industry news and upcoming releases — every Thursday.',
+  verdictName:'Verdict',verdictDay:'Every Friday',verdictDesc:'Deep, honest reviews of new releases. Watch it or Skip it.',
+  whatifName:'What If',whatifDay:'Alternate Sundays',whatifDesc:'Exploring alternate cinema universes.',
+  casefilesName:'Case Files',casefilesDay:'Alternate Sundays',casefilesDesc:'Medical diagnosis of movies. Every film is a patient.',
+  beyondbordersName:'Beyond Borders',beyondbordersDay:'Every 2 Tuesdays',beyondbordersDesc:'World cinema that never reached India — explained in English.',
+  specialsName:'CinéOpsy Specials',specialsDay:'Special Releases',specialsDesc:'Special videos, unique content & exclusive CinéOpsy productions.'};
+
+function buildCtFields(){
+  const wrap=document.getElementById('plCtFields');if(!wrap)return;
+  wrap.innerHTML=PLS.map(pl=>'<div style="margin-bottom:12px;"><div style="font-size:9px;color:var(--gray);margin-bottom:6px;text-transform:uppercase;letter-spacing:2px;">'+PLN[pl]+'</div><div class="frow"><div class="f"><label>Name</label><input type="text" class="fi" id="ct-'+pl+'Name"></div><div class="f"><label>Day/Schedule</label><input type="text" class="fi" id="ct-'+pl+'Day"></div></div><div class="f"><label>Description</label><input type="text" class="fi" id="ct-'+pl+'Desc"></div></div>').join('');
+}
+async function loadContent(){
+  Object.entries(CT_DEF).forEach(([k,v])=>{const e=document.getElementById('ct-'+k);if(e)e.value=v;});
+  if(!fbReady)return;
+  try{const doc=await db.collection('settings').doc('content').get();
+    if(doc.exists)Object.entries(doc.data()).forEach(([k,v])=>{const e=document.getElementById('ct-'+k);if(e&&v)e.value=v;});
+  }catch(e){}
+}
+async function saveContent(){
+  if(!needDb())return;
+  const data={};document.querySelectorAll('[id^="ct-"]').forEach(e=>{if(e.value.trim())data[e.id.replace('ct-','')]=e.value.trim();});
+  try{await db.collection('settings').doc('content').set(data);al('ctOk');}
+  catch(e){al('ctErr','❌ '+e.message,true);}
+}
+
+// ── ABOUT ──
+const AB_DEF={heroTitle:'Where Cinema<br>Meets Biopsy',heroSub:"We don't just watch films. We dissect them.",
+  missionQuote:'"Cinema is not just entertainment — it\'s a mirror of society, and we intend to hold it up clearly."',
+  missionSub:'— CinéOpsy',story1Label:'Our Story',story1Title:'Born from Two Worlds',
+  story1P1:'CinéOpsy was born from an unusual intersection — medical science and cinema.',
+  story1P2:'We believe every film deserves the same precision. Not a casual watch, but a deep examination.',
+  story2Label:'Our Approach',story2Title:'Diagnosis Over Opinion',
+  story2P1:'Where most review channels give you a thumbs up or down, we give you a full diagnosis.',
+  story2P2:'From Bollywood blockbusters to hidden world cinema gems — no fluff, no hype.',
+  pillarTitle0:'Weekly',pillarDesc0:'Box office, industry news and upcoming releases — every Thursday.',
+  pillarTitle1:'Verdict',pillarDesc1:'Honest, deep reviews with our signature Biopsy Score.',
+  pillarTitle2:'What If',pillarDesc2:'Alternate timeline analysis — what if the story went differently?',
+  pillarTitle3:'Case Files',pillarDesc3:'Medical diagnosis of cinema. Every film is a patient.',
+  pillarTitle4:'Beyond Borders',pillarDesc4:'World cinema that never reached India.',
+  pillarTitle5:'CinéOpsy Specials',pillarDesc5:'Exclusive content and special productions.',
+  creatorName:'Rajkamal Yadav',creatorRole:'Founder · Writer · Editor',
+  creatorBio:'Paramedical student with a passion for cinema and storytelling. CinéOpsy is built on the belief that the analytical lens of healthcare — precision, honesty, depth — can transform how we understand film.',
+  ctaTitle:'Ready to Dive In?',ctaSub:'Explore our series or subscribe to never miss an episode.'};
+
+function buildPillarF(){
+  const wrap=document.getElementById('pillarF');if(!wrap)return;
+  wrap.innerHTML=[0,1,2,3,4,5].map(i=>'<div class="frow" style="margin-bottom:8px;"><div class="f"><label>Pillar '+(i+1)+' Title</label><input type="text" class="fi" id="ab-pillarTitle'+i+'"></div><div class="f"><label>Description</label><input type="text" class="fi" id="ab-pillarDesc'+i+'"></div></div>').join('');
+}
+async function loadAbout(){
+  buildPillarF();
+  Object.entries(AB_DEF).forEach(([k,v])=>{const e=document.getElementById('ab-'+k);if(e)e.value=v;});
+  if(!fbReady)return;
+  try{const doc=await db.collection('settings').doc('about').get();
+    if(doc.exists)Object.entries(doc.data()).forEach(([k,v])=>{const e=document.getElementById('ab-'+k);if(e&&v)e.value=v;});
+  }catch(e){}
+}
+async function saveAbout(){
+  if(!needDb())return;
+  const data={};document.querySelectorAll('[id^="ab-"]').forEach(e=>{if(e.value.trim())data[e.id.replace('ab-','')]=e.value.trim();});
+  try{
     await db.collection('settings').doc('about').set(data);
-    // ALSO merge into 'content' collection so all pages pick it up
-    await db.collection('settings').doc('content').set(data, { merge: true });
-    msg.innerHTML = '<span style="color:#44ff88">✅ All about page content saved! Changes visible on website.</span>';
-  } catch(e) {
-    msg.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>';
-  }
-  if (btn) { btn.textContent = '💾 SAVE ALL ABOUT PAGE CHANGES →'; btn.disabled = false; }
+    await db.collection('settings').doc('content').set(data,{merge:true});
+    al('abOk');
+  }catch(e){al('abErr','❌ '+e.message,true);}
 }
 
-
-
-// ════ CONTENT TAB ════
-async function loadContentTab() {
-  // Show loading state
-  document.querySelectorAll('[id^="ct_"]').forEach(el => {
-    el.placeholder = 'Loading...';
-    el.disabled = true;
-  });
-
-  // Step 1: Fill with defaults (current hardcoded values)
-  const defaults = typeof CONTENT_DEFAULTS !== 'undefined' ? CONTENT_DEFAULTS : {};
-  Object.keys(defaults).forEach(key => {
-    const el = document.getElementById('ct_' + key);
-    if (el) el.value = defaults[key];
-  });
-
-  // Step 2: Override with Firebase saved values
-  if (firebaseReady) {
-    try {
-      const doc = await db.collection('settings').doc('content').get();
-      if (doc.exists) {
-        Object.entries(doc.data()).forEach(([key, val]) => {
-          const el = document.getElementById('ct_' + key);
-          if (el && val) el.value = val;
-        });
-      }
-    } catch(e) {}
-  }
-
-  // Re-enable fields
-  document.querySelectorAll('[id^="ct_"]').forEach(el => {
-    el.disabled = false;
-    if (el.placeholder === 'Loading...') el.placeholder = '';
-  });
+// ── SETTINGS ──
+async function loadSettings(){
+  if(!fbReady)return;
+  try{
+    const doc=await db.collection('settings').doc('social').get();
+    if(doc.exists)['youtube','instagram','twitter','threads','telegram','whatsapp'].forEach(k=>{const e=document.getElementById('set-'+k);if(e&&doc.data()[k])e.value=doc.data()[k];});
+    const ann=await db.collection('settings').doc('manage').get();
+    if(ann.exists){const d=ann.data();
+      const ae=document.getElementById('set-ann');if(ae&&d.announcement)ae.value=d.announcement;
+      const ac=document.getElementById('set-annActive');if(ac)ac.checked=!!d.announcementActive;
+    }
+  }catch(e){}
 }
-
-async function saveAllContent() {
-  const msgs = ['contentSaveMsg','contentSaveMsg2'];
-  msgs.forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = '<span style="color:#888">Saving...</span>'; });
-  
-  if (!firebaseReady) {
-    msgs.forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = '<span style="color:#f44">Firebase not connected!</span>'; });
-    return;
-  }
-  
-  // Collect all ct_ fields
-  const data = {};
-  document.querySelectorAll('[id^="ct_"]').forEach(el => {
-    const key = el.id.replace('ct_', '');
-    if (el.value.trim()) data[key] = el.value.trim();
-  });
-  
-  try {
-    await db.collection('settings').doc('content').set(data);
-    msgs.forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.innerHTML = '<span style="color:#44ff88">✅ Saved! Refresh the website to see changes.</span>';
-    });
-  } catch(e) {
-    msgs.forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.innerHTML = '<span style="color:#f44">Error: ' + e.message + '</span>';
-    });
+async function saveSocial(){
+  if(!needDb())return;
+  const data={};['youtube','instagram','twitter','threads','telegram','whatsapp'].forEach(k=>{const e=document.getElementById('set-'+k);if(e&&e.value.trim())data[k]=e.value.trim();});
+  try{await db.collection('settings').doc('social').set(data);al('socOk');}catch(e){alert(e.message);}
+}
+async function saveColors(){
+  if(!needDb())return;
+  try{await db.collection('settings').doc('theme').set({red:document.getElementById('set-red').value,bg:document.getElementById('set-bg').value},{merge:true});al('colOk');}catch(e){alert(e.message);}
+}
+async function saveAnn(){
+  if(!needDb())return;
+  try{await db.collection('settings').doc('manage').set({announcement:document.getElementById('set-ann').value.trim(),announcementActive:document.getElementById('set-annActive').checked},{merge:true});al('annOk');}catch(e){alert(e.message);}
+}
+async function changePw(){
+  if(!curUser){al('pwErr','❌ Not authenticated!',true);return;}
+  const nw=document.getElementById('pwNew').value,co=document.getElementById('pwConf').value;
+  if(nw.length<8){al('pwErr','❌ Min 8 characters!',true);return;}
+  if(nw!==co){al('pwErr','❌ Passwords do not match!',true);return;}
+  try{await curUser.updatePassword(nw);al('pwOk');['pwNew','pwConf'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
+  catch(e){
+    if(e.code==='auth/requires-recent-login')al('pwErr','❌ Please logout and login again first.',true);
+    else al('pwErr','❌ '+e.message,true);
   }
 }
+async function exportData(){
+  if(!needDb())return;
+  try{
+    const all={};for(const pl of PLS){const s=await db.collection('episodes').doc(pl).collection('items').get();all[pl]=s.docs.map(d=>({...d.data(),id:d.id}));}
+    const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(all,null,2));
+    a.download='cineopsy-backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();al('dataOk','✅ Exported!');
+  }catch(e){al('dataErr','❌ '+e.message,true);}
+}
+async function resetViews(){
+  if(!confirm('Reset ALL view counts? Cannot be undone!'))return;if(!needDb())return;
+  try{const snap=await db.collection('views').get();const batch=db.batch();snap.docs.forEach(d=>batch.delete(d.ref));await batch.commit();al('dataOk','✅ View counts reset!');}
+  catch(e){al('dataErr','❌ '+e.message,true);}
+}
 
-
+// Init date fields + Firebase
+document.getElementById('epDate').valueAsDate=new Date();
+document.getElementById('nDate').valueAsDate=new Date();
+// Start Firebase after SDKs load
+window.addEventListener('load',function(){setTimeout(initFB,800);});
 </script>
 </body>
 </html>
