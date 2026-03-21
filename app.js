@@ -105,6 +105,15 @@ async function doSearch(q) {
 async function loadSiteSettings() {
   if (!firebaseReady) return;
   try {
+    // Read from 'content' collection (what admin panel saves to)
+    const ct = await db.collection('settings').doc('content').get();
+    if (ct.exists) {
+      const d = ct.data();
+      if (d.footerCopy) { const el=document.getElementById('footerCopy'); if(el) el.textContent=d.footerCopy; }
+      if (d.footerTagline) { const el=document.getElementById('footerTagline'); if(el) el.textContent=d.footerTagline; }
+      if (d.tagline || d.homeHeroTagline) { const el=document.getElementById('heroTagline'); if(el) el.textContent=d.homeHeroTagline||d.tagline; }
+    }
+    // Also try old sitetext for backward compat
     const st = await db.collection('settings').doc('sitetext').get();
     if (st.exists) {
       const d = st.data();
@@ -293,12 +302,28 @@ function getParam(n) { return new URLSearchParams(location.search).get(n); }
 
 // ── Init on DOM ready ──
 document.addEventListener('DOMContentLoaded', function() {
-  initFirebase();
+  // Init inline critical functions first
   setupSearch();
   setupLightbox();
-  loadSiteSettings();
-  loadAnnouncement();
-  loadManageSettings();
+  
+  // Init Firebase then load all content
+  initFirebase();
+  
+  // Wait for Firebase to be ready then load everything
+  var tries = 0;
+  function waitAndLoad() {
+    tries++;
+    if (firebaseReady && db) {
+      // Firebase ready - load all content
+      loadSiteSettings();
+      loadAnnouncement();  
+      loadManageSettings();
+      loadPageContent();
+    } else if (tries < 20) {
+      setTimeout(waitAndLoad, 150);
+    }
+  }
+  setTimeout(waitAndLoad, 100);
 });
 
 // ── Announcement Banner ──

@@ -878,8 +878,18 @@ async function loadContent(){
 }
 async function saveContent(){
   if(!needDb())return;
-  const data={};document.querySelectorAll('[id^="ct-"]').forEach(e=>{if(e.value.trim())data[e.id.replace('ct-','')]=e.value.trim();});
-  try{await db.collection('settings').doc('content').set(data);al('ctOk');}
+  const data={};
+  document.querySelectorAll('[id^="ct-"]').forEach(e=>{if(e.value.trim())data[e.id.replace('ct-','')]=e.value.trim();});
+  try{
+    // Save to content collection
+    await db.collection('settings').doc('content').set(data);
+    // Also save footer/tagline to sitetext for backward compat
+    const sitetext = {};
+    if(data.footerCopy) sitetext.footer = data.footerCopy;
+    if(data.tagline) sitetext.tagline = data.tagline;
+    if(Object.keys(sitetext).length) await db.collection('settings').doc('sitetext').set(sitetext, {merge:true});
+    al('ctOk','✅ Saved! Changes visible after page refresh.');
+  }
   catch(e){al('ctErr','❌ '+e.message,true);}
 }
 
@@ -916,11 +926,12 @@ async function loadAbout(){
 }
 async function saveAbout(){
   if(!needDb())return;
-  const data={};document.querySelectorAll('[id^="ab-"]').forEach(e=>{if(e.value.trim())data[e.id.replace('ab-','')]=e.value.trim();});
+  const data={};
+  document.querySelectorAll('[id^="ab-"]').forEach(e=>{if(e.value.trim())data[e.id.replace('ab-','')]=e.value.trim();});
   try{
     await db.collection('settings').doc('about').set(data);
     await db.collection('settings').doc('content').set(data,{merge:true});
-    al('abOk');
+    al('abOk','✅ Saved! Changes visible after page refresh.');
   }catch(e){al('abErr','❌ '+e.message,true);}
 }
 
