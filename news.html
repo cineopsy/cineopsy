@@ -243,6 +243,6 @@ function filterNews(cat,btn){
   btn.classList.add('active');
   renderNews(cat==='all'?allNews:allNews.filter(function(n){return n.category===cat;}));
 }
-document.addEventListener('DOMContentLoaded',function(){setTimeout(loadNews,200);});
+document.addEventListener('DOMContentLoaded',function(){waitForDb().then(function(){loadNews();}).catch(function(){loadNews();});});
 </script>
 </body></html>

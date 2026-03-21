@@ -374,6 +374,6 @@ async function loadEpisode(){
     setTimeout(function(){initEpFeatures(ep.id,ep.title);},100);
   }catch(e){document.getElementById('epTitle').textContent='Error loading episode';}
 }
-document.addEventListener('DOMContentLoaded',function(){setTimeout(loadEpisode,200);});
+document.addEventListener('DOMContentLoaded',function(){waitForDb().then(function(){loadEpisode();}).catch(function(){loadEpisode();});});
 </script>
 </body></html>

@@ -293,6 +293,6 @@ async function handleNewsComment(){
   document.getElementById('commentName').value='';
   document.getElementById('commentText').value='';
 }
-document.addEventListener('DOMContentLoaded',function(){setTimeout(loadArticle,200);});
+document.addEventListener('DOMContentLoaded',function(){waitForDb().then(function(){loadArticle();}).catch(function(){loadArticle();});});
 </script>
 </body></html>

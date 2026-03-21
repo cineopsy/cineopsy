@@ -1,4 +1,4 @@
-const CACHE = 'cineopsy-v1';
+const CACHE = 'cineopsy-v2';
 const PRECACHE = ['/', '/index.html', '/cineopsy-features.js', '/firebase-config.js'];
 
 self.addEventListener('install', e => {

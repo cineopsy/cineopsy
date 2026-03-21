@@ -284,6 +284,6 @@ function setFilter(type,val,btn){
 }
 function setSortReviews(val){currentSort=val;renderReviews();}
 
-document.addEventListener('DOMContentLoaded',function(){var _t=0;function _r(){_t++;if(window.db||_t>12)loadReviews,300);});
+document.addEventListener('DOMContentLoaded',function(){waitForDb().then(function(){loadReviews();}).catch(function(){loadReviews();});});
 </script>
 </body></html>

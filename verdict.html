@@ -206,6 +206,6 @@ async function loadEpisodes(){
     grid.innerHTML='<div class="state-box"><div class="state-icon">⚠️</div><div class="state-title">Could not load</div><div class="state-sub">Please refresh the page.</div></div>';
   }
 }
-document.addEventListener('DOMContentLoaded',function(){setTimeout(loadEpisodes,200);});
+document.addEventListener('DOMContentLoaded',function(){waitForDb().then(function(){loadEpisodes();}).catch(function(){loadEpisodes();});});
 </script>
 </body></html>
